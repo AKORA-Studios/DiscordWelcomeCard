@@ -1,14 +1,6 @@
 const { createCanvas, loadImage } = require('canvas')
 const path = require('path')
 
-var themeMap = new Map()
-const themeArray = [
-    { name: 'sakura', color: '#7d0b2b', image: 'sakura.png' },
-]
-themeArray.forEach(t => {
-    themeMap.set(t.name, { color: t.color, image: t.image })
-})
-
 function CheckName(str) {
     if (str.length < 19) return str
     let oldArrayString = []
@@ -20,7 +12,8 @@ function CheckName(str) {
     return newArrString.join('#')
 }
 
-async function welcomeImage(member) {
+
+exports.welcomeImage = async function (member) {
     const canvas = createCanvas(700, 250)
     const ctx = canvas.getContext('2d')
 
@@ -56,7 +49,7 @@ async function welcomeImage(member) {
     //  return new MessageAttachment(canvas.toBuffer(), 'welcome.png')
 }
 
-async function goodbyeImage(member, theme) {
+exports.goodbyeImage = async function (member) {
     const canvas = createCanvas(700, 250)
     const ctx = canvas.getContext('2d')
 
@@ -86,5 +79,3 @@ async function goodbyeImage(member, theme) {
     return canvas.toBuffer()
     // return new MessageAttachment(canvas.toBuffer(), 'goodbye.png')
 }
-
-module.exports = { welcomeImage, goodbyeImage }

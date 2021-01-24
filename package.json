@@ -1,11 +1,11 @@
 {
-  "name": "welcome-card",
-  "version": "1.0.0",
-  "description": "Discord Welcome/Goodbye Images",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "DragonCat4012",
-  "license": "MIT"
+    "name": "welcome-card",
+    "version": "1.0.0",
+    "description": "Discord Welcome/Goodbye Images",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "DragonCat4012",
+    "license": "Apache License"
 }
