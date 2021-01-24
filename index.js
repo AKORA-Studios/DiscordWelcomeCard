@@ -45,7 +45,7 @@ exports.welcomeImage = async function (member) {
 
     ctx.drawImage(avatar, 25, 25, 200, 200)
 
-    return canvas.toBuffer()
+    return canvas
     //  return new MessageAttachment(canvas.toBuffer(), 'welcome.png')
 }
 
