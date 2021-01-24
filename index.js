@@ -1,5 +1,6 @@
 const { createCanvas, loadImage } = require('canvas')
 const path = require('path')
+const { MessageAttachment } = require("discord.js");
 
 function CheckName(str) {
     if (str.length < 19) return str
@@ -44,9 +45,7 @@ exports.welcomeImage = async function (member) {
     ctx.clip()
 
     ctx.drawImage(avatar, 25, 25, 200, 200)
-
-    return canvas
-    //  return new MessageAttachment(canvas.toBuffer(), 'welcome.png')
+    return new MessageAttachment(canvas.toBuffer(), 'welcome.png')
 }
 
 exports.goodbyeImage = async function (member) {
@@ -76,6 +75,5 @@ exports.goodbyeImage = async function (member) {
     ctx.clip()
 
     ctx.drawImage(avatar, 25, 25, 200, 200)
-    return canvas.toBuffer()
-    // return new MessageAttachment(canvas.toBuffer(), 'goodbye.png')
+    return new MessageAttachment(canvas.toBuffer(), 'goodbye.png')
 }

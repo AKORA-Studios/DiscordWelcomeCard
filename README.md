@@ -1,11 +1,12 @@
-# WelcomeCard
- Discord Welcome Card
+#  Discord Welcome Card
+![Example Welcome](https://cdn.discordapp.com/attachments/753474862693089300/802937562833879060/welcome.png)
+
 ```
 const Discord = require("discord.js");
-const {welcomeImage,goodbyeImage} = require('welcome-card')
-
 const client = new Discord.Client();
+const {welcomeImage, goodbyeImage} = require('discord-welcome-card')
+
 client.on("message", async message => {
-    message.channel.send('', new Discord.MessageAttachment(welcomeImage(message.member), 'welcome.png'))
+    message.channel.send('', await welcomeImage(message.member))
 })
 ```
