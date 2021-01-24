@@ -1,9 +1,8 @@
 {
     "name": "discord-welcome-card",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Discord Welcome/Goodbye Card",
     "main": "index.js",
-    "bin": "index.js",
     "scripts": {
         "start": "node src/index.js",
         "test": "echo \"Error: no test specified\" && exit 1"
