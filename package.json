@@ -13,13 +13,13 @@
         "canvas",
         "welcomecard"
     ],
+    "author": "dragoncat4012",
+    "license": "Apache License",
     "dependencies": {
         "canvas": "^2.6.1"
     },
     "repository": {
         "type": "git",
         "url": "https://github.com/DragonCat4012/DiscordWelcomeCard"
-    },
-    "author": "DragonCat4012",
-    "license": "Apache License"
+    }
 }
