@@ -1,10 +1,24 @@
 {
-    "name": "welcome-card",
+    "name": "discord-welcome-card",
     "version": "1.0.0",
-    "description": "Discord Welcome/Goodbye Images",
+    "description": "Discord Welcome/Goodbye Card",
     "main": "index.js",
+    "bin": "index.js",
     "scripts": {
+        "start": "node src/index.js",
         "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [
+        "discord",
+        "canvas",
+        "welcomecard"
+    ],
+    "dependencies": {
+        "canvas": "^2.6.1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/DragonCat4012/DiscordWelcomeCard"
     },
     "author": "DragonCat4012",
     "license": "Apache License"
