@@ -1,6 +1,18 @@
 const { createCanvas, loadImage } = require('canvas')
 const path = require('path')
 const { MessageAttachment } = require("discord.js");
+const themeArray = [
+    { name: 'dark', color: '#ffffff', image: 'dark.png' },
+    { name: 'sakura', color: '#7d0b2b', image: 'sakura.png' },
+    { name: 'blue', color: '#040f57', image: 'blue.png' },
+    { name: 'bamboo', color: '#137a0d', image: 'bamboo.png' },
+    { name: 'desert', color: '#000000', image: 'desert.png' },
+]
+
+const themeMap = new Map()
+themeArray.forEach(t => {
+    themeMap.set(t.name, { color: t.color, image: t.image })
+})
 
 function CheckName(str) {
     if (str.length < 19) return str
@@ -14,11 +26,14 @@ function CheckName(str) {
 }
 
 
-exports.welcomeImage = async function (member) {
+exports.welcomeImage = async function (member, theme) {
+    if (!theme) theme = 'sakura'
+    let canvasTheme = themeMap.get(theme.toLowerCase())
+    if (!canvasTheme) throw 'Invalid theme! Use: sakura | dark | bamboo | desert | blue'
     const canvas = createCanvas(700, 250)
     const ctx = canvas.getContext('2d')
 
-    const background = await loadImage(path.join(__dirname, 'sakura.png'))
+    const background = await loadImage(path.join(__dirname, canvasTheme.image))
     const avatar = await loadImage(member.user.displayAvatarURL({ format: 'png' }))
 
     ctx.drawImage(background, 0, 0)
@@ -26,18 +41,18 @@ exports.welcomeImage = async function (member) {
     ctx.strokeRect(0, 0, canvas.width, canvas.height);
 
     ctx.font = '30px sans-serif';
-    ctx.fillStyle = '#7d0b2b'
+    ctx.fillStyle = canvasTheme.color
     ctx.fillText(`Welcome to this server,`, canvas.width / 2.7, canvas.height / 3.5);
 
     ctx.font = '35px sans-serif';
-    ctx.fillStyle = '#7d0b2b'
+    ctx.fillStyle = canvasTheme.color
     ctx.fillText(`${CheckName(member.user.tag)}!`, canvas.width / 2.7, canvas.height / 1.8);
 
     ctx.font = '24px sans-serif'
-    ctx.fillStyle = '#7d0b2b'
+    ctx.fillStyle = canvasTheme.color
     ctx.fillText(`MemberCount: ${member.guild.memberCount}`, canvas.width / 2.7, canvas.height / 1.3);
 
-    ctx.strokeStyle = '#7d0b2b'
+    ctx.strokeStyle = canvasTheme.color
     ctx.lineWidth = 6
     ctx.beginPath()
     ctx.arc(125, 125, 100, 0, Math.PI * 2, true);
@@ -49,10 +64,13 @@ exports.welcomeImage = async function (member) {
 }
 
 exports.goodbyeImage = async function (member) {
+    if (!theme) theme = 'sakura'
+    let canvasTheme = themeMap.get(theme.toLowerCase())
+    if (!canvasTheme) throw 'Invalid theme! Use: sakura | dark | bamboo | desert | blue'
     const canvas = createCanvas(700, 250)
     const ctx = canvas.getContext('2d')
 
-    const background = await loadImage(path.join(__dirname, 'sakura.png'))
+    const background = await loadImage(path.join(__dirname, canvasTheme.image))
     const avatar = await loadImage(member.user.displayAvatarURL({ format: 'png' }))
 
     ctx.drawImage(background, 0, 0)
@@ -60,14 +78,14 @@ exports.goodbyeImage = async function (member) {
     ctx.strokeRect(0, 0, canvas.width, canvas.height);
 
     ctx.font = '30px sans-serif';
-    ctx.fillStyle = '#7d0b2b'
+    ctx.fillStyle = canvasTheme.color
     ctx.fillText(`Goodbye,`, canvas.width / 2.7, canvas.height / 3.5);
 
     ctx.font = '35px sans-serif';
-    ctx.fillStyle = '#7d0b2b'
+    ctx.fillStyle = canvasTheme.color
     ctx.fillText(`${CheckName(member.user.tag)}!`, canvas.width / 2.7, canvas.height / 1.8);
 
-    ctx.strokeStyle = '#7d0b2b'
+    ctx.strokeStyle = canvasTheme.color
     ctx.lineWidth = 6
     ctx.beginPath()
     ctx.arc(125, 125, 100, 0, Math.PI * 2, true);
