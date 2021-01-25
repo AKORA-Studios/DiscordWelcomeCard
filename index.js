@@ -16,20 +16,6 @@ themeArray.forEach(t => {
     themeMap.set(t.name, { color: t.color, image: t.image })
 })
 
-/**
- * @param {string} str 
- */
-function CheckName(str) {
-    if (str.length < 19) return str
-    let oldArrayString = []
-    let newArrString = []
-
-    oldArrayString = str.split('#')
-    newArrString.push(oldArrayString[0].substr(0, 14))
-    newArrString.push(oldArrayString[1])
-    return newArrString.join('#')
-}
-
 /** 
  * @param {string | Buffer} theme 
  */
@@ -66,9 +52,9 @@ exports.welcomeImage = async function (member, theme = 'sakura') {
     ctx.fillStyle = canvasTheme.color
     ctx.fillText(`Welcome to this server,`, canvas.width / 2.7, canvas.height / 3.5);
 
-    ctx.font = '35px sans-serif';
+    ctx.font = `${getFontSize(member.user.tag)}px sans-serif`
     ctx.fillStyle = canvasTheme.color
-    ctx.fillText(`${CheckName(member.user.tag)}!`, canvas.width / 2.7, canvas.height / 1.8);
+    ctx.fillText(`${member.user.tag}!`, canvas.width / 2.7, canvas.height / 1.8);
 
     ctx.font = '24px sans-serif'
     ctx.fillStyle = canvasTheme.color
@@ -107,9 +93,9 @@ exports.goodbyeImage = async function (member, theme = 'sakura') {
     ctx.fillStyle = canvasTheme.color
     ctx.fillText(`Goodbye,`, canvas.width / 2.7, canvas.height / 3.5);
 
-    ctx.font = '35px sans-serif';
+    ctx.font = `${getFontSize(member.user.tag)}px sans-serif`
     ctx.fillStyle = canvasTheme.color
-    ctx.fillText(`${CheckName(member.user.tag)}!`, canvas.width / 2.7, canvas.height / 1.8);
+    ctx.fillText(`${member.user.tag}!`, canvas.width / 2.7, canvas.height / 1.8);
 
     ctx.strokeStyle = canvasTheme.color
     ctx.lineWidth = 6
@@ -120,4 +106,16 @@ exports.goodbyeImage = async function (member, theme = 'sakura') {
 
     ctx.drawImage(avatar, 25, 25, 200, 200)
     return new MessageAttachment(canvas.toBuffer(), 'goodbye.png')
+}
+
+/** 
+ * @param {string} str 
+ */
+function getFontSize(str) {
+    let fontSize = 35;
+    if (str.length >= 19) fontSize = 28
+    if (str.length >= 24) fontSize = 22
+    if (str.length >= 29) fontSize = 18
+
+    return fontSize
 }
