@@ -1,6 +1,7 @@
 const { createCanvas, loadImage } = require('canvas')
 const path = require('path')
-const { MessageAttachment } = require("discord.js");
+const { MessageAttachment, GuildMember } = require("discord.js");
+
 const themeArray = [
     { name: 'dark', color: '#ffffff', image: 'dark.png' },
     { name: 'sakura', color: '#7d0b2b', image: 'sakura.png' },
@@ -25,15 +26,36 @@ function CheckName(str) {
     return newArrString.join('#')
 }
 
-
-exports.welcomeImage = async function (member, theme) {
-    if (!theme) theme = 'sakura'
+/** 
+ * @param {string | Buffer} theme 
+ */
+function theme2Img(theme) {
     let canvasTheme = themeMap.get(theme.toLowerCase())
-    if (!canvasTheme) throw 'Invalid theme! Use: sakura | dark | bamboo | desert | blue'
+    //if (!canvasTheme) throw 'Invalid theme! Use: ' + themeArray.map(v => v.name).join(' | ');
+
+    if (canvasTheme) return loadImage(path.join(__dirname, canvasTheme.image))
+    else {
+        if (theme instanceof Buffer) {
+            return loadImage(theme);
+        } else {
+            return loadImage(theme)
+        }
+    }
+}
+
+
+/**
+ * @param {GuildMember} member 
+ * @param {string | Buffer} theme 
+ */
+exports.welcomeImage = async function (member, theme = 'sakura') {
+    let canvasTheme = themeMap.get(theme.toLowerCase())
+    if (!canvasTheme);//throw 'Invalid theme! Use: ' + themeArray.map(v => v.name).join(' | ');
+
     const canvas = createCanvas(700, 250)
     const ctx = canvas.getContext('2d')
 
-    const background = await loadImage(path.join(__dirname, canvasTheme.image))
+    const background = await theme2Img(theme);
     const avatar = await loadImage(member.user.displayAvatarURL({ format: 'png' }))
 
     ctx.drawImage(background, 0, 0)
