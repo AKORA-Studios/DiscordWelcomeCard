@@ -1,6 +1,6 @@
 #  Discord Welcome Card
 Simple Goodbye and welcome cards
-<div align="center">
+<div align="left">
   <p>
     <a href="https://www.npmjs.com/package/discord.js"><img src="https://img.shields.io/npm/v/discord-welcome-card.svg?maxAge=3600" alt="NPM version" /></a>
     <a href="https://www.npmjs.com/package/discord-welcome-card"><img src="https://img.shields.io/npm/dt/discord-welcome-card.svg?maxAge=3600" alt="NPM downloads" /></a>
