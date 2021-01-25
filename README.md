@@ -1,7 +1,19 @@
 #  Discord Welcome Card
+Simple Goodbye and welcome cards
+
 [![NPM](https://nodei.co/npm/discord-welcome-card.png?downloads=true&stars=true)](https://www.npmjs.com/package/discord-welcome-card)
 
-Simple Goodbye and welcome cards
+
+<div align="center">
+  <p>
+    <a href="https://www.npmjs.com/package/discord.js"><img src="https://img.shields.io/npm/v/discord-welcome-card.svg?maxAge=3600" alt="NPM version" /></a>
+    <a href="https://www.npmjs.com/package/discord-welcome-card"><img src="https://img.shields.io/npm/dt/discord-welcome-card.svg?maxAge=3600" alt="NPM downloads" /></a>
+  </p>
+  <p>
+    <a href="https://nodei.co/npm/discord.js/"><img src="https://nodei.co/npm/discord.js.png?downloads=true&stars=true" alt="npm installnfo" /></a>
+  </p>
+</div>
+
 
 ##  Example Usage 
 
