@@ -36,39 +36,37 @@ function theme2Img(theme: string) {
 
 
 
+export const modules = {
+    welcomeText: (ctx: CanvasRenderingContext2D, canvas: Canvas) => {
+        ctx.font = '30px sans-serif';
+        ctx.fillText(`Welcome to this server,`, canvas.width / 2.7, canvas.height / 3.5);
+    },
 
-export const welcomeText = (ctx: CanvasRenderingContext2D, canvas: Canvas) => {
-    ctx.font = '30px sans-serif';
-    //ctx.fillStyle = theme.color
-    ctx.fillText(`Welcome to this server,`, canvas.width / 2.7, canvas.height / 3.5);
-}
+    goodbyeText: (ctx: CanvasRenderingContext2D, canvas: Canvas) => {
+        ctx.font = '30px sans-serif';
+        ctx.fillText(`Goodbye,`, canvas.width / 2.7, canvas.height / 3.5);
+    },
 
-export const goodbyeText = (ctx: CanvasRenderingContext2D, canvas: Canvas) => {
-    ctx.font = '30px sans-serif';
-    //ctx.fillStyle = theme.color
-    ctx.fillText(`Goodbye,`, canvas.width / 2.7, canvas.height / 3.5);
-}
+    userText: (ctx: CanvasRenderingContext2D, canvas: Canvas, member: GuildMember) => {
+        ctx.font = `${getFontSize(member.user.tag)}px sans-serif`
+        ctx.fillText(`${member.user.tag}!`, canvas.width / 2.7, canvas.height / 1.8);
+    },
 
-export const userText = (ctx: CanvasRenderingContext2D, canvas: Canvas, member: GuildMember) => {
-    ctx.font = `${getFontSize(member.user.tag)}px sans-serif`
-    //ctx.fillStyle = canvasTheme.color
-    ctx.fillText(`${member.user.tag}!`, canvas.width / 2.7, canvas.height / 1.8);
-}
+    memberCount: (ctx: CanvasRenderingContext2D, canvas: Canvas, member: GuildMember) => {
+        ctx.font = '24px sans-serif'
+        ctx.fillText(`MemberCount: ${member.guild.memberCount}`, canvas.width / 2.7, canvas.height / 1.3);
+    },
 
-export const memberCount = (ctx: CanvasRenderingContext2D, canvas: Canvas, member: GuildMember) => {
-    ctx.font = '24px sans-serif'
-    //ctx.fillStyle = canvasTheme.color
-    ctx.fillText(`MemberCount: ${member.guild.memberCount}`, canvas.width / 2.7, canvas.height / 1.3);
-}
+    avatarImg: async (ctx: CanvasRenderingContext2D, canvas: Canvas, member: GuildMember) => {
+        ctx.lineWidth = 6
+        ctx.beginPath();
+        ctx.arc(canvas.height / 2, canvas.height / 2, canvas.height / 2.5, 0, Math.PI * 2, true);
+        ctx.closePath();
+        ctx.clip();
 
-export const avatarImg = async (ctx: CanvasRenderingContext2D, canvas: Canvas, member: GuildMember) => {
-    ctx.lineWidth = 6
-    ctx.beginPath();
-    ctx.arc(canvas.height / 2, canvas.height / 2, canvas.height / 2.5, 0, Math.PI * 2, true);
-    ctx.closePath();
-    ctx.clip();
+        ctx.drawImage(await loadImage(member.user.displayAvatarURL({ format: 'png' })), 25, 25, 200, 200)
 
-    ctx.drawImage(await loadImage(member.user.displayAvatarURL({ format: 'png' })), 25, 25, 200, 200)
+    }
 }
 
 /**
@@ -90,10 +88,10 @@ export async function welcomeImage(member: GuildMember, theme = 'sakura') {
     ctx.fillStyle = canvasTheme.color;
     ctx.strokeStyle = canvasTheme.color;
 
-    welcomeText(ctx, canvas);
-    userText(ctx, canvas, member);
-    memberCount(ctx, canvas, member)
-    avatarImg(ctx, canvas, member);
+    modules.welcomeText(ctx, canvas);
+    modules.userText(ctx, canvas, member);
+    modules.memberCount(ctx, canvas, member)
+    modules.avatarImg(ctx, canvas, member);
 
     return new MessageAttachment(canvas.toBuffer(), 'welcome.png')
 }
@@ -118,9 +116,9 @@ export async function goodbyeImage(member: GuildMember, theme = 'sakura') {
     ctx.fillStyle = canvasTheme.color;
     ctx.strokeStyle = canvasTheme.color;
 
-    goodbyeText(ctx, canvas);
-    userText(ctx, canvas, member);
-    avatarImg(ctx, canvas, member);
+    modules.goodbyeText(ctx, canvas);
+    modules.userText(ctx, canvas, member);
+    modules.avatarImg(ctx, canvas, member);
 
     return new MessageAttachment(canvas.toBuffer(), 'goodbye.png')
 }
