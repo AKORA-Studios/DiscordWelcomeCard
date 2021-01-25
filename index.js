@@ -8,6 +8,7 @@ const themeArray = [
     { name: 'blue', color: '#040f57', image: 'blue.png' },
     { name: 'bamboo', color: '#137a0d', image: 'bamboo.png' },
     { name: 'desert', color: '#000000', image: 'desert.png' },
+    { name: 'code', color: '#ffffff', image: 'code.png' },
 ]
 
 const themeMap = new Map()
