@@ -35,11 +35,7 @@ function theme2Img(theme) {
 
     if (canvasTheme) return loadImage(path.join(__dirname, canvasTheme.image))
     else {
-        if (theme instanceof Buffer) {
-            return loadImage(theme);
-        } else {
-            return loadImage(theme)
-        }
+        return loadImage(theme)
     }
 }
 
