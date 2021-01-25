@@ -45,10 +45,11 @@ function theme2Img(theme) {
 
 /**
  * @param {GuildMember} member The GuildMember that joined the Guild.
- * @param {string | Buffer} theme Theme of the card, this is optional
+ * @param {string} theme Theme of the card, this is optional
  */
 exports.welcomeImage = async function (member, theme = 'sakura') {
-    let canvasTheme = themeMap.get(theme.toLowerCase())
+    let canvasTheme = themeArray.find(t => t.name === theme.toLowerCase())
+    if (!canvasTheme) throw 'Invalid theme! Use: ' + themeArray.map(v => v.name).join(' | ');
 
     const canvas = createCanvas(700, 250)
     const ctx = canvas.getContext('2d')
@@ -75,7 +76,7 @@ exports.welcomeImage = async function (member, theme = 'sakura') {
     ctx.strokeStyle = canvasTheme.color
     ctx.lineWidth = 6
     ctx.beginPath()
-    ctx.arc(125, 125, 100, 0, Math.PI * 2, true);
+    ctx.arc(canvas.height / 2, canvas.height / 2, canvas.height / 2.5, 0, Math.PI * 2, true);
     ctx.closePath()
     ctx.clip()
 
@@ -85,10 +86,11 @@ exports.welcomeImage = async function (member, theme = 'sakura') {
 
 /**
  * @param {GuildMember} member The GuildMember that left the Guild.
- * @param {string | Buffer} theme Theme of the card, this is optional
+ * @param {string} theme Theme of the card, this is optional
  */
 exports.goodbyeImage = async function (member, theme = 'sakura') {
-    let canvasTheme = themeMap.get(theme.toLowerCase())
+    let canvasTheme = themeArray.find(t => t.name === theme.toLowerCase())
+    if (!canvasTheme) throw 'Invalid theme! Use: ' + themeArray.map(v => v.name).join(' | ');
 
     const canvas = createCanvas(700, 250)
     const ctx = canvas.getContext('2d')
@@ -111,7 +113,7 @@ exports.goodbyeImage = async function (member, theme = 'sakura') {
     ctx.strokeStyle = canvasTheme.color
     ctx.lineWidth = 6
     ctx.beginPath()
-    ctx.arc(125, 125, 100, 0, Math.PI * 2, true);
+    ctx.arc(canvas.height / 2, canvas.height / 2, canvas.height / 2.5, 0, Math.PI * 2, true);
     ctx.closePath()
     ctx.clip()
 
