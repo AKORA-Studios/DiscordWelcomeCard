@@ -1,6 +1,7 @@
 #  Discord Welcome Card
+[![NPM](https://nodei.co/npm/discord-welcome-card.png?downloads=true&stars=true)](https://www.npmjs.com/package/discord-welcome-card)
+
 Simple Goodbye and welcome cards
-<img src="https://nodei.co/npm/discord-welcome-card.png?downloads=true&stars=true" alt="npm installnfo" />
 
 ##  Example Usage 
 
