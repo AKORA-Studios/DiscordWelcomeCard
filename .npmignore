@@ -1,4 +1,10 @@
+# Folders
 node_modules
+
+# Only important for git
+examples
+
+#Developement
 .ts
 !.d.ts
 package-lock.json
