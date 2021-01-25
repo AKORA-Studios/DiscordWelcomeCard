@@ -33,7 +33,7 @@ function theme2Img(theme) {
     let canvasTheme = themeMap.get(theme.toLowerCase())
     //if (!canvasTheme) throw 'Invalid theme! Use: ' + themeArray.map(v => v.name).join(' | ');
 
-    if (canvasTheme) return loadImage(path.join(__dirname, canvasTheme.image))
+    if (canvasTheme) return loadImage(path.join(__dirname, 'images', canvasTheme.image))
     else {
         return loadImage(theme)
     }
