@@ -36,3 +36,11 @@ client.on("message", async message => {
     message.channel.send('', await welcomeImage(message.member, 'dark'))
 })
 ```
+
+
+
+##  Changelog
+| Version  | Content |
+| ------------- | ------------- |
+| 1.1.4  | new card backgrounds  |
+| 1.1.5  | Added Auto Size  |
