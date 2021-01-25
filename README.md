@@ -42,7 +42,7 @@ client.on("message", async message => {
 
 client.login('your token here');
 ```
-![Image](examples/welcome.png)
+![Image](examples/goodbye.png)
 
 <br /><br /><br />
 
