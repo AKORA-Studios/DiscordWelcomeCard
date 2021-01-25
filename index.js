@@ -15,6 +15,9 @@ themeArray.forEach(t => {
     themeMap.set(t.name, { color: t.color, image: t.image })
 })
 
+/**
+ * @param {string} str 
+ */
 function CheckName(str) {
     if (str.length < 19) return str
     let oldArrayString = []
@@ -41,12 +44,11 @@ function theme2Img(theme) {
 
 
 /**
- * @param {GuildMember} member 
- * @param {string | Buffer} theme 
+ * @param {GuildMember} member The GuildMember that joined the Guild.
+ * @param {string | Buffer} theme Theme of the card, this is optional
  */
 exports.welcomeImage = async function (member, theme = 'sakura') {
     let canvasTheme = themeMap.get(theme.toLowerCase())
-    if (!canvasTheme);//throw 'Invalid theme! Use: ' + themeArray.map(v => v.name).join(' | ');
 
     const canvas = createCanvas(700, 250)
     const ctx = canvas.getContext('2d')
@@ -81,14 +83,17 @@ exports.welcomeImage = async function (member, theme = 'sakura') {
     return new MessageAttachment(canvas.toBuffer(), 'welcome.png')
 }
 
-exports.goodbyeImage = async function (member) {
-    if (!theme) theme = 'sakura'
+/**
+ * @param {GuildMember} member The GuildMember that left the Guild.
+ * @param {string | Buffer} theme Theme of the card, this is optional
+ */
+exports.goodbyeImage = async function (member, theme = 'sakura') {
     let canvasTheme = themeMap.get(theme.toLowerCase())
-    if (!canvasTheme) throw 'Invalid theme! Use: sakura | dark | bamboo | desert | blue'
+
     const canvas = createCanvas(700, 250)
     const ctx = canvas.getContext('2d')
 
-    const background = await loadImage(path.join(__dirname, canvasTheme.image))
+    const background = await theme2Img(theme);
     const avatar = await loadImage(member.user.displayAvatarURL({ format: 'png' }))
 
     ctx.drawImage(background, 0, 0)
