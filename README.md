@@ -26,7 +26,7 @@ client.login('your token here');
 ```
 ![Image](examples/welcome.png)
 
-<br /><br /><br />
+<br />
 
 
 ###  Goodbye Card
