@@ -8,6 +8,7 @@ export interface Theme {
 }
 
 export type ThemeType = (keyof typeof themes) | Theme;
+const hexcolor = /#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})/;
 
 const themes = {
     'dark': { color: '#ffffff', image: 'dark.png' },
@@ -81,11 +82,18 @@ export async function drawCard(member: GuildMember, theme: ThemeType = 'sakura',
     if (typeof theme === 'string') {
         //Builtin Theme
         canvasTheme = themes[theme];
-        if (!canvasTheme) throw new Error('Invalid theme, Use: ' + Object.keys(themes).join(' | '));
+        if (!canvasTheme) throw new Error('Invalid theme, use: ' + Object.keys(themes).join(' | '));
     } else {
         //Custom Theme
         canvasTheme = theme;
-        background = await loadImage(theme.image);
+
+        //Invalid Color
+        if (!theme.color.match(hexcolor)) throw new Error('Invalid Color provided.')
+
+        //Loading the Background
+        try {
+            background = await loadImage(theme.image);
+        } catch (e) { throw new Error('Invalid Path or Buffer provided.') }
     }
 
 
