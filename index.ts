@@ -79,7 +79,7 @@ export type Module = (keyof typeof modules) | (ModuleFunction)
 
 
 
-export async function drawCard(theme: ThemeType = 'sakura', member: GuildMember, mods: Module[]) {
+export async function drawCard(member: GuildMember, theme: ThemeType = 'sakura', mods: Module[]) {
     const canvasTheme = themes.find(t => t.name === theme.toLowerCase())
     if (!canvasTheme) throw 'Invalid theme, Use: ' + themes.map(v => v.name).join(' | ');
 
@@ -110,14 +110,14 @@ export async function drawCard(theme: ThemeType = 'sakura', member: GuildMember,
 
 
 export async function welcomeImage(member: GuildMember, theme: ThemeType = 'sakura') {
-    const canvas = await drawCard(theme, member, ['welcomeText', 'userText', 'memberCount', 'avatarImg'])
+    const canvas = await drawCard(member, theme, ['welcomeText', 'userText', 'memberCount', 'avatarImg'])
 
-    return new MessageAttachment(canvas.toBuffer(), 'welcome.png')
+    return new MessageAttachment(canvas.toBuffer('image/png'), 'welcome.png')
 }
 
 
 export async function goodbyeImage(member: GuildMember, theme: ThemeType = 'sakura') {
-    const canvas = await drawCard(theme, member, ['goodbyeText', 'userText', 'avatarImg'])
+    const canvas = await drawCard(member, theme, ['goodbyeText', 'userText', 'avatarImg'])
 
-    return new MessageAttachment(canvas.toBuffer(), 'goodbye.png')
+    return new MessageAttachment(canvas.toBuffer('image/png'), 'goodbye.png')
 }
