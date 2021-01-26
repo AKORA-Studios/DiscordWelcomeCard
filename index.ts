@@ -78,10 +78,9 @@ export type ModuleFunction = (ctx: CanvasRenderingContext2D, canvas: Canvas, mem
 export type Module = (keyof typeof modules) | (ModuleFunction)
 
 
-
-export async function drawCard(member: GuildMember, theme: ThemeType = 'sakura', mods: Module[]) {
+export async function drawCard(member: GuildMember, theme: ThemeType = 'sakura', mods: Module[]): Promise<Canvas> {
     const canvasTheme = themes.find(t => t.name === theme.toLowerCase())
-    if (!canvasTheme) throw 'Invalid theme, Use: ' + themes.map(v => v.name).join(' | ');
+    if (!canvasTheme) throw new Error('Invalid theme, Use: ' + themes.map(v => v.name).join(' | '));
 
     const canvas = createCanvas(700, 250)
     const ctx = canvas.getContext('2d')
