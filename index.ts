@@ -1,33 +1,24 @@
 import { GuildMember, MessageAttachment } from "discord.js";
-import { createCanvas, loadImage, CanvasRenderingContext2D, Canvas } from 'canvas';
+import { createCanvas, loadImage, CanvasRenderingContext2D, Canvas, Image } from 'canvas';
 import path from 'path';
 
 export interface Theme {
-    name: string;
     color: string;
-    image: string;
+    image: string | Buffer;
 }
-export type ThemeType = 'dark' | 'sakura' | 'blue' | 'bamboo' | 'desert' | 'code';
 
-const themes: Theme[] = [
-    { name: 'dark', color: '#ffffff', image: 'dark.png' },
-    { name: 'sakura', color: '#7d0b2b', image: 'sakura.png' },
-    { name: 'blue', color: '#040f57', image: 'blue.png' },
-    { name: 'bamboo', color: '#137a0d', image: 'bamboo.png' },
-    { name: 'desert', color: '#000000', image: 'desert.png' },
-    { name: 'code', color: '#ffffff', image: 'code.png' },
-]
+export type ThemeType = (keyof typeof themes) | Theme;
 
-
-function theme2Img(theme: string) {
-    let canvasTheme = themes.find(t => t.name === theme)
-    //if (!canvasTheme) throw 'Invalid theme! Use: ' + themeArray.map(v => v.name).join(' | ');
-
-    if (canvasTheme) return loadImage(path.join(__dirname, 'images', canvasTheme.image))
-    else {
-        return loadImage(theme)
-    }
+const themes = {
+    'dark': { color: '#ffffff', image: 'dark.png' },
+    'sakura': { color: '#7d0b2b', image: 'sakura.png' },
+    'blue': { color: '#040f57', image: 'blue.png' },
+    'bamboo': { color: '#137a0d', image: 'bamboo.png' },
+    'desert': { color: '#000000', image: 'desert.png' },
+    'code': { color: '#ffffff', image: 'code.png' },
 }
+
+
 
 function getFontSize(str: string) {
     if (str.length >= 19) return 28;
@@ -79,13 +70,25 @@ export type Module = (keyof typeof modules) | (ModuleFunction)
 
 
 export async function drawCard(member: GuildMember, theme: ThemeType = 'sakura', mods: Module[]): Promise<Canvas> {
-    const canvasTheme = themes.find(t => t.name === theme.toLowerCase())
-    if (!canvasTheme) throw new Error('Invalid theme, Use: ' + themes.map(v => v.name).join(' | '));
-
     const canvas = createCanvas(700, 250)
     const ctx = canvas.getContext('2d')
 
-    const background = await theme2Img(theme);
+    var canvasTheme: Theme,
+        background: Image;
+
+
+    //Parsing the Theme
+    if (typeof theme === 'string') {
+        //Builtin Theme
+        canvasTheme = themes[theme];
+        if (!canvasTheme) throw new Error('Invalid theme, Use: ' + Object.keys(themes).join(' | '));
+    } else {
+        //Custom Theme
+        canvasTheme = theme;
+        background = await loadImage(theme.image);
+    }
+
+
 
     ctx.drawImage(background, 0, 0)
     ctx.strokeRect(0, 0, canvas.width, canvas.height);
