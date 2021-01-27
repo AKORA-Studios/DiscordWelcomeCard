@@ -9,16 +9,18 @@ Simple Goodbye and welcome cards
 ## Examples
 ###  Welcome Card
 ```javascript
-const { Client} = require("discord.js");
+const Discord = require("discord.js");
 const { welcomeImage } = require('discord-welcome-card');
 
-const client = new Client();
+const client = new Discord.Client();
 
 client.on("message", async message => {
-    message.channel.send('', await welcomeImage(message.member, 'code'))
+    //Generating the actual welcome Card
+    const image = await welcomeImage(message.member, 'code');
+
+    message.channel.send(Discord.MessageAttachment(image, 'welcome.png'))
 });
 
-client.login('your token here');
 ```
 ![Image](examples/welcome.png)
 
