@@ -1,5 +1,5 @@
 {
-    "name": "@akorastudios/discord-welcome-card",
+    "name": "discord-welcome-card",
     "version": "1.1.5",
     "description": "Discord Welcome/Goodbye Card",
     "main": "index.js",

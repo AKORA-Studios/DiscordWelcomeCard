@@ -8,4 +8,6 @@ examples
 .ts
 !.d.ts
 package-lock.json
+tsconfig.json
 .gitignore
+.gitattributes
