@@ -39,7 +39,6 @@ export function changeFont(ctx: ctx2D, font: string) {
 
 export function changeFontSize(ctx: ctx2D, size: string) {
     var fontArgs = ctx.font.split(' ');
-    console.log('Size: ' + ctx.font);
     ctx.font = size + ' ' + fontArgs.slice(1).join(' '); /// using the last part
 }
 
