@@ -26,10 +26,7 @@ export var themes = {
 
 function getFontSize(str: string) {
     if (str.length < 18) return 30;
-    // 👌
-    const calculated = (600 * Math.pow(str.length, -1.05)).toFixed(0);
-    console.log(calculated);
-    return calculated;
+    return (600 * Math.pow(str.length, -1.05)).toFixed(0);
 }
 
 export function changeFont(ctx: ctx2D, font: string) {
