@@ -14,11 +14,11 @@ const hexcolor = /#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})/;
 
 const root = join(__dirname, 'images')
 export var themes = {
-    'dark': { color: '#ffffff', image: 'dark.png' },
-    'sakura': { color: '#7d0b2b', image: 'sakura.png' },
-    'blue': { color: '#040f57', image: 'blue.png' },
-    'bamboo': { color: '#137a0d', image: 'bamboo.png' },
-    'desert': { color: '#000000', image: 'desert.png' },
+    'dark': { color: '#ffffff', image: join(root, 'dark.png') },
+    'sakura': { color: '#7d0b2b', image: join(root, 'sakura.png') },
+    'blue': { color: '#040f57', image: join(root, 'blue.png') },
+    'bamboo': { color: '#137a0d', image: join(root, 'bamboo.png') },
+    'desert': { color: '#000000', image: join(root, 'desert.png') },
     'code': { color: '#ffffff', image: join(root, 'code.png'), font: 'Source Sans Pro' },
 }
 
@@ -120,7 +120,7 @@ export async function drawCard(member: GuildMember, theme: ThemeType = 'sakura',
 
     ctx.fillStyle = canvasTheme.color;
     ctx.strokeStyle = canvasTheme.color;
-    ctx.font = '30px ' + canvasTheme.font ? canvasTheme.font : '';
+    ctx.font = '30px ' + (canvasTheme.font ? canvasTheme.font : 'sans-serif');;
 
     for (const mod of mods) {
         if (typeof mod === 'string') {
