@@ -1,6 +1,6 @@
 import { GuildMember, MessageAttachment } from "discord.js";
 import { createCanvas, loadImage, CanvasRenderingContext2D as ctx2D, Canvas, Image } from 'canvas';
-import path, { join } from 'path';
+import { join } from 'path';
 
 export interface Theme {
     color: string;
@@ -25,11 +25,9 @@ export var themes = {
 
 
 function getFontSize(str: string) {
-    if (str.length >= 19) return 28;
-    if (str.length >= 24) return 22;
-    if (str.length >= 29) return 18;
+    if (str.length < 18) return 30;
 
-    return 35
+    return Math.pow(600 * str.length, -1.05)
 }
 
 export function changeFont(ctx: ctx2D, font: string) {
@@ -59,7 +57,7 @@ export var modules = {
     },
 
     userText: (ctx: ctx2D, canvas: Canvas, member: GuildMember) => {
-        changeFontSize(ctx, `${getFontSize(member.user.tag)}px`);
+        changeFontSize(ctx, getFontSize(member.user.tag) + 'px');
         ctx.fillText(`${member.user.tag}!`, canvas.width / 2.7, canvas.height / 1.8);
     },
 
