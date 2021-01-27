@@ -34,7 +34,6 @@ function getFontSize(str: string) {
 
 export function changeFont(ctx: ctx2D, font: string) {
     var fontArgs = ctx.font.split(' ');
-    console.log('Font: ' + fontArgs)
     ctx.font = fontArgs[0] + ' ' + font; /// using the first part
 }
 
