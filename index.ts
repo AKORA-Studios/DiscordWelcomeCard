@@ -1,22 +1,25 @@
 import { GuildMember, MessageAttachment } from "discord.js";
-import { createCanvas, loadImage, CanvasRenderingContext2D, Canvas, Image } from 'canvas';
-import path from 'path';
+import { createCanvas, loadImage, CanvasRenderingContext2D as ctx2D, Canvas, Image } from 'canvas';
+import path, { join } from 'path';
 
 export interface Theme {
     color: string;
     image: string | Buffer;
+    font?: string;
 }
 
 export type ThemeType = (keyof typeof themes) | Theme;
 const hexcolor = /#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})/;
 
-const themes = {
+
+const root = join(__dirname, 'images')
+export var themes = {
     'dark': { color: '#ffffff', image: 'dark.png' },
     'sakura': { color: '#7d0b2b', image: 'sakura.png' },
     'blue': { color: '#040f57', image: 'blue.png' },
     'bamboo': { color: '#137a0d', image: 'bamboo.png' },
     'desert': { color: '#000000', image: 'desert.png' },
-    'code': { color: '#ffffff', image: 'code.png' },
+    'code': { color: '#ffffff', image: join(root, 'code.png'), font: 'Source Sans Pro' },
 }
 
 
@@ -29,33 +32,45 @@ function getFontSize(str: string) {
     return 35
 }
 
+export function changeFont(ctx: ctx2D, font: string) {
+    var fontArgs = ctx.font.split(' ');
+    console.log('Font: ' + fontArgs)
+    ctx.font = fontArgs[0] + ' ' + font; /// using the first part
+}
+
+export function changeFontSize(ctx: ctx2D, size: string) {
+    var fontArgs = ctx.font.split(' ');
+    console.log('Size: ' + ctx.font);
+    ctx.font = size + ' ' + fontArgs.slice(1).join(' '); /// using the last part
+}
 
 
 
 
 
-export const modules = {
+
+export var modules = {
     welcomeText: (ctx, canvas: Canvas, member: GuildMember) => {
-        ctx.font = '30px sans-serif';
+        changeFontSize(ctx, '30px');
         ctx.fillText(`Welcome to this server,`, canvas.width / 2.7, canvas.height / 3.5);
     },
 
-    goodbyeText: (ctx: CanvasRenderingContext2D, canvas: Canvas, member: GuildMember) => {
-        ctx.font = '30px sans-serif';
+    goodbyeText: (ctx: ctx2D, canvas: Canvas, member: GuildMember) => {
+        changeFontSize(ctx, '30px');
         ctx.fillText(`Goodbye,`, canvas.width / 2.7, canvas.height / 3.5);
     },
 
-    userText: (ctx: CanvasRenderingContext2D, canvas: Canvas, member: GuildMember) => {
-        ctx.font = `${getFontSize(member.user.tag)}px sans-serif`
+    userText: (ctx: ctx2D, canvas: Canvas, member: GuildMember) => {
+        changeFontSize(ctx, `${getFontSize(member.user.tag)}px`);
         ctx.fillText(`${member.user.tag}!`, canvas.width / 2.7, canvas.height / 1.8);
     },
 
-    memberCount: (ctx: CanvasRenderingContext2D, canvas: Canvas, member: GuildMember) => {
-        ctx.font = '24px sans-serif'
+    memberCount: (ctx: ctx2D, canvas: Canvas, member: GuildMember) => {
+        changeFontSize(ctx, '25px');
         ctx.fillText(`MemberCount: ${member.guild.memberCount}`, canvas.width / 2.7, canvas.height / 1.3);
     },
 
-    avatarImg: async (ctx: CanvasRenderingContext2D, canvas: Canvas, member: GuildMember) => {
+    avatarImg: async (ctx: ctx2D, canvas: Canvas, member: GuildMember) => {
         ctx.lineWidth = 6
         ctx.beginPath();
         ctx.arc(canvas.height / 2, canvas.height / 2, canvas.height / 2.5, 0, Math.PI * 2, true);
@@ -66,11 +81,11 @@ export const modules = {
     }
 }
 
-export type ModuleFunction = (ctx: CanvasRenderingContext2D, canvas: Canvas, member: GuildMember) => any
+export type ModuleFunction = (ctx: ctx2D, canvas: Canvas, member: GuildMember) => any
 export type Module = (keyof typeof modules) | (ModuleFunction)
 
 
-export async function drawCard(member: GuildMember, theme: ThemeType = 'sakura', mods: Module[]): Promise<Canvas> {
+export async function drawCard(member: GuildMember, theme: ThemeType = 'sakura', mods: Module[]): Promise<Buffer> {
     const canvas = createCanvas(700, 250)
     const ctx = canvas.getContext('2d')
 
@@ -83,6 +98,8 @@ export async function drawCard(member: GuildMember, theme: ThemeType = 'sakura',
         //Builtin Theme
         canvasTheme = themes[theme];
         if (!canvasTheme) throw new Error('Invalid theme, use: ' + Object.keys(themes).join(' | '));
+
+        background = await loadImage(canvasTheme.image);
     } else {
         //Custom Theme
         canvasTheme = theme;
@@ -103,6 +120,7 @@ export async function drawCard(member: GuildMember, theme: ThemeType = 'sakura',
 
     ctx.fillStyle = canvasTheme.color;
     ctx.strokeStyle = canvasTheme.color;
+    ctx.font = '30px ' + canvasTheme.font ? canvasTheme.font : '';
 
     for (const mod of mods) {
         if (typeof mod === 'string') {
@@ -115,19 +133,18 @@ export async function drawCard(member: GuildMember, theme: ThemeType = 'sakura',
         }
     }
 
-    return canvas;
+    return canvas.toBuffer('image/png');
 }
 
 
-export async function welcomeImage(member: GuildMember, theme: ThemeType = 'sakura') {
-    const canvas = await drawCard(member, theme, ['welcomeText', 'userText', 'memberCount', 'avatarImg'])
-
-    return new MessageAttachment(canvas.toBuffer('image/png'), 'welcome.png')
+export async function welcomeImage(member: GuildMember, theme: ThemeType = 'sakura'): Promise<Buffer> {
+    const buff = await drawCard(member, theme, ['welcomeText', 'userText', 'memberCount', 'avatarImg'])
+    //const attachment = new MessageAttachment(buff, 'welcome.png')
+    return buff;
 }
 
 
-export async function goodbyeImage(member: GuildMember, theme: ThemeType = 'sakura') {
-    const canvas = await drawCard(member, theme, ['goodbyeText', 'userText', 'avatarImg'])
-
-    return new MessageAttachment(canvas.toBuffer('image/png'), 'goodbye.png')
+export async function goodbyeImage(member: GuildMember, theme: ThemeType = 'sakura'): Promise<Buffer> {
+    const buff = await drawCard(member, theme, ['goodbyeText', 'userText', 'avatarImg'])
+    return buff;
 }
