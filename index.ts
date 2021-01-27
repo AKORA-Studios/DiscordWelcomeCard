@@ -1,6 +1,28 @@
 import { GuildMember, MessageAttachment } from "discord.js";
-import { createCanvas, loadImage, CanvasRenderingContext2D as ctx2D, Canvas, Image } from 'canvas';
+import { createCanvas, loadImage, CanvasRenderingContext2D, Canvas, Image } from 'canvas';
 import { join } from 'path';
+
+class ctx2D extends CanvasRenderingContext2D {
+    //Dummy implementtion for type support
+    roundRect(x: number, y: number, w: number, h: number, r: number): this {
+        return this;
+    }
+}
+
+//@ts-ignore
+CanvasRenderingContext2D.prototype.roundRect = function (x: number, y: number, w: number, h: number, r: number) {
+    if (w < 2 * r) r = w / 2;
+    if (h < 2 * r) r = h / 2;
+    console.log(this.moveTo)
+    this.beginPath();
+    this.moveTo(x + r, y);
+    this.arcTo(x + w, y, x + w, y + h, r);
+    this.arcTo(x + w, y + h, x, y + h, r);
+    this.arcTo(x, y + h, x, y, r);
+    this.arcTo(x, y, x + w, y, r);
+    this.closePath();
+    return this;
+}
 
 export interface Theme {
     color: string;
@@ -86,7 +108,7 @@ export type Module = (keyof typeof modules) | (ModuleFunction)
 
 export async function drawCard(member: GuildMember, theme: ThemeType = 'sakura', mods: Module[]): Promise<Buffer> {
     const canvas = createCanvas(700, 250)
-    const ctx = canvas.getContext('2d')
+    const ctx = canvas.getContext('2d') as ctx2D;
 
     var canvasTheme: Theme,
         background: Image;
@@ -114,12 +136,17 @@ export async function drawCard(member: GuildMember, theme: ThemeType = 'sakura',
 
 
 
-    ctx.drawImage(background, 0, 0)
+    ctx.roundRect(0, 0, canvas.width, canvas.height, canvas.height / 15);
+    ctx.clip();
+    ctx.drawImage(background, 0, 0);
+
     ctx.strokeRect(0, 0, canvas.width, canvas.height);
 
     ctx.fillStyle = canvasTheme.color;
     ctx.strokeStyle = canvasTheme.color;
-    ctx.font = '30px ' + (canvasTheme.font ? canvasTheme.font : 'sans-serif');;
+    ctx.font = '30px ' + (canvasTheme.font ? canvasTheme.font : 'sans-serif');
+
+
 
     for (const mod of mods) {
         if (typeof mod === 'string') {
