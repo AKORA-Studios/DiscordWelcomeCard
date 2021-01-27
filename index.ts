@@ -18,7 +18,7 @@ export var themes = {
     'sakura': { color: '#7d0b2b', image: join(root, 'sakura.png') },
     'blue': { color: '#040f57', image: join(root, 'blue.png') },
     'bamboo': { color: '#137a0d', image: join(root, 'bamboo.png') },
-    'desert': { color: '#000000', image: join(root, 'desert.png') },
+    'desert': { color: '#000000', image: join(root, 'desert.png'), font: 'Segoe Print' },
     'code': { color: '#ffffff', image: join(root, 'code.png'), font: 'Source Sans Pro' },
 }
 
@@ -66,13 +66,17 @@ export var modules = {
     },
 
     avatarImg: async (ctx: ctx2D, canvas: Canvas, member: GuildMember) => {
+        const h = canvas.height, w = canvas.width;
+
+        const radius = h / 2.5;
+
         ctx.lineWidth = 6
         ctx.beginPath();
-        ctx.arc(canvas.height / 2, canvas.height / 2, canvas.height / 2.5, 0, Math.PI * 2, true);
+        ctx.arc(h / 2, h / 2, radius, 0, Math.PI * 2, true);
         ctx.closePath();
         ctx.clip();
 
-        ctx.drawImage(await loadImage(member.user.displayAvatarURL({ format: 'png' })), 25, 25, 200, 200)
+        ctx.drawImage(await loadImage(member.user.displayAvatarURL({ format: 'png' })), radius / 4, radius / 4, radius * 2, radius * 2)
     }
 }
 
