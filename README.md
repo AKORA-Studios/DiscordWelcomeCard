@@ -18,7 +18,7 @@ client.on("message", async message => {
     //Generating the actual welcome Card
     const image = await welcomeImage(message.member, 'code');
 
-    message.channel.send(Discord.MessageAttachment(image, 'welcome.png'))
+    message.channel.send(new Discord.MessageAttachment(image, 'welcome.png'))
 });
 
 ```
@@ -38,7 +38,7 @@ client.on("message", async message => {
     //Generating the actual welcome Card
     const image = await goodbyeImage(message.member, 'code');
 
-    message.channel.send(Discord.MessageAttachment(image, 'welcome.png'))
+    message.channel.send(new Discord.MessageAttachment(image, 'welcome.png'))
 });
 
 client.login('your token here');
