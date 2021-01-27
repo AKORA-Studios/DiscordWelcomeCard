@@ -27,13 +27,16 @@ client.login('your token here');
 
 ###  Goodbye Card
 ```javascript
-const { Client} = require("discord.js");
+const Discord = require("discord.js");
 const { goodbyeImage } = require('discord-welcome-card');
 
-const client = new Client();
+const client = new Discord.Client();
 
 client.on("message", async message => {
-    message.channel.send('', await goodbyeImage(message.member, 'code'))
+    //Generating the actual welcome Card
+    const image = await goodbyeImage(message.member, 'code');
+
+    message.channel.send(Discord.MessageAttachment(image, 'welcome.png'))
 });
 
 client.login('your token here');
