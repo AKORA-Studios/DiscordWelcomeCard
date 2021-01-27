@@ -26,8 +26,10 @@ export var themes = {
 
 function getFontSize(str: string) {
     if (str.length < 18) return 30;
-
-    return Math.pow(600 * str.length, -1.05)
+    // 👌
+    const calculated = (600 * Math.pow(str.length, -1.05)).toFixed(0);
+    console.log(calculated);
+    return calculated;
 }
 
 export function changeFont(ctx: ctx2D, font: string) {
@@ -57,8 +59,8 @@ export var modules = {
     },
 
     userText: (ctx: ctx2D, canvas: Canvas, member: GuildMember) => {
-        changeFontSize(ctx, getFontSize(member.user.tag) + 'px');
-        ctx.fillText(`${member.user.tag}!`, canvas.width / 2.7, canvas.height / 1.8);
+        changeFontSize(ctx, getFontSize(member.displayName) + 'px');
+        ctx.fillText(`${member.displayName}!`, canvas.width / 2.7, canvas.height / 1.8);
     },
 
     memberCount: (ctx: ctx2D, canvas: Canvas, member: GuildMember) => {
