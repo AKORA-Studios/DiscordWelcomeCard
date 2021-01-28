@@ -1,19 +1,22 @@
 import { GuildMember, MessageAttachment } from "discord.js";
-import { createCanvas, loadImage, CanvasRenderingContext2D, Canvas, Image } from 'canvas';
+import { createCanvas, loadImage, CanvasRenderingContext2D as Nodectx2D, Canvas, Image } from 'canvas';
 import { join } from 'path';
 
-class ctx2D extends CanvasRenderingContext2D {
+class ctx2D extends Nodectx2D {
+    width: number; w: number;
+    height: number; h: number;
+    theme: Theme;
+
     //Dummy implementtion for type support
-    roundRect(x: number, y: number, w: number, h: number, r: number): this {
-        return this;
-    }
+    roundRect(x: number, y: number, w: number, h: number, r: number): this { return this; }
+    changeFont(font: string): this { return this; }
+    changeFontSize(size: string): this { return this; }
 }
 
 //@ts-ignore
-CanvasRenderingContext2D.prototype.roundRect = function (x: number, y: number, w: number, h: number, r: number) {
+Nodectx2D.prototype.roundRect = function (x: number, y: number, w: number, h: number, r: number) {
     if (w < 2 * r) r = w / 2;
     if (h < 2 * r) r = h / 2;
-    console.log(this.moveTo)
     this.beginPath();
     this.moveTo(x + r, y);
     this.arcTo(x + w, y, x + w, y + h, r);
@@ -23,6 +26,25 @@ CanvasRenderingContext2D.prototype.roundRect = function (x: number, y: number, w
     this.closePath();
     return this;
 }
+
+//@ts-ignore
+Nodectx2D.prototype.changeFont = function (font: string) {
+    var fontArgs = this.font.split(' ');
+    this.font = fontArgs[0] + ' ' + font; /// using the first part
+    return this;
+}
+
+//@ts-ignore
+Nodectx2D.prototype.changeFontSize = function (size: string) {
+    var fontArgs = this.font.split(' ');
+    this.font = size + ' ' + fontArgs.slice(1).join(' '); /// using the last part
+    return this;
+}
+
+
+
+
+
 
 export interface Theme {
     color: string;
@@ -51,44 +73,30 @@ function getFontSize(str: string) {
     return (600 * Math.pow(str.length, -1.05)).toFixed(0);
 }
 
-export function changeFont(ctx: ctx2D, font: string) {
-    var fontArgs = ctx.font.split(' ');
-    ctx.font = fontArgs[0] + ' ' + font; /// using the first part
-}
-
-export function changeFontSize(ctx: ctx2D, size: string) {
-    var fontArgs = ctx.font.split(' ');
-    ctx.font = size + ' ' + fontArgs.slice(1).join(' '); /// using the last part
-}
-
-
-
-
-
 
 export var modules = {
-    welcomeText: (ctx, canvas: Canvas, member: GuildMember) => {
-        changeFontSize(ctx, '30px');
-        ctx.fillText(`Welcome to this server,`, canvas.width / 2.7, canvas.height / 3.5);
+    welcomeText: (ctx: ctx2D, member: GuildMember) => {
+        ctx.changeFontSize('30px')
+            .fillText(`Welcome to this server,`, ctx.width / 2.7, ctx.height / 3.5);
     },
 
-    goodbyeText: (ctx: ctx2D, canvas: Canvas, member: GuildMember) => {
-        changeFontSize(ctx, '30px');
-        ctx.fillText(`Goodbye,`, canvas.width / 2.7, canvas.height / 3.5);
+    goodbyeText: (ctx: ctx2D, member: GuildMember) => {
+        ctx.changeFontSize('30px')
+            .fillText(`Goodbye,`, ctx.width / 2.7, ctx.height / 3.5);
     },
 
-    userText: (ctx: ctx2D, canvas: Canvas, member: GuildMember) => {
-        changeFontSize(ctx, getFontSize(member.displayName) + 'px');
-        ctx.fillText(`${member.displayName}!`, canvas.width / 2.7, canvas.height / 1.8);
+    userText: (ctx: ctx2D, member: GuildMember) => {
+        ctx.changeFontSize(getFontSize(member.displayName) + 'px')
+            .fillText(`${member.displayName}!`, ctx.width / 2.7, ctx.height / 1.8);
     },
 
-    memberCount: (ctx: ctx2D, canvas: Canvas, member: GuildMember) => {
-        changeFontSize(ctx, '25px');
-        ctx.fillText(`MemberCount: ${member.guild.memberCount}`, canvas.width / 2.7, canvas.height / 1.3);
+    memberCount: (ctx: ctx2D, member: GuildMember) => {
+        ctx.changeFontSize('25px')
+            .fillText(`MemberCount: ${member.guild.memberCount}`, ctx.width / 2.7, ctx.height / 1.3);
     },
 
-    avatarImg: async (ctx: ctx2D, canvas: Canvas, member: GuildMember) => {
-        const h = canvas.height, w = canvas.width;
+    avatarImg: async (ctx: ctx2D, member: GuildMember) => {
+        const { w, h } = ctx;
 
         const radius = h / 2.5;
 
@@ -102,13 +110,16 @@ export var modules = {
     }
 }
 
-export type ModuleFunction = (ctx: ctx2D, canvas: Canvas, member: GuildMember) => any
+export type ModuleFunction = (ctx: ctx2D, member: GuildMember) => any
 export type Module = (keyof typeof modules) | (ModuleFunction)
 
 
 export async function drawCard(member: GuildMember, theme: ThemeType = 'sakura', mods: Module[]): Promise<Buffer> {
     const canvas = createCanvas(700, 250)
     const ctx = canvas.getContext('2d') as ctx2D;
+    ctx.w = ctx.width = 700;
+    ctx.h = ctx.height = 250;
+
 
     var canvasTheme: Theme,
         background: Image;
@@ -134,7 +145,7 @@ export async function drawCard(member: GuildMember, theme: ThemeType = 'sakura',
         } catch (e) { throw new Error('Invalid Path or Buffer provided.') }
     }
 
-
+    ctx.theme = canvasTheme;
 
     ctx.roundRect(0, 0, canvas.width, canvas.height, canvas.height / 15);
     ctx.clip();
@@ -152,9 +163,9 @@ export async function drawCard(member: GuildMember, theme: ThemeType = 'sakura',
         if (typeof mod === 'string') {
             var func = modules[mod];
             if (!func) throw new Error(`${mod}, is not a valid Module`);
-            await func(ctx, canvas, member)
+            await func(ctx, member)
         } else {
-            if (typeof mod === 'function') await mod(ctx, canvas, member);
+            if (typeof mod === 'function') await mod(ctx, member);
             else throw (new Error(`${mod}, is not a valid Module`));
         }
     }
