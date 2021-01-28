@@ -8,6 +8,7 @@ Simple Goodbye and welcome cards
 
 ## Examples
 ###  Welcome Card
+
 ```javascript
 const Discord = require("discord.js");
 const { welcomeImage } = require('discord-welcome-card');
@@ -28,6 +29,7 @@ client.on("message", async message => {
 
 
 ###  Goodbye Card
+
 ```javascript
 const Discord = require("discord.js");
 const { goodbyeImage } = require('discord-welcome-card');
