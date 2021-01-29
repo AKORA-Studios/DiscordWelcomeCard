@@ -54,5 +54,10 @@ client.login('your token here');
 ##  Changelog
 | Version  | Content |
 | ------------- | ------------- |
-| 1.1.4  | new card backgrounds  |
-| 1.1.5  | Added Auto Size  |
+| 1.1.4 | new card backgrounds  |
+| 1.1.5 | Added Auto Size  |
+| 2.0.0 | Switched to typescript  |
+| 2.0.1 | Added Custom Card Function  |
+| 2.0.2 | Added more typings  |
+| 2.1.0 | Added Custom Themes and Fonts  |
+| 2.1.1 | Added Custom Functions to CanvasContext |
