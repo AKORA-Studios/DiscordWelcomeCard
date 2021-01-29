@@ -1,41 +1,53 @@
+![NPM Version](https://img.shields.io/npm/v/discord-welcome-card?color=00DEC8&style=for-the-badge)
+![NPM Downloads](https://img.shields.io/npm/dt/discord-welcome-card?color=00DEC8&style=for-the-badge)
+![NPM License](https://img.shields.io/npm/l/discord-welcome-card?color=00DEC8&style=for-the-badge)
+![Github Size](https://img.shields.io/github/repo-size/AKORA-Studios/DiscordWelcomeCard?color=00DEC8&label=SIZE&style=for-the-badge)
+
 #  Discord Welcome Card
 Simple Goodbye and welcome cards
-<div align="left">
-  <p>
-    <a href="https://www.npmjs.com/package/discord.js"><img src="https://img.shields.io/npm/v/discord-welcome-card.svg?maxAge=3600" alt="NPM version" /></a>
-    <a href="https://www.npmjs.com/package/discord-welcome-card"><img src="https://img.shields.io/npm/dt/discord-welcome-card.svg?maxAge=3600" alt="NPM downloads" /></a>
-  </p>
-</div>
 
-[![NPM](https://nodei.co/npm/discord-welcome-card.png?downloads=true&stars=true)](https://www.npmjs.com/package/discord-welcome-card)
-
-
-##  Example Usage 
-
-![Example Welcome](https://media.discordapp.net/attachments/753474862693089300/802981356589154324/welcome.png)
-```javascript
-const Discord = require("discord.js");
-const client = new Discord.Client();
-const {welcomeImage, goodbyeImage} = require('discord-welcome-card')
-
-client.on("message", async message => {
-    message.channel.send('', await welcomeImage(message.member))
-})
-```
-
-##  Example Usage 2
-
-![Example 2 Welcome](https://cdn.discordapp.com/attachments/753474862693089300/802981806604943370/welcome.png)
+## Examples
+###  Welcome Card
 
 ```javascript
 const Discord = require("discord.js");
+const { welcomeImage } = require('discord-welcome-card');
+
 const client = new Discord.Client();
-const {welcomeImage, goodbyeImage} = require('discord-welcome-card')
 
 client.on("message", async message => {
-    message.channel.send('', await welcomeImage(message.member, 'dark'))
-})
+    //Generating the actual welcome Card
+    const image = await welcomeImage(message.member, 'code');
+
+    message.channel.send(new Discord.MessageAttachment(image, 'welcome.png'))
+});
+
 ```
+![Image](examples/welcome.png)
+
+<br />
+
+
+###  Goodbye Card
+
+```javascript
+const Discord = require("discord.js");
+const { goodbyeImage } = require('discord-welcome-card');
+
+const client = new Discord.Client();
+
+client.on("message", async message => {
+    //Generating the actual welcome Card
+    const image = await goodbyeImage(message.member, 'code');
+
+    message.channel.send(new Discord.MessageAttachment(image, 'welcome.png'))
+});
+
+client.login('your token here');
+```
+![Image](examples/goodbye.png)
+
+<br /><br /><br />
 
 
 
