@@ -17,7 +17,7 @@ const client = new Discord.Client();
 
 client.on("message", async message => {
     //Generating the actual welcome Card
-    const image = await welcomeImage(message.member, 'code');
+    const image = await welcomeImage(message.member);
 
     message.channel.send(new Discord.MessageAttachment(image, 'welcome.png'))
 });
