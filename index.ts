@@ -11,6 +11,7 @@ class ctx2D extends Nodectx2D {
     roundRect(x: number, y: number, w: number, h: number, r: number): this { return this; }
     changeFont(font: string): this { return this; }
     changeFontSize(size: string): this { return this; }
+    blur(strength: number): this { return this; }
 }
 
 //@ts-ignore
@@ -38,6 +39,28 @@ Nodectx2D.prototype.changeFont = function (font: string) {
 Nodectx2D.prototype.changeFontSize = function (size: string) {
     var fontArgs = this.font.split(' ');
     this.font = size + ' ' + fontArgs.slice(1).join(' '); /// using the last part
+    return this;
+}
+
+//@ts-ignore
+Nodectx2D.prototype.blur = function (strength: number) {
+    this.globalAlpha = 0.5; // Higher alpha made it more smooth
+    // Add blur layers by strength to x and y
+    // 2 made it a bit faster without noticeable quality loss
+    for (var y = -strength; y <= strength; y += 2) {
+        for (var x = -strength; x <= strength; x += 2) {
+            // Apply layers
+            this.drawImage(this.canvas, x, y);
+            // Add an extra layer, prevents it from rendering lines
+            // on top of the images (does makes it slower though)
+            if (x >= 0 && y >= 0) {
+                this.drawImage(this.canvas, -(x - 1), -(y - 1));
+            }
+        }
+    }
+    this.globalAlpha = 1.0;
+
+
     return this;
 }
 
@@ -80,15 +103,17 @@ export type CardOptions = {
     text?: string;
     subtitle?: string;
     avatar?: Canvas | Image;
+    blur?: boolean | number;
     custom?: ModuleFunction;
 }
 
 
 export async function drawCard(member: GuildMember, options: CardOptions): Promise<Buffer> {
-    const canvas = createCanvas(700, 250);
+    const w = 700, h = 250;
+    const canvas = createCanvas(w, h);
     const ctx = canvas.getContext('2d') as ctx2D;
-    ctx.w = ctx.width = 700;
-    ctx.h = ctx.height = 250;
+    ctx.w = ctx.width = w;
+    ctx.h = ctx.height = h;
 
     //@ts-ignore
     var theme: Theme = options.theme ?? 'sakura';
@@ -116,12 +141,29 @@ export async function drawCard(member: GuildMember, options: CardOptions): Promi
 
     ctx.theme = theme;
 
+    //Background
     ctx.roundRect(0, 0, canvas.width, canvas.height, canvas.height / 15);
     ctx.clip();
-    ctx.drawImage(background, 0, 0);
+    if (options.blur) {
+        console.log('Q');
+        var blur = createCanvas(w, h), blur_ctx = blur.getContext('2d') as ctx2D;
+        blur_ctx.drawImage(background, 0, 0, w, h);
 
-    ctx.strokeRect(0, 0, canvas.width, canvas.height);
+        if (typeof options.blur === 'boolean') blur_ctx.blur(3);
+        else blur_ctx.blur(options.blur);
 
+
+
+        ctx.drawImage(blur, 0, 0, w, h);
+    } else {
+        ctx.drawImage(background, 0, 0, w, h);
+    }
+
+
+    ctx.strokeRect(0, 0, w, h);
+
+
+    //Setting Styles
     ctx.fillStyle = theme.color;
     ctx.strokeStyle = theme.color;
     ctx.font = '30px ' + (theme.font ? theme.font : 'sans-serif');
@@ -141,8 +183,6 @@ export async function drawCard(member: GuildMember, options: CardOptions): Promi
         .fillText(options.subtitle ?? '', ctx.width / 2.7, ctx.height / 1.3);
 
     //Avatar Image
-    const { w, h } = ctx;
-
     const radius = h / 2.5;
 
     ctx.lineWidth = 6
@@ -166,7 +206,8 @@ export async function welcomeImage(member: GuildMember, options: CardOptions = {
         text: options.text ?? `${member.user.tag}!`,
         subtitle: options.subtitle ?? `MemberCount: ${member.guild.memberCount}`,
         theme: options.theme ?? 'sakura',
-        avatar: options.avatar ?? await loadImage(member.user.displayAvatarURL({ format: 'png' }))
+        avatar: options.avatar ?? await loadImage(member.user.displayAvatarURL({ format: 'png' })),
+        blur: options.blur
     })
     //const attachment = new MessageAttachment(buff, 'welcome.png')
     return buff;
@@ -179,7 +220,8 @@ export async function goodbyeImage(member: GuildMember, options: CardOptions = {
         text: options.text ?? `${member.user.tag}!`,
         subtitle: options.subtitle,
         theme: options.theme ?? 'sakura',
-        avatar: options.avatar ?? await loadImage(member.user.displayAvatarURL({ format: 'png' }))
+        avatar: options.avatar ?? await loadImage(member.user.displayAvatarURL({ format: 'png' })),
+        blur: options.blur
     })
     return buff;
 }
