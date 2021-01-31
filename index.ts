@@ -1,4 +1,4 @@
-import { GuildMember, MessageAttachment } from "discord.js";
+import { GuildMember } from "discord.js";
 import { createCanvas, loadImage, CanvasRenderingContext2D as Nodectx2D, Canvas, Image } from 'canvas';
 import { join } from 'path';
 
@@ -73,69 +73,38 @@ function getFontSize(str: string) {
     return (600 * Math.pow(str.length, -1.05)).toFixed(0);
 }
 
-
-export var modules = {
-    welcomeText: (ctx: ctx2D, member: GuildMember) => {
-        ctx.changeFontSize('30px')
-            .fillText(`Welcome to this server,`, ctx.width / 2.7, ctx.height / 3.5);
-    },
-
-    goodbyeText: (ctx: ctx2D, member: GuildMember) => {
-        ctx.changeFontSize('30px')
-            .fillText(`Goodbye,`, ctx.width / 2.7, ctx.height / 3.5);
-    },
-
-    userText: (ctx: ctx2D, member: GuildMember) => {
-        ctx.changeFontSize(getFontSize(member.user.tag) + 'px')
-            .fillText(`${member.user.tag}!`, ctx.width / 2.7, ctx.height / 1.8);
-    },
-
-    memberCount: (ctx: ctx2D, member: GuildMember) => {
-        ctx.changeFontSize('25px')
-            .fillText(`MemberCount: ${member.guild.memberCount}`, ctx.width / 2.7, ctx.height / 1.3);
-    },
-
-    avatarImg: async (ctx: ctx2D, member: GuildMember) => {
-        const { w, h } = ctx;
-
-        const radius = h / 2.5;
-
-        ctx.lineWidth = 6
-        ctx.beginPath();
-        ctx.arc(h / 2, h / 2, radius, 0, Math.PI * 2, true);
-        ctx.closePath();
-        ctx.clip();
-
-        ctx.drawImage(await loadImage(member.user.displayAvatarURL({ format: 'png' })), radius / 4, radius / 4, radius * 2, radius * 2)
-    }
+export type ModuleFunction = (ctx: ctx2D, member: GuildMember) => any
+export type CardOptions = {
+    theme?: ThemeType;
+    title?: string;
+    text?: string;
+    subtitle?: string;
+    avatar?: Canvas | Image;
+    custom?: ModuleFunction;
 }
 
-export type ModuleFunction = (ctx: ctx2D, member: GuildMember) => any
-export type Module = (keyof typeof modules) | (ModuleFunction)
 
-
-export async function drawCard(member: GuildMember, theme: ThemeType = 'sakura', mods: Module[]): Promise<Buffer> {
-    const canvas = createCanvas(700, 250)
+export async function drawCard(member: GuildMember, options: CardOptions): Promise<Buffer> {
+    const canvas = createCanvas(700, 250);
     const ctx = canvas.getContext('2d') as ctx2D;
     ctx.w = ctx.width = 700;
     ctx.h = ctx.height = 250;
 
+    //@ts-ignore
+    var theme: Theme = options.theme ?? 'sakura';
 
-    var canvasTheme: Theme,
-        background: Image;
+
+    var background: Image;
 
 
     //Parsing the Theme
     if (typeof theme === 'string') {
         //Builtin Theme
-        canvasTheme = themes[theme];
-        if (!canvasTheme) throw new Error('Invalid theme, use: ' + Object.keys(themes).join(' | '));
+        theme = themes[theme];
+        if (!theme) throw new Error('Invalid theme, use: ' + Object.keys(themes).join(' | '));
 
-        background = await loadImage(canvasTheme.image);
+        background = await loadImage(theme.image);
     } else {
-        //Custom Theme
-        canvasTheme = theme;
-
         //Invalid Color
         if (!theme.color.match(hexcolor)) throw new Error('Invalid Color provided.')
 
@@ -145,7 +114,7 @@ export async function drawCard(member: GuildMember, theme: ThemeType = 'sakura',
         } catch (e) { throw new Error('Invalid Path or Buffer provided.') }
     }
 
-    ctx.theme = canvasTheme;
+    ctx.theme = theme;
 
     ctx.roundRect(0, 0, canvas.width, canvas.height, canvas.height / 15);
     ctx.clip();
@@ -153,35 +122,60 @@ export async function drawCard(member: GuildMember, theme: ThemeType = 'sakura',
 
     ctx.strokeRect(0, 0, canvas.width, canvas.height);
 
-    ctx.fillStyle = canvasTheme.color;
-    ctx.strokeStyle = canvasTheme.color;
-    ctx.font = '30px ' + (canvasTheme.font ? canvasTheme.font : 'sans-serif');
+    ctx.fillStyle = theme.color;
+    ctx.strokeStyle = theme.color;
+    ctx.font = '30px ' + (theme.font ? theme.font : 'sans-serif');
 
 
+    //Drawing
+    //Title
+    ctx.changeFontSize('30px')
+        .fillText(options.title ?? '', ctx.width / 2.7, ctx.height / 3.5);
 
-    for (const mod of mods) {
-        if (typeof mod === 'string') {
-            var func = modules[mod];
-            if (!func) throw new Error(`${mod}, is not a valid Module`);
-            await func(ctx, member)
-        } else {
-            if (typeof mod === 'function') await mod(ctx, member);
-            else throw (new Error(`${mod}, is not a valid Module`));
-        }
-    }
+    //Text
+    ctx.changeFontSize(getFontSize(member.user.tag) + 'px')
+        .fillText(options.title ?? '', ctx.width / 2.7, ctx.height / 1.8);
+
+    //Subtitle
+    ctx.changeFontSize('25px')
+        .fillText(options.subtitle ?? '', ctx.width / 2.7, ctx.height / 1.3);
+
+    //Avatar Image
+    const { w, h } = ctx;
+
+    const radius = h / 2.5;
+
+    ctx.lineWidth = 6
+    ctx.beginPath();
+    ctx.arc(h / 2, h / 2, radius, 0, Math.PI * 2, true);
+    ctx.closePath();
+    ctx.clip();
+
+    ctx.drawImage(options.avatar ?? '', radius / 4, radius / 4, radius * 2, radius * 2)
+
+
 
     return canvas.toBuffer('image/png');
 }
 
 
 export async function welcomeImage(member: GuildMember, theme: ThemeType = 'sakura'): Promise<Buffer> {
-    const buff = await drawCard(member, theme, ['welcomeText', 'userText', 'memberCount', 'avatarImg'])
+    const buff = await drawCard(member, {
+        title: `Welcome to this server,`,
+        text: `${member.user.tag}!`,
+        subtitle: `MemberCount: ${member.guild.memberCount}`,
+        avatar: await loadImage(member.user.displayAvatarURL({ format: 'png' }))
+    })
     //const attachment = new MessageAttachment(buff, 'welcome.png')
     return buff;
 }
 
 
 export async function goodbyeImage(member: GuildMember, theme: ThemeType = 'sakura'): Promise<Buffer> {
-    const buff = await drawCard(member, theme, ['goodbyeText', 'userText', 'avatarImg'])
+    const buff = await drawCard(member, {
+        title: `Goodbye,`,
+        text: `${member.user.tag}!`,
+        avatar: await loadImage(member.user.displayAvatarURL({ format: 'png' }))
+    })
     return buff;
 }
