@@ -134,7 +134,7 @@ export async function drawCard(member: GuildMember, options: CardOptions): Promi
 
     //Text
     ctx.changeFontSize(getFontSize(member.user.tag) + 'px')
-        .fillText(options.title ?? '', ctx.width / 2.7, ctx.height / 1.8);
+        .fillText(options.text ?? '', ctx.width / 2.7, ctx.height / 1.8);
 
     //Subtitle
     ctx.changeFontSize('25px')
@@ -151,7 +151,7 @@ export async function drawCard(member: GuildMember, options: CardOptions): Promi
     ctx.closePath();
     ctx.clip();
 
-    ctx.drawImage(options.avatar ?? '', radius / 4, radius / 4, radius * 2, radius * 2)
+    if (options.avatar && typeof options.avatar === 'object') ctx.drawImage(options.avatar, radius / 4, radius / 4, radius * 2, radius * 2)
 
 
 
