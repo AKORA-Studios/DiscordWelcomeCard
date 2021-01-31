@@ -86,7 +86,7 @@ export var modules = {
     },
 
     userText: (ctx: ctx2D, member: GuildMember) => {
-        ctx.changeFontSize(getFontSize(member.displayName) + 'px')
+        ctx.changeFontSize(getFontSize(member.user.tag) + 'px')
             .fillText(`${member.user.tag}!`, ctx.width / 2.7, ctx.height / 1.8);
     },
 
