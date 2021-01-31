@@ -69,6 +69,10 @@ Nodectx2D.prototype.blur = function (strength: number) {
 
 
 
+
+
+
+
 export interface Theme {
     color: string;
     image: string | Buffer;
@@ -91,6 +95,8 @@ export var themes = {
 
 
 
+
+
 function getFontSize(str: string) {
     if (str.length < 18) return 30;
     return (600 * Math.pow(str.length, -1.05)).toFixed(0);
@@ -106,6 +112,12 @@ export type CardOptions = {
     blur?: boolean | number;
     custom?: ModuleFunction;
 }
+
+
+
+
+
+
 
 
 export async function drawCard(member: GuildMember, options: CardOptions): Promise<Buffer> {
