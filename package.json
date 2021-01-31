@@ -16,7 +16,6 @@
     "author": "dragoncat4012",
     "license": "Apache License",
     "dependencies": {
-        "discord.js": "^12.5.1",
         "canvas": "^2.6.1"
     },
     "repository": {
@@ -24,6 +23,7 @@
         "url": "git://github.com/AKORA-Studios/DiscordWelcomeCard.git"
     },
     "devDependencies": {
-        "@types/node": "^14.14.22"
+        "@types/node": "^14.14.22",
+        "discord.js": "^12.5.1"
     }
 }
