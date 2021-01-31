@@ -159,23 +159,26 @@ export async function drawCard(member: GuildMember, options: CardOptions): Promi
 }
 
 
-export async function welcomeImage(member: GuildMember, theme: ThemeType = 'sakura'): Promise<Buffer> {
+export async function welcomeImage(member: GuildMember, options: CardOptions = {}): Promise<Buffer> {
     const buff = await drawCard(member, {
-        title: `Welcome to this server,`,
-        text: `${member.user.tag}!`,
-        subtitle: `MemberCount: ${member.guild.memberCount}`,
-        avatar: await loadImage(member.user.displayAvatarURL({ format: 'png' }))
+        title: options.title ?? `Welcome to this server,`,
+        text: options.text ?? `${member.user.tag}!`,
+        subtitle: options.subtitle ?? `MemberCount: ${member.guild.memberCount}`,
+        theme: options.theme ?? 'sakura',
+        avatar: options.avatar ?? await loadImage(member.user.displayAvatarURL({ format: 'png' }))
     })
     //const attachment = new MessageAttachment(buff, 'welcome.png')
     return buff;
 }
 
 
-export async function goodbyeImage(member: GuildMember, theme: ThemeType = 'sakura'): Promise<Buffer> {
+export async function goodbyeImage(member: GuildMember, options: CardOptions = {}): Promise<Buffer> {
     const buff = await drawCard(member, {
-        title: `Goodbye,`,
-        text: `${member.user.tag}!`,
-        avatar: await loadImage(member.user.displayAvatarURL({ format: 'png' }))
+        title: options.title ?? `Goodbye,`,
+        text: options.text ?? `${member.user.tag}!`,
+        subtitle: options.subtitle,
+        theme: options.theme ?? 'sakura',
+        avatar: options.avatar ?? await loadImage(member.user.displayAvatarURL({ format: 'png' }))
     })
     return buff;
 }
