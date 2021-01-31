@@ -151,7 +151,8 @@ export async function drawCard(member: GuildMember, options: CardOptions): Promi
     ctx.closePath();
     ctx.clip();
 
-    if (options.avatar && typeof options.avatar === 'object') ctx.drawImage(options.avatar, radius / 4, radius / 4, radius * 2, radius * 2)
+    if (options.avatar && (options.avatar instanceof Canvas || options.avatar instanceof Image))
+        ctx.drawImage(options.avatar, radius / 4, radius / 4, radius * 2, radius * 2)
 
 
 
