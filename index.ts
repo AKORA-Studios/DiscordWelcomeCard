@@ -76,14 +76,19 @@ Nodectx2D.prototype.blur = function (strength: number = 1) {
 
 
 
-export interface Theme {
-    color: string;
+export type Theme = {
+    color: string | Gradient;
     image: string | Buffer;
     font?: string;
 }
 
+export class Gradient {
+    toString(): string {
+        return '';
+    }
+}
+
 export type ThemeType = (keyof typeof themes) | Theme;
-const hexcolor = /#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})/;
 
 
 const root = join(__dirname, 'images')
@@ -150,9 +155,6 @@ export async function drawCard(member: GuildMember, options: CardOptions): Promi
 
         background = await loadImage(theme.image);
     } else {
-        //Invalid Color
-        if (!theme.color.match(hexcolor)) throw new Error('Invalid Color provided.')
-
         //Loading the Background
         try {
             background = await loadImage(theme.image);
@@ -210,8 +212,8 @@ export async function drawCard(member: GuildMember, options: CardOptions): Promi
 
 
     //Setting Styles
-    ctx.fillStyle = theme.color;
-    ctx.strokeStyle = theme.color;
+    ctx.fillStyle = theme.color.toString();
+    ctx.strokeStyle = theme.color.toString();
     ctx.font = '30px ' + (theme.font ? theme.font : 'sans-serif');
 
 
