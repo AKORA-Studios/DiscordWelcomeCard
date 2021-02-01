@@ -114,7 +114,7 @@ export type CardOptions = {
     avatar?: Canvas | Image;
     blur?: boolean | number;
     border?: boolean;
-    round?: boolean;
+    rounded?: boolean;
     custom?: ModuleFunction;
 }
 
@@ -164,7 +164,7 @@ export async function drawCard(member: GuildMember, options: CardOptions): Promi
 
     //Background
     snap(canvas);
-    if (options.round) ctx.roundRect(0, 0, w, h, h / 15);
+    if (options.rounded) ctx.roundRect(0, 0, w, h, h / 15);
     else ctx.rect(0, 0, w, h);
     ctx.clip();
 
@@ -182,11 +182,11 @@ export async function drawCard(member: GuildMember, options: CardOptions): Promi
     snap(canvas);
     //Rounded Edges
     if (options.border) {
-        if (options.round) ctx.roundRect(b, b, w - 2 * b, h - 2 * b, h / 15);
+        if (options.rounded) ctx.roundRect(b, b, w - 2 * b, h - 2 * b, h / 15);
         else ctx.rect(b, b, w - (2 * b), h - (2 * b));
         ctx.clip();
     } else {
-        if (options.round) ctx.roundRect(0, 0, w, h, h / 15).clip();
+        if (options.rounded) ctx.roundRect(0, 0, w, h, h / 15).clip();
         else ctx.rect(0, 0, w, h);
     }
 
