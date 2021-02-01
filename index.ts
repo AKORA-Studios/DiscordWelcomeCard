@@ -83,8 +83,27 @@ export type Theme = {
 }
 
 export class Gradient {
-    toString(): string {
-        return '';
+    type: 'linear' | 'radial';
+    colors: { offset: number; color: string; }[];
+    grad: CanvasGradient;
+
+    constructor(type: 'linear' | 'radial' = 'linear', ...colors: { offset: number; color: string; }[]) {
+        this.type = type;
+        this.colors = colors ?? [];
+    }
+
+    addColorStop(offset: number, color: string) {
+        this.colors.push({ offset, color });
+    }
+
+    toString(ctx: ctx2D) {
+        var grad = this.type === 'linear' ?
+            ctx.createLinearGradient(0, 0, ctx.w, ctx.h)
+            : ctx.createRadialGradient(ctx.w / 2, ctx.h / 2, ctx.w / 2, ctx.w / 2, ctx.h / 2, ctx.w / 2);
+
+        for (const v of this.colors) grad.addColorStop(v.offset, v.color)
+
+        return grad;
     }
 }
 
@@ -142,7 +161,6 @@ export async function drawCard(member: GuildMember, options: CardOptions): Promi
 
     //@ts-ignore
     var theme: Theme = options.theme ?? 'sakura';
-
 
     var background: Image;
 
@@ -212,8 +230,8 @@ export async function drawCard(member: GuildMember, options: CardOptions): Promi
 
 
     //Setting Styles
-    ctx.fillStyle = theme.color.toString();
-    ctx.strokeStyle = theme.color.toString();
+    ctx.fillStyle = theme.color.toString(ctx);
+    ctx.strokeStyle = theme.color.toString(ctx);
     ctx.font = '30px ' + (theme.font ? theme.font : 'sans-serif');
 
 
