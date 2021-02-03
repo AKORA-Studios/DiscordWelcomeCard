@@ -135,7 +135,7 @@ export type CardOptions = {
     title?: string;
     text?: string;
     subtitle?: string;
-    avatar?: Canvas | Image;
+    avatar?: Canvas | Image | Buffer | string;
     blur?: boolean | number;
     border?: boolean;
     rounded?: boolean;
@@ -257,8 +257,13 @@ export async function drawCard(options: CardOptions): Promise<Buffer> {
     ctx.closePath();
     ctx.clip();
 
-    if (options.avatar && (options.avatar instanceof Canvas || options.avatar instanceof Image))
-        ctx.drawImage(options.avatar, radius / 4, radius / 4, radius * 2, radius * 2)
+    if (options.avatar) {
+        if (options.avatar instanceof Canvas || options.avatar instanceof Image)
+            ctx.drawImage(options.avatar, radius / 4, radius / 4, radius * 2, radius * 2);
+        else if (typeof options.avatar === 'string' || options.avatar instanceof Buffer)
+            ctx.drawImage(await loadImage(options.avatar), radius / 4, radius / 4, radius * 2, radius * 2);
+        else throw new Error('Invalid Avatar Argument');
+    }
 
     if (options.custom) options.custom(ctx);
 
