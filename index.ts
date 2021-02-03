@@ -1,24 +1,24 @@
-import { GuildMember } from "discord.js";
-import { createCanvas, loadImage, CanvasRenderingContext2D as Nodectx2D, Canvas, Image } from 'canvas';
+import { GuildMember } from 'discord.js';
+import { createCanvas, loadImage, CanvasRenderingContext2D as ctx2D, Canvas, Image } from 'canvas';
 import { join } from 'path';
 import { writeFileSync } from "fs";
 
 const production = true;
 
-class ctx2D extends Nodectx2D {
-    width: number; w: number;
-    height: number; h: number;
-    theme: Theme;
+declare global {
+    interface CanvasRenderingContext2D {
+        width: number; w: number;
+        height: number; h: number;
+        theme: Theme;
 
-    //Dummy implementtion for type support
-    roundRect(x: number, y: number, w: number, h: number, r: number): this { return this; }
-    changeFont(font: string): this { return this; }
-    changeFontSize(size: string): this { return this; }
-    blur(strength: number = 1): this { return this; }
+        roundRect(x: number, y: number, w: number, h: number, r: number): this
+        changeFont(font: string): this
+        changeFontSize(size: string): this
+        blur(strength: number): this
+    }
 }
 
-//@ts-ignore
-Nodectx2D.prototype.roundRect = function (x: number, y: number, w: number, h: number, r: number) {
+ctx2D.prototype.roundRect = function (x, y, w, h, r) {
     if (w < 2 * r) r = w / 2;
     if (h < 2 * r) r = h / 2;
     this.beginPath();
@@ -31,22 +31,19 @@ Nodectx2D.prototype.roundRect = function (x: number, y: number, w: number, h: nu
     return this;
 }
 
-//@ts-ignore
-Nodectx2D.prototype.changeFont = function (font: string) {
+ctx2D.prototype.changeFont = function (font) {
     var fontArgs = this.font.split(' ');
     this.font = fontArgs[0] + ' ' + font; /// using the first part
     return this;
 }
 
-//@ts-ignore
-Nodectx2D.prototype.changeFontSize = function (size: string) {
+ctx2D.prototype.changeFontSize = function (size) {
     var fontArgs = this.font.split(' ');
     this.font = size + ' ' + fontArgs.slice(1).join(' '); /// using the last part
     return this;
 }
 
-//@ts-ignore
-Nodectx2D.prototype.blur = function (strength: number = 1) {
+ctx2D.prototype.blur = function (strength = 1) {
     this.globalAlpha = 0.5; // Higher alpha made it more smooth
     // Add blur layers by strength to x and y
     // 2 made it a bit faster without noticeable quality loss
@@ -155,7 +152,7 @@ function snap(c: Canvas) {
 export async function drawCard(options: CardOptions): Promise<Buffer> {
     const w = 700, h = 250;
     const canvas = createCanvas(w, h);
-    const ctx = canvas.getContext('2d') as ctx2D;
+    const ctx = canvas.getContext('2d');
     ctx.w = ctx.width = w;
     ctx.h = ctx.height = h;
 
