@@ -1,6 +1,9 @@
-import { GuildMember, MessageAttachment } from "discord.js";
+import { GuildMember } from "discord.js";
 import { createCanvas, loadImage, CanvasRenderingContext2D as Nodectx2D, Canvas, Image } from 'canvas';
 import { join } from 'path';
+import { writeFileSync } from "fs";
+
+const production = true;
 
 class ctx2D extends Nodectx2D {
     width: number; w: number;
@@ -11,6 +14,7 @@ class ctx2D extends Nodectx2D {
     roundRect(x: number, y: number, w: number, h: number, r: number): this { return this; }
     changeFont(font: string): this { return this; }
     changeFontSize(size: string): this { return this; }
+    blur(strength: number = 1): this { return this; }
 }
 
 //@ts-ignore
@@ -41,19 +45,69 @@ Nodectx2D.prototype.changeFontSize = function (size: string) {
     return this;
 }
 
+//@ts-ignore
+Nodectx2D.prototype.blur = function (strength: number = 1) {
+    this.globalAlpha = 0.5; // Higher alpha made it more smooth
+    // Add blur layers by strength to x and y
+    // 2 made it a bit faster without noticeable quality loss
+    for (var y = -strength; y <= strength; y += 2) {
+        for (var x = -strength; x <= strength; x += 2) {
+            // Apply layers
+            this.drawImage(this.canvas, x, y);
+            // Add an extra layer, prevents it from rendering lines
+            // on top of the images (does makes it slower though)
+            if (x >= 0 && y >= 0) {
+                this.drawImage(this.canvas, -(x - 1), -(y - 1));
+            }
+        }
+    }
+    this.globalAlpha = 1.0;
+
+
+    return this;
+}
 
 
 
 
 
-export interface Theme {
-    color: string;
+
+
+
+
+
+export type Theme = {
+    color: string | Gradient;
     image: string | Buffer;
     font?: string;
 }
 
+export class Gradient {
+    type: 'linear' | 'radial';
+    colors: { offset: number; color: string; }[];
+    grad: CanvasGradient;
+
+    constructor(type: 'linear' | 'radial' = 'linear', ...colors: { offset: number; color: string; }[]) {
+        this.type = type;
+        this.colors = colors ?? [];
+    }
+
+    addColorStop(offset: number, color: string) {
+        this.colors.push({ offset, color });
+    }
+
+    toString(ctx: ctx2D) {
+        var grad = this.type === 'linear' ?
+            ctx.createLinearGradient(0, 0, ctx.w, ctx.h)
+            : ctx.createRadialGradient(ctx.w / 2, ctx.h / 2, ctx.w / 2, ctx.w / 2, ctx.h / 2, ctx.w / 2);
+
+        for (const v of this.colors) grad.addColorStop(v.offset, v.color)
+
+        return grad;
+    }
+}
+
 export type ThemeType = (keyof typeof themes) | Theme;
-const hexcolor = /#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})/;
 
 
 const root = join(__dirname, 'images')
@@ -68,120 +122,174 @@ export var themes = {
 
 
 
+
+
 function getFontSize(str: string) {
     if (str.length < 18) return 30;
     return (600 * Math.pow(str.length, -1.05)).toFixed(0);
 }
 
-
-export var modules = {
-    welcomeText: (ctx: ctx2D, member: GuildMember) => {
-        ctx.changeFontSize('30px')
-            .fillText(`Welcome to this server,`, ctx.width / 2.7, ctx.height / 3.5);
-    },
-
-    goodbyeText: (ctx: ctx2D, member: GuildMember) => {
-        ctx.changeFontSize('30px')
-            .fillText(`Goodbye,`, ctx.width / 2.7, ctx.height / 3.5);
-    },
-
-    userText: (ctx: ctx2D, member: GuildMember) => {
-        ctx.changeFontSize(getFontSize(member.user.tag) + 'px')
-            .fillText(`${member.user.tag}!`, ctx.width / 2.7, ctx.height / 1.8);
-    },
-
-    memberCount: (ctx: ctx2D, member: GuildMember) => {
-        ctx.changeFontSize('25px')
-            .fillText(`MemberCount: ${member.guild.memberCount}`, ctx.width / 2.7, ctx.height / 1.3);
-    },
-
-    avatarImg: async (ctx: ctx2D, member: GuildMember) => {
-        const { w, h } = ctx;
-
-        const radius = h / 2.5;
-
-        ctx.lineWidth = 6
-        ctx.beginPath();
-        ctx.arc(h / 2, h / 2, radius, 0, Math.PI * 2, true);
-        ctx.closePath();
-        ctx.clip();
-
-        ctx.drawImage(await loadImage(member.user.displayAvatarURL({ format: 'png' })), radius / 4, radius / 4, radius * 2, radius * 2)
-    }
+export type ModuleFunction = (ctx: ctx2D, member: GuildMember) => any
+export type CardOptions = {
+    theme?: ThemeType;
+    title?: string;
+    text?: string;
+    subtitle?: string;
+    avatar?: Canvas | Image;
+    blur?: boolean | number;
+    border?: boolean;
+    rounded?: boolean;
+    custom?: ModuleFunction;
 }
 
-export type ModuleFunction = (ctx: ctx2D, member: GuildMember) => any
-export type Module = (keyof typeof modules) | (ModuleFunction)
 
 
-export async function drawCard(member: GuildMember, theme: ThemeType = 'sakura', mods: Module[]): Promise<Buffer> {
-    const canvas = createCanvas(700, 250)
+
+var count = 0;
+function snap(c: Canvas) {
+    if (!production) writeFileSync(`./snapshots/${count}.png`, c.toBuffer('image/png'));
+    count++;
+}
+
+
+export async function drawCard(member: GuildMember, options: CardOptions): Promise<Buffer> {
+    const w = 700, h = 250;
+    const canvas = createCanvas(w, h);
     const ctx = canvas.getContext('2d') as ctx2D;
-    ctx.w = ctx.width = 700;
-    ctx.h = ctx.height = 250;
+    ctx.w = ctx.width = w;
+    ctx.h = ctx.height = h;
 
+    //@ts-ignore
+    var theme: Theme = options.theme ?? 'sakura';
 
-    var canvasTheme: Theme,
-        background: Image;
+    var background: Image;
 
 
     //Parsing the Theme
     if (typeof theme === 'string') {
         //Builtin Theme
-        canvasTheme = themes[theme];
-        if (!canvasTheme) throw new Error('Invalid theme, use: ' + Object.keys(themes).join(' | '));
+        theme = themes[theme];
+        if (!theme) throw new Error('Invalid theme, use: ' + Object.keys(themes).join(' | '));
 
-        background = await loadImage(canvasTheme.image);
+        background = await loadImage(theme.image);
     } else {
-        //Custom Theme
-        canvasTheme = theme;
-
-        //Invalid Color
-        if (!theme.color.match(hexcolor)) throw new Error('Invalid Color provided.')
-
         //Loading the Background
         try {
             background = await loadImage(theme.image);
         } catch (e) { throw new Error('Invalid Path or Buffer provided.') }
     }
 
-    ctx.theme = canvasTheme;
+    ctx.theme = theme;
+    const b = 10; //Border
 
-    ctx.roundRect(0, 0, canvas.width, canvas.height, canvas.height / 15);
+    //Background
+    snap(canvas);
+    if (options.rounded) ctx.roundRect(0, 0, w, h, h / 15);
+    else ctx.rect(0, 0, w, h);
     ctx.clip();
-    ctx.drawImage(background, 0, 0);
 
-    ctx.strokeRect(0, 0, canvas.width, canvas.height);
+    if (options.border) {
+        ctx.drawImage(background, 0, 0, w, h);
+        ctx.globalAlpha = 0.3;
+        ctx.fillStyle = '#000';
+        ctx.fillRect(0, 0, w, h);
+        ctx.globalAlpha = 1;
 
-    ctx.fillStyle = canvasTheme.color;
-    ctx.strokeStyle = canvasTheme.color;
-    ctx.font = '30px ' + (canvasTheme.font ? canvasTheme.font : 'sans-serif');
-
-
-
-    for (const mod of mods) {
-        if (typeof mod === 'string') {
-            var func = modules[mod];
-            if (!func) throw new Error(`${mod}, is not a valid Module`);
-            await func(ctx, member)
-        } else {
-            if (typeof mod === 'function') await mod(ctx, member);
-            else throw (new Error(`${mod}, is not a valid Module`));
-        }
+        ctx.blur(3);
     }
+
+
+    snap(canvas);
+    //Rounded Edges
+    if (options.border) {
+        if (options.rounded) ctx.roundRect(b, b, w - 2 * b, h - 2 * b, h / 15);
+        else ctx.rect(b, b, w - (2 * b), h - (2 * b));
+        ctx.clip();
+    } else {
+        if (options.rounded) ctx.roundRect(0, 0, w, h, h / 15).clip();
+        else ctx.rect(0, 0, w, h);
+    }
+
+
+    var temp: Canvas | Image = background;
+    if (options.blur) {
+        console.log('Q');
+        var blur = createCanvas(w, h), blur_ctx = blur.getContext('2d') as ctx2D;
+        blur_ctx.drawImage(background, 0, 0, w, h);
+
+        if (typeof options.blur === 'boolean') blur_ctx.blur(3);
+        else blur_ctx.blur(options.blur);
+
+        temp = blur;
+    }
+    if (options.border) ctx.drawImage(temp, b, b, w - b * 2, h - b * 2);
+    else ctx.drawImage(temp, 0, 0, w, h);
+
+
+    snap(canvas);
+
+
+    //Setting Styles
+    ctx.fillStyle = theme.color.toString(ctx);
+    ctx.strokeStyle = theme.color.toString(ctx);
+    ctx.font = '30px ' + (theme.font ? theme.font : 'sans-serif');
+
+
+    //Drawing
+    //Title
+    ctx.changeFontSize('30px')
+        .fillText(options.title ?? '', ctx.width / 2.7, ctx.height / 3.5);
+
+    //Text
+    ctx.changeFontSize(getFontSize(member.user.tag) + 'px')
+        .fillText(options.text ?? '', ctx.width / 2.7, ctx.height / 1.8);
+
+    //Subtitle
+    ctx.changeFontSize('25px')
+        .fillText(options.subtitle ?? '', ctx.width / 2.7, ctx.height / 1.3);
+
+    //Avatar Image
+    const radius = h / 2.5;
+
+    ctx.lineWidth = 6
+    ctx.beginPath();
+    ctx.arc(h / 2, h / 2, radius, 0, Math.PI * 2, true);
+    ctx.closePath();
+    ctx.clip();
+
+    if (options.avatar && (options.avatar instanceof Canvas || options.avatar instanceof Image))
+        ctx.drawImage(options.avatar, radius / 4, radius / 4, radius * 2, radius * 2)
+
+    if (options.custom) options.custom(ctx, member);
+
+    snap(canvas);
+
 
     return canvas.toBuffer('image/png');
 }
 
 
-export async function welcomeImage(member: GuildMember, theme: ThemeType = 'sakura'): Promise<Buffer> {
-    const buff = await drawCard(member, theme, ['welcomeText', 'userText', 'memberCount', 'avatarImg'])
+export async function welcomeImage(member: GuildMember, options: CardOptions = {}): Promise<Buffer> {
+    const buff = await drawCard(member, {
+        title: options.title ?? `Welcome to this server,`,
+        text: options.text ?? `${member.user.tag}!`,
+        subtitle: options.subtitle ?? `MemberCount: ${member.guild.memberCount}`,
+        theme: options.theme ?? 'sakura',
+        avatar: options.avatar ?? await loadImage(member.user.displayAvatarURL({ format: 'png' })),
+        blur: options.blur
+    })
     //const attachment = new MessageAttachment(buff, 'welcome.png')
     return buff;
 }
 
 
-export async function goodbyeImage(member: GuildMember, theme: ThemeType = 'sakura'): Promise<Buffer> {
-    const buff = await drawCard(member, theme, ['goodbyeText', 'userText', 'avatarImg'])
+export async function goodbyeImage(member: GuildMember, opts: CardOptions = {}): Promise<Buffer> {
+    opts.title = opts.title ?? `Goodbye,`;
+    opts.title = opts.title ?? `Goodbye,`;
+    opts.text = opts.text ?? `${member.user.tag}!`;
+    opts.theme = opts.theme ?? 'sakura';
+    opts.avatar = opts.avatar ?? await loadImage(member.user.displayAvatarURL({ format: 'png' }));
+
+    const buff = await drawCard(member, opts);
     return buff;
 }
