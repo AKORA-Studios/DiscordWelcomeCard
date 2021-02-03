@@ -96,5 +96,5 @@ client.login('Your-Bot-Token');
 | 3.5.1 | Fixxed broken Image |
 | 3.6.0 | Removed `member` argument in `drawCard` |
 | 3.7.0 | Removed `member` argument in `drawCard` |
-| 3.7.1 | Removed `member` argument in `drawCard` |
+| 3.7.1 | Fixxed options in `welcomeImage` Function |
 
