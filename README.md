@@ -60,7 +60,7 @@ client.on("message", async message => {
     const image = await drawCard({
             blur: true,
             title: 'Title',
-            theme: 'sakura',
+            theme: 'dark',
             text: 'Text',
             subtitle: 'Subtitle',
             rounded: true,
