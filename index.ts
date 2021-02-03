@@ -129,7 +129,7 @@ function getFontSize(str: string) {
     return (600 * Math.pow(str.length, -1.05)).toFixed(0);
 }
 
-export type ModuleFunction = (ctx: ctx2D, member: GuildMember) => any
+export type ModuleFunction = (ctx: ctx2D) => any
 export type CardOptions = {
     theme?: ThemeType;
     title?: string;
@@ -152,7 +152,7 @@ function snap(c: Canvas) {
 }
 
 
-export async function drawCard(member: GuildMember, options: CardOptions): Promise<Buffer> {
+export async function drawCard(options: CardOptions): Promise<Buffer> {
     const w = 700, h = 250;
     const canvas = createCanvas(w, h);
     const ctx = canvas.getContext('2d') as ctx2D;
@@ -241,7 +241,7 @@ export async function drawCard(member: GuildMember, options: CardOptions): Promi
         .fillText(options.title ?? '', ctx.width / 2.7, ctx.height / 3.5);
 
     //Text
-    ctx.changeFontSize(getFontSize(member.user.tag) + 'px')
+    ctx.changeFontSize(getFontSize(options.text ?? '') + 'px')
         .fillText(options.text ?? '', ctx.width / 2.7, ctx.height / 1.8);
 
     //Subtitle
@@ -260,7 +260,7 @@ export async function drawCard(member: GuildMember, options: CardOptions): Promi
     if (options.avatar && (options.avatar instanceof Canvas || options.avatar instanceof Image))
         ctx.drawImage(options.avatar, radius / 4, radius / 4, radius * 2, radius * 2)
 
-    if (options.custom) options.custom(ctx, member);
+    if (options.custom) options.custom(ctx);
 
     snap(canvas);
 
@@ -270,7 +270,7 @@ export async function drawCard(member: GuildMember, options: CardOptions): Promi
 
 
 export async function welcomeImage(member: GuildMember, options: CardOptions = {}): Promise<Buffer> {
-    const buff = await drawCard(member, {
+    const buff = await drawCard({
         title: options.title ?? `Welcome to this server,`,
         text: options.text ?? `${member.user.tag}!`,
         subtitle: options.subtitle ?? `MemberCount: ${member.guild.memberCount}`,
@@ -290,6 +290,6 @@ export async function goodbyeImage(member: GuildMember, opts: CardOptions = {}):
     opts.theme = opts.theme ?? 'sakura';
     opts.avatar = opts.avatar ?? await loadImage(member.user.displayAvatarURL({ format: 'png' }));
 
-    const buff = await drawCard(member, opts);
+    const buff = await drawCard(opts);
     return buff;
 }

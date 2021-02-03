@@ -22,6 +22,7 @@ client.on("message", async message => {
     message.channel.send(new Discord.MessageAttachment(image, 'welcome.png'))
 });
 
+client.login('Your-Bot-Token');
 ```
 ![Image](examples/welcome2.png)
 
@@ -43,7 +44,7 @@ client.on("message", async message => {
     message.channel.send(new Discord.MessageAttachment(image, 'welcome.png'))
 });
 
-client.login('your token here');
+client.login('Your-Bot-Token');
 ```
 ![Image](examples/goodbye2.png)
 
