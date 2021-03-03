@@ -6,3 +6,5 @@
 # Compiled
 *.js
 *.d.ts
+*.map
+*.tgz

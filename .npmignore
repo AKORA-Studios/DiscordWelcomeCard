@@ -2,13 +2,16 @@
 node_modules
 testing
 .vscode
+.github
 
 # Only important for git
 examples
 
 #Developement
-.ts
-!.d.ts
+*.ts
+!*.d.ts
+*.map
+*.tgz
 package-lock.json
 tsconfig.json
 .gitignore
