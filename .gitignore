@@ -4,6 +4,7 @@
 /.vscode
 
 # Compiled
+dist
 *.js
 *.d.ts
 *.map

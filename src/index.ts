@@ -107,7 +107,7 @@ export class Gradient {
 export type ThemeType = (keyof typeof themes) | Theme;
 
 
-const root = join(__dirname, 'images')
+const root = join(__dirname, '..', 'images')
 export var themes = {
     'dark': { color: '#ffffff', image: join(root, 'dark.png') },
     'sakura': { color: '#7d0b2b', image: join(root, 'sakura.png') },
@@ -238,8 +238,8 @@ export async function drawCard(options: CardOptions): Promise<Buffer> {
         .fillText(options.title ?? '', ctx.width / 2.7, ctx.height / 3.5);
 
     //Text
-    ctx.changeFontSize(getFontSize(options.text ?? '') + 'px')
-        .fillText(options.text ?? '', ctx.width / 2.7, ctx.height / 1.8);
+    ctx.changeFontSize('40px')
+        .fillText(options.text ?? '', ctx.width / 2.7, ctx.height / 1.8, (ctx.w * 3) / 5);
 
     //Subtitle
     ctx.changeFontSize('25px')
