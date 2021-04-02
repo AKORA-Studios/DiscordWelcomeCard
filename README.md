@@ -17,6 +17,7 @@ const { welcomeImage } = require('discord-welcome-card');
 const client = new Discord.Client();
 
 client.on("message", async message => {
+if(message.author.bot)return
     //Generating the actual welcome Card
     const image = await welcomeImage(message.member);
 
@@ -38,6 +39,7 @@ const { goodbyeImage } = require('discord-welcome-card');
 const client = new Discord.Client();
 
 client.on("message", async message => {
+if(message.author.bot)return
     //Generating the actual welcome Card
     const image = await goodbyeImage(message.member, 'code');
 
