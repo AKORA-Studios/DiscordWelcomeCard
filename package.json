@@ -1,26 +1,25 @@
 {
-    "name": "discord-welcome-card",
+    "name": "@discord-card/greeting",
     "version": "3.7.5",
-    "description": "Discord Welcome/Goodbye Card",
-    "main": "dist/index.js",
-    "types": "dist/index.d.ts",
-    "scripts": {
-        "start": "node src/index.js",
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
+    "description": "Discord Welcome/Goodbye Cards",
+    "main": "src/index.js",
+    "types": "src/index.d.ts",
     "keywords": [
         "discord",
         "canvas",
-        "welcomecard"
+        "welcome",
+        "goodbye",
+        "greeting"
     ],
-    "author": "dragoncat4012",
+    "author": "discord-card",
     "license": "Apache License",
     "dependencies": {
-        "canvas": "^2.6.1"
+        "canvas": "^2.6.1",
+        "@discord-card/core": "^1.1.1"
     },
     "repository": {
         "type": "git",
-        "url": "git://github.com/AKORA-Studios/DiscordWelcomeCard.git"
+        "url": "git://github.com/discord-card/greeting.git"
     },
     "devDependencies": {
         "@types/node": "^14.14.22",
