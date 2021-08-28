@@ -18,9 +18,8 @@ const root = join(__dirname, '..', 'images')
 export var themes = {
     'dark': { color: '#ffffff', image: join(root, 'dark.png') },
     'sakura': { color: '#7d0b2b', image: join(root, 'sakura.png') },
-    'blue': { color: '#040f57', image: join(root, 'blue.png') },
-    'bamboo': { color: '#137a0d', image: join(root, 'bamboo.png') },
-    'desert': { color: '#000000', image: join(root, 'desert.png'), font: 'Segoe Print' },
+    'circuit': { color: '#040f57', image: join(root, 'circuit.png') },
+    'colorsplash': { color: '#137a0d', image: join(root, 'colorsplash.png') },
     'code': { color: '#ffffff', image: join(root, 'code.png'), font: 'Source Sans Pro' },
 }
 
@@ -55,7 +54,7 @@ export async function drawCard(options: CardOptions): Promise<Buffer> {
     ctx.h = ctx.height = h;
 
     //@ts-ignore
-    var theme: Theme = options.theme ?? 'sakura';
+    var theme: Theme = options.theme ?? 'code';
 
     var background: Image;
 
@@ -172,7 +171,7 @@ export async function welcomeImage(member: GuildMember, opts: CardOptions = { })
     opts.title = opts.title ?? `Welcome to this server,`;
     opts.text = opts.text ?? `${member.user.tag}!`;
     opts.subtitle = opts.subtitle ?? `MemberCount: ${member.guild.memberCount}`;
-    opts.theme = opts.theme ?? 'sakura';
+    opts.theme = opts.theme ?? 'code';
     opts.avatar = opts.avatar ?? await loadImage(member.user.displayAvatarURL({ format: 'png' }));
 
     return await drawCard(opts);
@@ -182,7 +181,7 @@ export async function welcomeImage(member: GuildMember, opts: CardOptions = { })
 export async function goodbyeImage(member: GuildMember, opts: CardOptions = { }): Promise<Buffer> {
     opts.title = opts.title ?? `Goodbye,`;
     opts.text = opts.text ?? `${member.user.tag}!`;
-    opts.theme = opts.theme ?? 'sakura';
+    opts.theme = opts.theme ?? 'code';
     opts.avatar = opts.avatar ?? await loadImage(member.user.displayAvatarURL({ format: 'png' }));
 
     return await drawCard(opts);
