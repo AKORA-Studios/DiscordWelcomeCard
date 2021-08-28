@@ -1,7 +1,9 @@
-[![NPM Version](https://img.shields.io/npm/v/@discord-card/greeting?color=00DEC8&style=for-the-badge)](https://www.npmjs.com/package/@discord-card/greeting)
-[![NPM Downloads](https://img.shields.io/npm/dt/@discord-card/greeting?color=00DEC8&style=for-the-badge)](https://www.npmjs.com/package/@discord-card/greeting)
-[![NPM License](https://img.shields.io/npm/l/@discord-card/greeting?color=00DEC8&style=for-the-badge)](https://www.npmjs.com/package/@discord-card/greeting)
-[![Github Size](https://img.shields.io/github/repo-size/discord-card/greeting?color=00DEC8&label=SIZE&style=for-the-badge)](https://www.npmjs.com/package/@discord-card/greeting)
+[![NPM Version](https://img.shields.io/npm/v/discord-welcome-card?color=00DEC8&style=for-the-badge)](https://www.npmjs.com/package/discord-welcome-card)
+[![NPM Downloads](https://img.shields.io/npm/dt/discord-welcome-card?color=00DEC8&style=for-the-badge)](https://www.npmjs.com/package/discord-welcome-card)
+[![NPM License](https://img.shields.io/npm/l/discord-welcome-card?color=00DEC8&style=for-the-badge)](https://www.npmjs.com/package/discord-welcome-card)
+[![Github Size](https://img.shields.io/github/repo-size/AKORA-Studios/DiscordWelcomeCard?color=00DEC8&label=SIZE&style=for-the-badge)](https://www.npmjs.com/package/discord-welcome-card)
+
+**[![widget](https://discord.com/api/guilds/553942677117337600/widget.png?style=banner2)](https://discord.gg/Emk2udJ)**
 
 #  Discord Welcome Card
 Simple Goodbye and welcome cards
@@ -133,26 +135,3 @@ client.login('Your-Bot-Token');
 
 ## Example projects
 * [Miyuki](https://github.com/discord-card/Miyuki) (V13)
-
-##  Changelog
-| Version  | Content |
-| ------------- | ------------- |
-| 1.1.4 | new card backgrounds  |
-| 1.1.5 | Added Auto Size  |
-| 2.0.0 | Switched to typescript  |
-| 2.0.1 | Added Custom Card Function  |
-| 2.0.2 | Added more typings  |
-| 2.1.0 | Added Custom Themes and Fonts  |
-| 2.1.1 | Added Custom Functions to CanvasContext |
-| 3.0.0 | Switched to `options-syntax` |
-| 3.1.0 | Moved theme into options |
-| 3.2.0 | Added `blur` |
-| 3.3.0 | Added `round` |
-| 3.3.1 | Renamed to `rounded` |
-| 3.4.0 | Removed `hex-color-validation` |
-| 3.5.0 | Added `gradient` |
-| 3.5.1 | Fixxed broken Image |
-| 3.6.0 | Removed `member` argument in `drawCard` |
-| 3.7.0 | Removed `member` argument in `drawCard` |
-| 3.7.1 | Fixxed options in `welcomeImage` Function |
-

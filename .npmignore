@@ -1,12 +1,11 @@
-# Folders
+# Only important for git repo
+examples
+CHANGELOG.md
+
+#Developement
 node_modules
 testing
 .vscode
-
-# Only important for git
-examples
-
-#Developement
 *.map
 *.tgz
 
@@ -16,3 +15,4 @@ tsconfig.json
 #Git
 .gitignore
 .gitattributes
+.github
