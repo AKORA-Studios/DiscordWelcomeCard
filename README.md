@@ -6,7 +6,18 @@
 **[![widget](https://discord.com/api/guilds/553942677117337600/widget.png?style=banner2)](https://discord.gg/Emk2udJ)**
 
 #  Discord Welcome Card
-Simple Goodbye and welcome cards
+Simple easy-to-use Goodbye and welcome cards for your discord Bot.
+
+## Features
+* ⛩️ 5 default themes (circuit, code, sakura, dark, colorsplash)
+* 🍭 gradient color support
+* 🖼️custom background support
+* 📎 customizable cards (blur, rounded edges)
+* 🗛 multiple font support
+
+(Note that all example codes below are for discord.js Version 12. Example usage code in Version 13 or higher, is provided at [Usage.md](Usage.md))
+
+<br>
 
 ## Examples
 <details open> 
@@ -48,7 +59,7 @@ client.on("message", async message => {
     //Generating the actual goodbye Card
     const image = await goodbyeImage(message.member, 'code');
 
-    message.channel.send(new Discord.MessageAttachment(image, 'welcome.png'))
+    message.channel.send(new Discord.MessageAttachment(image, 'goodbye.png'))
 });
 
 client.login('Your-Bot-Token');
@@ -94,9 +105,11 @@ client.login('Your-Bot-Token');
 <details> <summary> Custom Card (custom Background) </summary>
 folder strcuture:
 
+```
 folder
 |-index.js
 |-image.png
+```
 
 ```javascript
 const Discord = require("discord.js");
@@ -134,4 +147,5 @@ client.login('Your-Bot-Token');
 </details>    
 
 ## Example projects
-* [Miyuki](https://github.com/discord-card/Miyuki) (V13)
+Some projects written with this package
+* [Miyuki](https://github.com/discord-card/Miyuki) (discord.js V13)

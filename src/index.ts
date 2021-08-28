@@ -18,7 +18,7 @@ const root = join(__dirname, '..', 'images')
 export var themes = {
     'dark': { color: '#ffffff', image: join(root, 'dark.png') },
     'sakura': { color: '#7d0b2b', image: join(root, 'sakura.png') },
-    'circuit': { color: '#040f57', image: join(root, 'circuit.png') },
+    'circuit': { color: '#ffffff', image: join(root, 'circuit.png') },
     'colorsplash': { color: '#137a0d', image: join(root, 'colorsplash.png') },
     'code': { color: '#ffffff', image: join(root, 'code.png'), font: 'Source Sans Pro' },
 }
