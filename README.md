@@ -94,8 +94,10 @@ client.login('Your-Bot-Token');
 <details> <summary> Custom Card (custom Background) </summary>
 folder strcuture:
 
-folder
+folder 
+
 |-index.js
+
 |-image.png
 
 ```javascript
