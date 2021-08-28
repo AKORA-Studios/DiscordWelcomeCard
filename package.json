@@ -4,6 +4,9 @@
     "description": "Discord Welcome/Goodbye Cards",
     "main": "src/index.js",
     "types": "src/index.d.ts",
+    "scripts": {
+        "prepublish": "tsc"
+    },
     "keywords": [
         "discord",
         "canvas",
