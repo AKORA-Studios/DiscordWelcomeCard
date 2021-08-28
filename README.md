@@ -5,8 +5,12 @@
 
 **[![widget](https://discord.com/api/guilds/553942677117337600/widget.png?style=banner2)](https://discord.gg/Emk2udJ)**
 
+<br>
+
 #  Discord Welcome Card
 Simple easy-to-use Goodbye and welcome cards for your discord Bot.
+
+<br>
 
 ## Features
 * ⛩️ 5 default themes (circuit, code, sakura, dark, colorsplash)
@@ -145,6 +149,8 @@ client.login('Your-Bot-Token');
 ```
     
 </details>    
+
+<br>
 
 ## Example projects
 Some projects written with this package
