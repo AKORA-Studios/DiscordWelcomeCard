@@ -15,7 +15,7 @@ Simple easy-to-use Goodbye and welcome cards for your discord Bot.
 ## Features
 * ⛩️ 5 default themes (circuit, code, sakura, dark, colorsplash)
 * 🍭 gradient color support
-* 🖼️custom background support
+* 🖼️ custom background support
 * 📎 customizable cards (blur, rounded edges)
 * 🗛 multiple font support
 
