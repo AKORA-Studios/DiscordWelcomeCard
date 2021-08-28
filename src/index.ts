@@ -108,7 +108,6 @@ export async function drawCard(options: CardOptions): Promise<Buffer> {
 
     var temp: Canvas | Image = background;
     if (options.blur) {
-        console.log('Q');
         var blur = createCanvas(w, h), blur_ctx = blur.getContext('2d') as ctx2D;
         blur_ctx.drawImage(background, 0, 0, w, h);
 
@@ -154,9 +153,9 @@ export async function drawCard(options: CardOptions): Promise<Buffer> {
 
     if (options.avatar) {
         if (options.avatar instanceof Canvas || options.avatar instanceof Image)
-            ctx.drawImage(options.avatar, radius / 4, radius / 4, radius * 2, radius * 2);
+            ctx.drawImage(options.avatar, (h / 2) - radius, (h / 2) - radius, radius * 2, radius * 2);
         else if (typeof options.avatar === 'string' || options.avatar instanceof Buffer)
-            ctx.drawImage(await loadImage(options.avatar), radius / 4, radius / 4, radius * 2, radius * 2);
+            ctx.drawImage(await loadImage(options.avatar), (h / 2) - radius, (h / 2) - radius, radius * 2, radius * 2);
         else throw new Error('Invalid Avatar Argument');
     }
 
@@ -169,24 +168,22 @@ export async function drawCard(options: CardOptions): Promise<Buffer> {
 }
 
 
-export async function welcomeImage(member: GuildMember, opts: CardOptions = {}): Promise<Buffer> {
+export async function welcomeImage(member: GuildMember, opts: CardOptions = { }): Promise<Buffer> {
     opts.title = opts.title ?? `Welcome to this server,`;
     opts.text = opts.text ?? `${member.user.tag}!`;
     opts.subtitle = opts.subtitle ?? `MemberCount: ${member.guild.memberCount}`;
     opts.theme = opts.theme ?? 'sakura';
     opts.avatar = opts.avatar ?? await loadImage(member.user.displayAvatarURL({ format: 'png' }));
 
-    const buff = await drawCard(opts);
-    return buff;
+    return await drawCard(opts);
 }
 
 
-export async function goodbyeImage(member: GuildMember, opts: CardOptions = {}): Promise<Buffer> {
+export async function goodbyeImage(member: GuildMember, opts: CardOptions = { }): Promise<Buffer> {
     opts.title = opts.title ?? `Goodbye,`;
     opts.text = opts.text ?? `${member.user.tag}!`;
     opts.theme = opts.theme ?? 'sakura';
     opts.avatar = opts.avatar ?? await loadImage(member.user.displayAvatarURL({ format: 'png' }));
 
-    const buff = await drawCard(opts);
-    return buff;
+    return await drawCard(opts);
 }
