@@ -65,9 +65,9 @@ export type CardOptions = {
     background?: ImageResolvable;
     /** If the background should be blurred (true -> 3) */
     blur?: boolean | number;
-    /** When enabled a blurred border is drawn */
+    /** When enabled a blurred border is drawn, enabled by default */
     border?: boolean;
-    /** If enabled the edges will be rounded */
+    /** If enabled the edges will be rounded, enabled by default */
     rounded?: boolean;
     //custom?: ModuleFunction;
 }
@@ -90,9 +90,11 @@ export async function drawCard(options: CardOptions): Promise<Buffer> {
     ctx.h = ctx.height = h;
 
     //@ts-ignore
-    let theme: Theme = { };
+    let theme: Theme;
     let background: Image;
 
+    options.border ??= true;
+    options.rounded ??= true;
 
     //Parsing the Theme
     if (typeof (options.theme ?? 'code') === 'string') {
