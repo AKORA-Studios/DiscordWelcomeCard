@@ -1,6 +1,6 @@
 {
     "name": "discord-welcome-card",
-    "version": "3.7.9",
+    "version": "4.0.0",
     "description": "Discord Welcome/Goodbye Cards",
     "main": "src/index.js",
     "types": "src/index.d.ts",
@@ -14,7 +14,9 @@
     },
     "keywords": [
         "discord",
+        "discord.js",
         "canvas",
+        "node-canvas",
         "welcome",
         "welcomecard",
         "goodbye",
