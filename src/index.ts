@@ -3,7 +3,7 @@ import { createCanvas, loadImage, CanvasRenderingContext2D as ctx2D, Canvas, Ima
 import { writeFileSync } from 'fs';
 import { join } from 'path';
 import { Gradient, Theme } from '@discord-card/core';
-export * from '@discord-card/core';
+export { Gradient, Theme } from '@discord-card/core';
 
 
 
@@ -29,9 +29,7 @@ async function toImage(image: ImageResolvable, name?: string) {
 const root = join(__dirname, '..', 'images')
 export var themes = {
     'dark': { color: '#ffffff', image: join(root, 'dark.png') },
-    'sakura': { color: '#7d0b2b', image: join(root, 'sakura.png') },
     'circuit': { color: '#ffffff', image: join(root, 'circuit.png') },
-    'colorsplash': { color: '#137a0d', image: join(root, 'colorsplash.png') },
     'code': { color: '#ffffff', image: join(root, 'code.png'), font: 'Source Sans Pro' },
 }
 
@@ -41,6 +39,7 @@ type ImageResolvable = Canvas | Image | Buffer | string;
 export type CardOptions = {
     /** Select a theme with some default options */
     theme?: (keyof typeof themes);
+    /** Options for the text on the card */
     text?: {
         /** Text in the Top */
         title?: string;
@@ -60,7 +59,7 @@ export type CardOptions = {
         /** Width of the outline around the avatar */
         outlineWidth?: number;
         /** Color of the outline */
-        outlineColor?: Color
+        outlineColor?: Color;
     }
     /** Override the Background, can be a URL/Canvas/Image or Buffer  */
     background?: ImageResolvable;
@@ -166,7 +165,7 @@ export async function drawCard(options: CardOptions): Promise<Buffer> {
 
 
     //Setting Styles
-    ctx.fillStyle = options.text?.color.toString(ctx) ?? theme.color.toString(ctx);
+    ctx.fillStyle = (options.text?.color ?? theme.color).toString(ctx);
     //ctx.strokeStyle = theme.color.toString(ctx);
     ctx.font = '30px ' + ((options.text?.font ?? theme.font) ?? 'sans-serif');
 
