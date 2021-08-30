@@ -2,7 +2,7 @@ import { GuildMember } from 'discord.js';
 import { createCanvas, loadImage, CanvasRenderingContext2D as ctx2D, Canvas, Image } from 'canvas';
 import { writeFileSync } from 'fs';
 import { join } from 'path';
-import { Gradient } from '@discord-card/core';
+import { Gradient, Theme } from '@discord-card/core';
 export * from '@discord-card/core';
 
 
@@ -14,6 +14,18 @@ function getFontSize(str: string) {
     return (600 * Math.pow(str.length, -1.05)).toFixed(0);
 }
 
+async function toImage(image: ImageResolvable, name?: string) {
+    if (image instanceof Canvas) {
+        let img = new Image();
+        img.src = (image as Canvas).toDataURL();
+        return img;
+    } else if (image instanceof Image)
+        return image
+    else if (typeof image === 'string' || image instanceof Buffer)
+        return await loadImage(image)
+    else throw new Error('Invalid Image Format for: ' + name ?? 'Image');
+}
+
 const root = join(__dirname, '..', 'images')
 export var themes = {
     'dark': { color: '#ffffff', image: join(root, 'dark.png') },
@@ -23,7 +35,9 @@ export var themes = {
     'code': { color: '#ffffff', image: join(root, 'code.png'), font: 'Source Sans Pro' },
 }
 
-export type Color = `#${string}` | Gradient
+type Color = `#${string}` | Gradient;
+type ImageResolvable = Canvas | Image | Buffer | string;
+
 export type CardOptions = {
     /** Select a theme with some default options */
     theme?: (keyof typeof themes);
@@ -34,18 +48,20 @@ export type CardOptions = {
         text?: string;
         /** Text on the bottom */
         subtitle?: string;
+        /** Font Color */
+        color?: Color;
     },
     /** Options for the avatar */
     avatar?: {
         /** The Avatar Image, can be a URL/Canvas/Image or Buffer */
-        image?: Canvas | Image | Buffer | string;
+        image?: ImageResolvable;
         /** Width of the outline around the avatar */
         outlineWidth?: number;
         /** Color of the outline */
         outlineColor?: Color
     }
     /** Override the Background, can be a URL/Canvas/Image or Buffer  */
-    background?: Canvas | Image | Buffer | string;
+    background?: ImageResolvable;
     /** If the background should be blurred (true -> 3) */
     blur?: boolean | number;
     /** When enabled a blurred border is drawn */
@@ -73,24 +89,19 @@ export async function drawCard(options: CardOptions): Promise<Buffer> {
     ctx.h = ctx.height = h;
 
     //@ts-ignore
-    var theme: Theme = options.theme ?? 'code';
-
-    var background: Image;
+    let theme: Theme = { };
+    let background: Image;
 
 
     //Parsing the Theme
-    if (typeof theme === 'string') {
-        //Builtin Theme
-        theme = themes[theme];
+    if (typeof (options.theme ?? 'code') === 'string') {
+        theme = themes[options.theme ?? 'code'];
         if (!theme) throw new Error('Invalid theme, use: ' + Object.keys(themes).join(' | '));
 
         background = await loadImage(theme.image);
-    } else {
-        //Loading the Background
-        try {
-            background = await loadImage(theme.image);
-        } catch (e) { throw new Error('Invalid Path or Buffer provided.') }
-    }
+    } else throw new Error('Invalid theme, use: ' + Object.keys(themes).join(' | '));
+
+    if (options.background) background = await toImage(options.background, 'Background');
 
     ctx.theme = theme;
     const b = 10; //Border
@@ -142,9 +153,9 @@ export async function drawCard(options: CardOptions): Promise<Buffer> {
 
 
     //Setting Styles
-    ctx.fillStyle = theme.color.toString(ctx);
-    ctx.strokeStyle = theme.color.toString(ctx);
-    ctx.font = '30px ' + (theme.font ? theme.font : 'sans-serif');
+    ctx.fillStyle = options.text?.color.toString(ctx) ?? theme.color.toString(ctx);
+    //ctx.strokeStyle = theme.color.toString(ctx);
+    ctx.font = '30px ' + (theme.font ?? 'sans-serif');
 
 
     //Drawing
@@ -169,14 +180,17 @@ export async function drawCard(options: CardOptions): Promise<Buffer> {
     ctx.closePath();
     ctx.clip();
 
-    if (options.avatar) {
-        const { image: avatarImage, outlineWidth, outlineColor } = options.avatar;
+    const { avatar } = options;
+    if (avatar) {
+        const { image: avatarImage, outlineWidth, outlineColor } = avatar;
         if (avatarImage) {
-            if (avatarImage instanceof Canvas || avatarImage instanceof Image)
-                ctx.drawImage(avatarImage, (h / 2) - radius, (h / 2) - radius, radius * 2, radius * 2);
-            else if (typeof avatarImage === 'string' || avatarImage instanceof Buffer)
-                ctx.drawImage(await loadImage(avatarImage), (h / 2) - radius, (h / 2) - radius, radius * 2, radius * 2);
-            else throw new Error('Invalid Avatar Argument');
+            ctx.drawImage(
+                await toImage(avatarImage),
+                ((h / 2) - radius) + (avatar.outlineWidth ?? 0), //x
+                ((h / 2) - radius) + (avatar.outlineWidth ?? 0), //y
+                (radius * 2) - (avatar.outlineWidth ?? 0) * 2, //width
+                (radius * 2) - (avatar.outlineWidth ?? 0) * 2//height
+            );
         }
 
         if (outlineWidth) {
@@ -186,9 +200,7 @@ export async function drawCard(options: CardOptions): Promise<Buffer> {
 
             ctx.lineWidth = outlineWidth
             if (outlineColor) {
-                if (outlineColor instanceof Gradient) { ctx.strokeStyle = outlineColor.toString(ctx) }
-                else { ctx.strokeStyle = outlineColor }
-
+                ctx.strokeStyle = outlineColor.toString(ctx)
             } else ctx.strokeStyle = '#fff'
 
             ctx.stroke();
