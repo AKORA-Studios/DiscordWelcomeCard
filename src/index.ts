@@ -50,6 +50,8 @@ export type CardOptions = {
         subtitle?: string;
         /** Font Color */
         color?: Color;
+        /** Custom Font */
+        font?: string;
     },
     /** Options for the avatar */
     avatar?: {
@@ -166,7 +168,7 @@ export async function drawCard(options: CardOptions): Promise<Buffer> {
     //Setting Styles
     ctx.fillStyle = options.text?.color.toString(ctx) ?? theme.color.toString(ctx);
     //ctx.strokeStyle = theme.color.toString(ctx);
-    ctx.font = '30px ' + (theme.font ?? 'sans-serif');
+    ctx.font = '30px ' + ((options.text?.font ?? theme.font) ?? 'sans-serif');
 
 
     //Drawing
