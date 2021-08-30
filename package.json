@@ -5,7 +5,9 @@
     "main": "src/index.js",
     "types": "src/index.d.ts",
     "scripts": {
-        "prepublish": "tsc"
+        "build": "tsc",
+        "build:watch": "npm run build -- -w",
+        "prepublishOnly": "npm run build"
     },
     "keywords": [
         "discord",
@@ -18,8 +20,7 @@
     "author": "AKORA Studios",
     "license": "MIT",
     "dependencies": {
-        "@discord-card/core": "^1.1.1",
-        "canvas": "^2.6.1"
+        "@discord-card/core": "^1.1.3"
     },
     "repository": {
         "type": "git",
