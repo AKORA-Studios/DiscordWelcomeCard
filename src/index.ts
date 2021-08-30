@@ -2,10 +2,12 @@ import { GuildMember } from 'discord.js';
 import { createCanvas, loadImage, CanvasRenderingContext2D as ctx2D, Canvas, Image } from 'canvas';
 import { writeFileSync } from 'fs';
 import { join } from 'path';
+import { Gradient } from '@discord-card/core';
 export * from '@discord-card/core';
 
-const production = true;
 
+
+const production = true;
 
 function getFontSize(str: string) {
     if (str.length < 18) return 30;
@@ -21,7 +23,7 @@ export var themes = {
     'code': { color: '#ffffff', image: join(root, 'code.png'), font: 'Source Sans Pro' },
 }
 
-export type ModuleFunction = (ctx: ctx2D) => any
+export type Color = `#${string}` | Gradient
 export type CardOptions = {
     /** Select a theme with some default options */
     theme?: (keyof typeof themes);
@@ -33,8 +35,15 @@ export type CardOptions = {
         /** Text on the bottom */
         subtitle?: string;
     },
-    /** The Avatar Image, can be a URL/Canvas/Image or Buffer */
-    avatar?: Canvas | Image | Buffer | string;
+    /** Options for the avatar */
+    avatar?: {
+        /** The Avatar Image, can be a URL/Canvas/Image or Buffer */
+        image?: Canvas | Image | Buffer | string;
+        /** Width of the outline around the avatar */
+        outlineWidth?: number;
+        /** Color of the outline */
+        outlineColor?: Color
+    }
     /** Override the Background, can be a URL/Canvas/Image or Buffer  */
     background?: Canvas | Image | Buffer | string;
     /** If the background should be blurred (true -> 3) */
@@ -161,11 +170,29 @@ export async function drawCard(options: CardOptions): Promise<Buffer> {
     ctx.clip();
 
     if (options.avatar) {
-        if (options.avatar instanceof Canvas || options.avatar instanceof Image)
-            ctx.drawImage(options.avatar, (h / 2) - radius, (h / 2) - radius, radius * 2, radius * 2);
-        else if (typeof options.avatar === 'string' || options.avatar instanceof Buffer)
-            ctx.drawImage(await loadImage(options.avatar), (h / 2) - radius, (h / 2) - radius, radius * 2, radius * 2);
-        else throw new Error('Invalid Avatar Argument');
+        const { image: avatarImage, outlineWidth, outlineColor } = options.avatar;
+        if (avatarImage) {
+            if (avatarImage instanceof Canvas || avatarImage instanceof Image)
+                ctx.drawImage(avatarImage, (h / 2) - radius, (h / 2) - radius, radius * 2, radius * 2);
+            else if (typeof avatarImage === 'string' || avatarImage instanceof Buffer)
+                ctx.drawImage(await loadImage(avatarImage), (h / 2) - radius, (h / 2) - radius, radius * 2, radius * 2);
+            else throw new Error('Invalid Avatar Argument');
+        }
+
+        if (outlineWidth) {
+            ctx.beginPath();
+            ctx.arc(h / 2, h / 2, radius - (outlineWidth / 2), 0, Math.PI * 2, true);
+            ctx.closePath();
+
+            ctx.lineWidth = outlineWidth
+            if (outlineColor) {
+                if (outlineColor instanceof Gradient) { ctx.strokeStyle = outlineColor.toString(ctx) }
+                else { ctx.strokeStyle = outlineColor }
+
+            } else ctx.strokeStyle = '#fff'
+
+            ctx.stroke();
+        }
     }
 
     snap(canvas);
@@ -178,11 +205,12 @@ export async function drawCard(options: CardOptions): Promise<Buffer> {
 export async function welcomeImage(member: GuildMember, options: CardOptions = { }): Promise<Buffer> {
     const opts = { ...options }
     opts.text ??= { }
+    opts.avatar ??= { }
+
     opts.text.title ??= `Welcome to this server,`;
     opts.text.text ??= `${member.user.tag}!`;
     opts.text.subtitle ??= `MemberCount: ${member.guild.memberCount}`;
-    opts.theme ??= 'code';
-    opts.avatar ??= await loadImage(member.user.displayAvatarURL({ format: 'png' }));
+    opts.avatar.image ??= await loadImage(member.user.displayAvatarURL({ format: 'png' }));
 
     return await drawCard(opts);
 }
@@ -191,10 +219,11 @@ export async function welcomeImage(member: GuildMember, options: CardOptions = {
 export async function goodbyeImage(member: GuildMember, options: CardOptions = { }): Promise<Buffer> {
     const opts = { ...options }
     opts.text ??= { }
+    opts.avatar ??= { }
+
     opts.text.title ??= `Goodbye,`;
     opts.text.text ??= `${member.user.tag}!`;
-    opts.theme ??= 'code';
-    opts.avatar ??= await loadImage(member.user.displayAvatarURL({ format: 'png' }));
+    opts.avatar.image ??= await loadImage(member.user.displayAvatarURL({ format: 'png' }));
 
     return await drawCard(opts);
 }
