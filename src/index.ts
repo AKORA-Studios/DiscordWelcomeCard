@@ -104,6 +104,7 @@ export async function drawCard(options: CardOptions): Promise<Buffer> {
     if (options.background) background = await toImage(options.background, 'Background');
 
     ctx.theme = theme;
+    /** Border width */
     const b = 10; //Border
 
     //Background
@@ -126,8 +127,18 @@ export async function drawCard(options: CardOptions): Promise<Buffer> {
     snap(canvas);
     //Rounded Edges
     if (options.border) {
-        if (options.rounded) ctx.roundRect(b, b, w - 2 * b, h - 2 * b, h / 15);
-        else ctx.rect(b, b, w - (2 * b), h - (2 * b));
+        if (options.rounded) {
+            ctx.roundRect(
+                b, b,
+                w - 2 * b, h - 2 * b,
+                h / 20
+            );
+        } else {
+            ctx.rect(
+                b, b,
+                w - (2 * b), h - (2 * b)
+            );
+        }
         ctx.clip();
     } else {
         if (options.rounded) ctx.roundRect(0, 0, w, h, h / 15).clip();
