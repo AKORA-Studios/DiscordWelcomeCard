@@ -210,10 +210,8 @@ export async function drawCard(options: CardOptions): Promise<Buffer> {
             ctx.arc(h / 2, h / 2, radius - (outlineWidth / 2), 0, Math.PI * 2, true);
             ctx.closePath();
 
-            ctx.lineWidth = outlineWidth
-            if (outlineColor) {
-                ctx.strokeStyle = outlineColor.toString(ctx)
-            } else ctx.strokeStyle = '#fff'
+            ctx.lineWidth = outlineWidth;
+            ctx.strokeStyle = (outlineColor ?? theme.color ?? '#fff').toString(ctx);
 
             ctx.stroke();
         }
