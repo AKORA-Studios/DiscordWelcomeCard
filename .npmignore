@@ -1,6 +1,7 @@
 # Only important for git repo
 examples
 CHANGELOG.md
+USAGE.md
 
 #Developement
 node_modules
