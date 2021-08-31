@@ -1,25 +1,27 @@
 
 ## Examples
 <details open> 
-    <summary>  Welcome Card </summary>
+    <summary>  Welcome Card (circuit) </summary>
 
 ```javascript
-const Discord = require("discord.js");
+const { Client, Intents } = require("discord.js");
 const { welcomeImage } = require('discord-welcome-card');
-const client = new Discord.Client();
+const client = new Client({
+    intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES]
+});
 
-client.on("message", async message => {
+client.on("messageCreate", async message => {
     if(message.author.bot) return
     //Generating the actual welcome Card
-    const image = await welcomeImage(message.member);
+    const image = await welcomeImage(message.member, { theme: 'circuit' });
 
-    message.channel.send({ files: [new Discord.MessageAttachment(image, 'welcome.png')] })
+    message.channel.send({ files: [ image ] })
 });
 
 client.login('Your-Bot-Token');
 ```
     
-![Image](examples/welcome2.png)
+![Image](examples/circuit_welcome.png)
 
 
 </details>
@@ -30,21 +32,23 @@ client.login('Your-Bot-Token');
 <details open> <summary> Goodbye Card </summary>
 
 ```javascript
-const Discord = require("discord.js");
+const { Client, Intents } = require("discord.js");
 const { goodbyeImage } = require('discord-welcome-card');
-const client = new Discord.Client();
+const client = new Client({
+    intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES]
+});
 
-client.on("message", async message => {
+client.on("messageCreate", async message => {
     if(message.author.bot) return
     //Generating the actual goodbye Card
-    const image = await goodbyeImage(message.member, 'code');
+    const image = await goodbyeImage(message.member, { theme: 'code' });
 
-    message.channel.send({ files: [new  Discord.MessageAttachment(image, 'goodbye.png')] });
+    message.channel.send({ files: [ image ] });
 
 client.login('Your-Bot-Token');
 ```
     
-![Image](examples/goodbye2.png)
+![Image](examples/code_goodbye.png)
     
 </details>
 <br />
@@ -52,29 +56,43 @@ client.login('Your-Bot-Token');
 <details open><summary> Custom Card </summary>
 
 ```javascript
-const Discord = require("discord.js");
+const { Client, Intents } = require("discord.js");
 const { drawCard } = require('discord-welcome-card');
-const client = new Discord.Client();
+const client = new Client({
+    intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES]
+});
 
-client.on("message", async message => {
+client.on("messageCreate", async message => {
     if(message.author.bot) return
     //Generating the actual custom Card
     const image = await drawCard({
-            blur: true,
-            title: 'Title',
-            theme: 'dark',
-            text: 'Text',
-            subtitle: 'Subtitle',
-            rounded: true,
-            border: true,
-            avatar: message.member.user.avatarURL({ format: 'png' })
-        })
-    message.channel.send({ files: [new  Discord.MessageAttachment(image, 'custom.png')] })
+        theme: "circuit",
+        text: {
+            title: 'Hellloo',
+            text: message.author.tag,
+            subtitle: 'please read the Rules',
+            color: `#88f`
+        },
+        avatar: {
+            image: message.author.displayAvatarURL({ format: 'png' }),
+            outlineWidth: 5,
+            outlineColor: new Gradient('linear',
+                [0, '#33f'],
+                [1, '#f33']
+            ),
+        },
+        background: 'https://i.imgur.com/ea9PB3H.png',
+        blur: 1,
+        border: true,
+        rounded: true
+    });
+
+    message.channel.send({ files: [ image ] })
 });
 
 client.login('Your-Bot-Token');
 ```
     
-![Image](examples/custom2.png)
+![Image](examples/fullCustom.png)
 
 </details>

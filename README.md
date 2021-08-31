@@ -23,9 +23,9 @@ Simple easy-to-use Goodbye and welcome cards for your discord Bot. The version c
 
 
 ## Card Options
-```javascript
-  /** Select a theme with some default options */
-    theme?: (keyof typeof themes);
+```typescript
+    /** Select a theme with some default options */
+    theme?: "dark" | "circuit" | "code";
     /** Options for the text on the card */
     text?: {
         /** Text in the Top */
@@ -35,43 +35,77 @@ Simple easy-to-use Goodbye and welcome cards for your discord Bot. The version c
         /** Text on the bottom */
         subtitle?: string;
         /** Font Color / Gradient */
-        color?: Color;
+        color?: `#${string}` | Gradient;
         /** Custom Font */
         font?: string;
     },
     /** Options for the avatar */
     avatar?: {
         /** The Avatar Image, can be a URL/Canvas/Image or Buffer */
-        image?: ImageResolvable;
+        image?: Canvas | Image | Buffer | string;
         /** Width of the outline around the avatar in px (0-50) */
         outlineWidth?: number;
         /** Color of the outline / Gradient */
-        outlineColor?: Color;
-    }
+        outlineColor?: `#${string}` | Gradient;
+    },
     /** Override the Background, can be a URL/Canvas/Image or Buffer  */
-    background?: ImageResolvable;
+    background?: Canvas | Image | Buffer | string;
     /** If the background should be blurred (true -> 3) */
     blur?: boolean | number;
     /** When enabled a blurred border is drawn, enabled by default */
     border?: boolean;
     /** If enabled the edges will be rounded, enabled by default */
     rounded?: boolean;
-    //custom?: ModuleFunction;
 ```
 
+<details> 
+    <summary> Full example </summary>
+
+```typescript
+    theme: 'circuit',
+    text: {
+        title: 'Hellloo',
+        text: user.tag,
+        subtitle: 'please read the Rules',
+        color: `#88f`
+    },
+    avatar: {
+        image: user.displayAvatarURL({ format: 'png' }),
+        outlineWidth: 5,
+        outlineColor: new Gradient('linear',
+            [0, '#33f'],
+            [1, '#f33']
+        )
+    },
+    background: 'https://i.imgur.com/ea9PB3H.png',
+    blur: 1,
+    border: true,
+    rounded: true
+```
+
+![Custom Card](examples/fullCustom.png)
+</details>
+
+<br/><br/><br/>
+
+
 ## Default themes & font colors
-Dark
-![Dark Theme](https://cdn.discordapp.com/attachments/753474834004049970/880461624912269352/welcome.png)
 
-Circuit
-![Circuit Theme](https://cdn.discordapp.com/attachments/881826427392102401/881868994074800159/welcome.png)
 
-Code
-![Code Theme](https://cdn.discordapp.com/attachments/753474836281557063/847803305450274846/goodbye.png)
+### Dark
+![Dark Theme](examples/dark_welcome.png)
+
+### Circuit
+![Circuit Theme](examples/circuit_welcome.png)
+
+### Code
+![Code Theme](examples/code_goodbye.png)
+
+<br/><br/><br/>
 
 ## Examples
 <details open> 
-    <summary>  Welcome Card </summary>
+    <summary> Welcome Card (dark) </summary>
 
 ```javascript
 const Discord = require("discord.js");
@@ -81,7 +115,9 @@ const client = new Discord.Client();
 client.on("message", async message => {
     if(message.author.bot) return
     //Generating the actual welcome Card
-    const image = await welcomeImage(message.member);
+    const image = await welcomeImage(message.member, {
+        theme: 'dark'
+    });
 
     message.channel.send(new Discord.MessageAttachment(image, 'welcome.png'))
 });
@@ -89,12 +125,12 @@ client.on("message", async message => {
 client.login('Your-Bot-Token');
 ```
     
-![Image](examples/welcome2.png)
+![Image](examples/dark_welcome.png)
 
 </details>
 
 
-<details> <summary> Goodbye Card </summary>
+<details> <summary> Goodbye Card (code) </summary>
 
 ```javascript
 const Discord = require("discord.js");
@@ -104,7 +140,7 @@ const client = new Discord.Client();
 client.on("message", async message => {
     if(message.author.bot) return
     //Generating the actual goodbye Card
-    const image = await goodbyeImage(message.member, 'code');
+    const image = await goodbyeImage(message.member, { theme: 'code' });
 
     message.channel.send(new Discord.MessageAttachment(image, 'goodbye.png'))
 });
@@ -112,11 +148,11 @@ client.on("message", async message => {
 client.login('Your-Bot-Token');
 ```
     
-![Image](examples/goodbye2.png)
+![Image](examples/code_goodbye.png)
     
 </details>
 
-<details><summary> Custom Card </summary>
+<details><summary> Full Custom Card </summary>
 
 ```javascript
 const Discord = require("discord.js");
@@ -127,29 +163,33 @@ client.on("message", async message => {
     if(message.author.bot) return
     //Generating the actual custom Card
     const image = await drawCard({
-            theme: 'dark',
-            text: {
-                title: 'Title',
-                 text: 'Text',
-                subtitle: 'Subtitle',
-                color: '#aaa6ff'
-            },
-            avatar: {
-                image: message.member.user.avatarURL({ format: 'png' }),
-                outlineWidth: 5,
-                outlineColor: '#6dc97c'
-            },
-            blur: true,
-            border: true,
-            rounded: true
-        })
+        theme: "circuit",
+        text: {
+            title: 'Hellloo',
+            text: msg.author.tag,
+            subtitle: 'please read the Rules',
+            color: `#88f`
+        },
+        avatar: {
+            image: msg.author.displayAvatarURL({ format: 'png' }),
+            outlineWidth: 5,
+            outlineColor: new Gradient('linear',
+                [0, '#33f'],
+                [1, '#f33']
+            ),
+        },
+        background: 'https://i.imgur.com/ea9PB3H.png',
+        blur: 1,
+        border: true,
+        rounded: true
+    })
     message.channel.send(new Discord.MessageAttachment(image, 'custom.png'))
 });
 
 client.login('Your-Bot-Token');
 ```
     
-![Image](examples/custom2.png)
+![Image](examples/fullCustom.png)
 
 </details>
  
