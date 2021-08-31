@@ -7,7 +7,7 @@
 
 
 #  Discord Welcome Card
-Simple easy-to-use Goodbye and welcome cards for your discord Bot. The version changelog could be found at [changelog](CHANGELOG.md).
+Simple easy-to-use Goodbye and welcome cards for your discord Bot. The version changelog could be found at [changelog.md](CHANGELOG.md).
 
 
 ## Features
