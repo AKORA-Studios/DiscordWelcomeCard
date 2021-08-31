@@ -62,8 +62,10 @@ Simple easy-to-use Goodbye and welcome cards for your discord Bot. The version c
 ## Default themes & font colors
 Dark
 ![Dark Theme](https://cdn.discordapp.com/attachments/753474834004049970/880461624912269352/welcome.png)
+
 Circuit
 ![Circuit Theme](https://cdn.discordapp.com/attachments/881826427392102401/881868994074800159/welcome.png)
+
 Code
 ![Code Theme](https://cdn.discordapp.com/attachments/753474836281557063/847803305450274846/goodbye.png)
 
