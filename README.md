@@ -1,13 +1,10 @@
+#  Discord Welcome Card
 [![NPM Version](https://img.shields.io/npm/v/discord-welcome-card?color=00DEC8&style=for-the-badge)](https://www.npmjs.com/package/discord-welcome-card)
 [![NPM Downloads](https://img.shields.io/npm/dt/discord-welcome-card?color=00DEC8&style=for-the-badge)](https://www.npmjs.com/package/discord-welcome-card)
 [![NPM License](https://img.shields.io/npm/l/discord-welcome-card?color=00DEC8&style=for-the-badge)](https://www.npmjs.com/package/discord-welcome-card)
 [![Github Size](https://img.shields.io/github/repo-size/AKORA-Studios/DiscordWelcomeCard?color=00DEC8&label=SIZE&style=for-the-badge)](https://www.npmjs.com/package/discord-welcome-card)
 
-**[![widget](https://discord.com/api/guilds/553942677117337600/widget.png?style=banner2)](https://discord.gg/Emk2udJ)**
-
-
-#  Discord Welcome Card
-Simple easy-to-use Goodbye and welcome cards for your discord Bot. The version changelog could be found at [changelog.md](CHANGELOG.md).
+Simple easy-to-use Goodbye and welcome cards for your discord Bot. The version changelog could be found at [changelog.md](CHANGELOG.md). If you have any problems or questiosn considering this package, feel free to open a issue or join our [discord server](https://discord.gg/Emk2udJ).
 
 
 ## Features
@@ -19,43 +16,28 @@ Simple easy-to-use Goodbye and welcome cards for your discord Bot. The version c
 * 💿 rounded edges / border
 * ⭕ avatar outline
 
-(Note that all example codes below are for discord.js Version 12. Example usage code in Version 13 or higher, is provided in [this file](Usage.md))
+(Note that all example codes below are for discord.js Version 12. Example usage code in Version 13 or higher, is provided in [another file](Usage.md))
 
 
 ## Card Options
 ```typescript
-    /** Select a theme with some default options */
-    theme?: "dark" | "circuit" | "code";
-    /** Options for the text on the card */
-    text?: {
-        /** Text in the Top */
-        title?: string;
-        /**Text in the middle(big) */
-        text?: string;
-        /** Text on the bottom */
-        subtitle?: string;
-        /** Font Color / Gradient */
-        color?: `#${string}` | Gradient;
-        /** Custom Font */
-        font?: string;
+    theme?: "dark" | "circuit" | "code";    /** Select a theme with some default options */
+    text?: {   /** Options for the text on the card */
+        title?: string;      /** Text in the Top */
+        text?: string; /**Text in the middle(big) */
+        subtitle?: string; /** Text on the bottom */
+        color?: `#${string}` | Gradient;      /** Font Color / Gradient */
+        font?: string;  /** Custom Font */
     },
-    /** Options for the avatar */
-    avatar?: {
-        /** The Avatar Image, can be a URL/Canvas/Image or Buffer */
-        image?: Canvas | Image | Buffer | string;
-        /** Width of the outline around the avatar in px (0-50) */
-        outlineWidth?: number;
-        /** Color of the outline / Gradient */
-        outlineColor?: `#${string}` | Gradient;
+    avatar?: { /** Options for the avatar */
+        image?: Canvas | Image | Buffer | string;   /** The Avatar Image, can be a URL/Canvas/Image or Buffer */
+        outlineWidth?: number;  /** Width of the outline around the avatar in px (0-50) */
+        outlineColor?: `#${string}` | Gradient;   /** Color of the outline / Gradient */
     },
-    /** Override the Background, can be a URL/Canvas/Image or Buffer  */
-    background?: Canvas | Image | Buffer | string;
-    /** If the background should be blurred (true -> 3) */
-    blur?: boolean | number;
-    /** When enabled a blurred border is drawn, enabled by default */
-    border?: boolean;
-    /** If enabled the edges will be rounded, enabled by default */
-    rounded?: boolean;
+    background?: Canvas | Image | Buffer | string;  /** Override the Background, can be a URL/Canvas/Image or Buffer  */
+    blur?: boolean | number;  /** If the background should be blurred (true -> 3) */
+    border?: boolean;    /** When enabled a blurred border is drawn, enabled by default */
+    rounded?: boolean; /** If enabled the edges will be rounded, enabled by default */
 ```
 
 <details> 
@@ -152,7 +134,7 @@ client.login('Your-Bot-Token');
     
 </details>
 
-<details><summary> Full Custom Card </summary>
+<details><summary> Full Custom Card (Background from URL) </summary>
 
 ```javascript
 const Discord = require("discord.js");
@@ -194,7 +176,7 @@ client.login('Your-Bot-Token');
 </details>
  
 
-<details> <summary> Custom Card (custom Background) </summary>
+<details> <summary> Custom Card (custom Background from file) </summary>
 folder strcuture:
 
 ```
@@ -244,3 +226,6 @@ client.login('Your-Bot-Token');
 ## Example projects
 Some projects written with this package
 * [Miyuki](https://github.com/discord-card/Miyuki) (discord.js V13)
+
+## Support Server
+**[![widget](https://discord.com/api/guilds/553942677117337600/widget.png?style=banner2)](https://discord.gg/Emk2udJ)**
