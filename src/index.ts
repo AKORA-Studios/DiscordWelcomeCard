@@ -169,7 +169,7 @@ export async function drawCard(options: CardOptions): Promise<Buffer> {
     //Setting Styles
     ctx.fillStyle = (options.text?.color ?? theme.color).toString(ctx);
     //ctx.strokeStyle = theme.color.toString(ctx);
-    ctx.font = '30px ' + ((options.text?.font ?? theme.font) ?? 'sans-serif');
+    ctx.font = '30px ' + ((options.text?.font ?? theme.font) ?? 'sans-serif', 'segoe-ui-emoji');
 
 
     //Drawing

@@ -31,7 +31,7 @@ Simple easy-to-use Goodbye and welcome cards for your discord Bot. The version c
     },
     avatar?: { /** Options for the avatar */
         image?: Canvas | Image | Buffer | string;   /** The Avatar Image, can be a URL/Canvas/Image or Buffer */
-        outlineWidth?: number;  /** Width of the outline around the avatar in px (0-50) */
+        outlineWidth?: number;  /** Width of the outline around the avatar in px */
         outlineColor?: `#${string}` | Gradient;   /** Color of the outline / Gradient */
     },
     background?: Canvas | Image | Buffer | string;  /** Override the Background, can be a URL/Canvas/Image or Buffer  */
