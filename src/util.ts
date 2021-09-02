@@ -130,7 +130,6 @@ export async function baseCard(opts: Cardopts): Promise<Canvas> {
         else ctx.rect(0, 0, w, h);
     }
 
-
     var temp: Canvas | Image = background;
     if (opts.blur) {
         var blur = createCanvas(w, h), blurCTX = blur.getContext('2d');
