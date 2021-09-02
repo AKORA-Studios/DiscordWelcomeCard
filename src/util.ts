@@ -164,7 +164,7 @@ export async function baseCard(opts: Cardopts): Promise<Canvas> {
         .fillText(opts.text.subtitle ?? '', ctx.width / 2.7, ctx.height / 1.3);
 
     //Avatar Image
-    const radius = (opts.avatar.radius ?? 0.4) * h / 2;
+    const radius = (opts.avatar.radius ?? 0.8) * h / 2;
 
     const { avatar } = opts;
     if (avatar) {
