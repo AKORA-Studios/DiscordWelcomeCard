@@ -28,7 +28,7 @@ export var themes = {
     'code': { color: '#ffffff', image: join(root, 'code.png'), font: 'Source Sans Pro' },
 }
 
-export type Color = `#${string}` | Gradient;
+export type Color = string | Gradient;
 export type ImageResolvable = Canvas | Image | Buffer | string;
 
 
@@ -36,7 +36,7 @@ export type ImageResolvable = Canvas | Image | Buffer | string;
 
 
 
-type Cardopts = {
+export type Cardopts = {
     width: number,
     height: number,
     /** Options for the text on the card */
@@ -72,32 +72,31 @@ type Cardopts = {
     }
     /** Override the Background, can be a URL/Canvas/Image or Buffer  */
     background?: ImageResolvable;
-    /** If the background should be blurred */
+    /** If the background should be blurred, `3` by default */
     blur?: number;
-    /** When enabled a blurred border is drawn, enabled by default */
+    /** When enabled a blurred border is drawn, `10` by default */
     border?: number;
-    /** If enabled the edges will be rounded, enabled by default */
-    rounded?: boolean;
-    //custom?: ModuleFunction;
+    /** (0-1) If enabled the edges will be rounded, `0.1` by default */
+    rounded?: number;
 }
 
 
 
-export async function drawCard(opts: Cardopts): Promise<Canvas> {
+export async function baseCard(opts: Cardopts): Promise<Canvas> {
     const w = opts.width, h = opts.height,
         canvas = createCanvas(w, h),
         ctx = canvas.getContext('2d');
 
     ctx.w = ctx.width = w;
     ctx.h = ctx.height = h;
-
-    const background: Image = await toImage(opts.background ?? canvas, 'Background');
-
     /** Border width */
     const b = opts.border; //Border
 
+    const background = await toImage(opts.background ?? canvas, 'Background');
+
+
     //Background
-    if (opts.rounded) ctx.roundRect(0, 0, w, h, h / 15);
+    if (opts.rounded > 0) ctx.roundRect(0, 0, w, h, (h / 2) * opts.rounded);
     else ctx.rect(0, 0, w, h);
     ctx.clip();
 
@@ -112,12 +111,12 @@ export async function drawCard(opts: Cardopts): Promise<Canvas> {
     }
 
     //Rounded Edges
-    if (opts.border) {
-        if (opts.rounded) {
+    if (opts.border > 0) {
+        if (opts.rounded > 0) {
             ctx.roundRect(
                 b, b,
                 w - 2 * b, h - 2 * b,
-                h / 20
+                (h / 2) * opts.rounded
             );
         } else {
             ctx.rect(
@@ -127,7 +126,7 @@ export async function drawCard(opts: Cardopts): Promise<Canvas> {
         }
         ctx.clip();
     } else {
-        if (opts.rounded) ctx.roundRect(0, 0, w, h, h / 15).clip();
+        if (opts.rounded > 0) ctx.roundRect(0, 0, w, h, (h / 2) * opts.rounded).clip();
         else ctx.rect(0, 0, w, h);
     }
 
@@ -142,7 +141,7 @@ export async function drawCard(opts: Cardopts): Promise<Canvas> {
 
         temp = blur;
     }
-    if (opts.border) ctx.drawImage(temp, b, b, w - b * 2, h - b * 2);
+    if (opts.border > 0) ctx.drawImage(temp, b, b, w - b * 2, h - b * 2);
     else ctx.drawImage(temp, 0, 0, w, h);
 
     //Setting Styles
@@ -165,25 +164,28 @@ export async function drawCard(opts: Cardopts): Promise<Canvas> {
         .fillText(opts.text.subtitle ?? '', ctx.width / 2.7, ctx.height / 1.3);
 
     //Avatar Image
-    const radius = opts.avatar.radius ?? 0.4;
-
-    ctx.lineWidth = 6
-    ctx.beginPath();
-    ctx.arc(h / 2, h / 2, radius, 0, Math.PI * 2, true);
-    ctx.closePath();
-    ctx.clip();
+    const radius = (opts.avatar.radius ?? 0.4) * h / 2;
 
     const { avatar } = opts;
     if (avatar) {
         avatar.outlineWidth ??= 0;
         avatar.position ??= { x: 0.5, y: 0.5 };
+
         const { image: avatarImage, outlineWidth: outWidth, outlineColor, position: p } = avatar;
+        p.x = (p.x ?? 0.5) * h;
+        p.y = (p.y ?? 0.5) * h;
+
+        ctx.lineWidth = 6
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, radius, 0, Math.PI * 2, true);
+        ctx.closePath();
+        ctx.clip();
 
         if (avatarImage) {
             ctx.drawImage(
                 await toImage(avatarImage),
-                ((h * p.x) - radius) + outWidth, //x
-                ((h * p.y) - radius) + outWidth, //y
+                (p.x - radius) + outWidth, //x
+                (p.y - radius) + outWidth, //y
                 (radius * 2) - (outWidth * 2), //width
                 (radius * 2) - (outWidth * 2) //height
             );
@@ -192,7 +194,7 @@ export async function drawCard(opts: Cardopts): Promise<Canvas> {
         if (outWidth > 0) {
             ctx.beginPath();
             ctx.arc(
-                (h * p.x), (h * p.y),
+                p.x, p.y,
                 radius - (outWidth / 2),
                 0, Math.PI * 2, true
             );
