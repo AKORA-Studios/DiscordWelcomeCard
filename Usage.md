@@ -63,12 +63,12 @@ client.on("message", async message => {
         theme: "circuit",
         text: {
             title: 'Hellloo',
-            text: msg.author.tag,
+            text: message.author.tag,
             subtitle: 'please read the Rules',
             color: `#88f`
         },
         avatar: {
-            image: msg.author.displayAvatarURL({ format: 'png' }),
+            image: message.author.displayAvatarURL({ format: 'png' }),
             outlineWidth: 5,
             outlineColor: new Gradient('linear',
                 [0, '#33f'],
