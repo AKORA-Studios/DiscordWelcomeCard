@@ -16,7 +16,7 @@ Simple easy-to-use Goodbye and welcome cards for your discord Bot. The version c
 * 💿 rounded edges / border
 * ⭕ avatar outline
 
-(Note that all example codes below are for discord.js Version 12. Example usage code in Version 13 or higher, is provided in [another file](Usage.md))
+(Note that all example codes below are for discord.js Version 13. Example usage code in Version 12, is provided in [another file](Usage.md))
 
 
 ## Card Options
@@ -85,47 +85,52 @@ Simple easy-to-use Goodbye and welcome cards for your discord Bot. The version c
 
 <br/><br/><br/>
 
+
 ## Examples
 <details open> 
-    <summary> Welcome Card (dark) </summary>
+    <summary>  Welcome Card (circuit) </summary>
 
 ```javascript
-const Discord = require("discord.js");
+const { Client, Intents } = require("discord.js");
 const { welcomeImage } = require('discord-welcome-card');
-const client = new Discord.Client();
+const client = new Client({
+    intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES]
+});
 
-client.on("message", async message => {
+client.on("messageCreate", async message => {
     if(message.author.bot) return
     //Generating the actual welcome Card
-    const image = await welcomeImage(message.member, {
-        theme: 'dark'
-    });
+    const image = await welcomeImage(message.member, { theme: 'circuit' });
 
-    message.channel.send(new Discord.MessageAttachment(image, 'welcome.png'))
+    message.channel.send({ files: [ image ] })
 });
 
 client.login('Your-Bot-Token');
 ```
     
-![Image](examples/dark_welcome.png)
+![Image](examples/circuit_welcome.png)
+
 
 </details>
 
+<br />
 
-<details> <summary> Goodbye Card (code) </summary>
+
+<details open> <summary> Goodbye Card </summary>
 
 ```javascript
-const Discord = require("discord.js");
+const { Client, Intents } = require("discord.js");
 const { goodbyeImage } = require('discord-welcome-card');
-const client = new Discord.Client();
+const client = new Client({
+    intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES]
+});
 
-client.on("message", async message => {
+client.on("messageCreate", async message => {
     if(message.author.bot) return
     //Generating the actual goodbye Card
     const image = await goodbyeImage(message.member, { theme: 'code' });
 
-    message.channel.send(new Discord.MessageAttachment(image, 'goodbye.png'))
-});
+    message.channel.send({ files: [ image ] });
 
 client.login('Your-Bot-Token');
 ```
@@ -133,27 +138,30 @@ client.login('Your-Bot-Token');
 ![Image](examples/code_goodbye.png)
     
 </details>
+<br />
 
-<details><summary> Full Custom Card (Background from URL) </summary>
+<details open><summary> Custom Card </summary>
 
 ```javascript
-const Discord = require("discord.js");
+const { Client, Intents } = require("discord.js");
 const { drawCard } = require('discord-welcome-card');
-const client = new Discord.Client();
+const client = new Client({
+    intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES]
+});
 
-client.on("message", async message => {
+client.on("messageCreate", async message => {
     if(message.author.bot) return
     //Generating the actual custom Card
     const image = await drawCard({
         theme: "circuit",
         text: {
             title: 'Hellloo',
-            text: msg.author.tag,
+            text: message.author.tag,
             subtitle: 'please read the Rules',
             color: `#88f`
         },
         avatar: {
-            image: msg.author.displayAvatarURL({ format: 'png' }),
+            image: message.author.displayAvatarURL({ format: 'png' }),
             outlineWidth: 5,
             outlineColor: new Gradient('linear',
                 [0, '#33f'],
@@ -164,8 +172,9 @@ client.on("message", async message => {
         blur: 1,
         border: true,
         rounded: true
-    })
-    message.channel.send(new Discord.MessageAttachment(image, 'custom.png'))
+    });
+
+    message.channel.send({ files: [ image ] })
 });
 
 client.login('Your-Bot-Token');
@@ -173,54 +182,7 @@ client.login('Your-Bot-Token');
     
 ![Image](examples/fullCustom.png)
 
-</details>
- 
-
-<details> <summary> Custom Card (custom Background from file) </summary>
-folder strcuture:
-
-```
-folder
-|-index.js
-|-image.png
-```
-
-```javascript
-const Discord = require("discord.js");
-const { drawCard } = require('discord-welcome-card');
-const client = new Discord.Client();
-
-client.on("message", async message => {
-    if(message.author.bot) return
-    //Generating the actual custom Card
-    const image = await drawCard({
-            text: {
-                title: 'Title',
-                 text: 'Text',
-                subtitle: 'Subtitle',
-                color:  new Gradient("linear", {
-                     color: "#4287f5",
-                    offset: 1
-                    }, {
-                    color: "#f5426f",
-                     offset: 0
-                     })
-            },
-            avatar: {
-                image: message.member.user.avatarURL({ format: 'png' })
-            },
-            background: "./image.png",
-            blur: true,
-            border: true,
-            rounded: true
-        })
-    message.channel.send(new Discord.MessageAttachment(image, 'custom.png'))
-});
-
-client.login('Your-Bot-Token');
-```
-    
-</details>    
+</details>  
 
 
 ## Example projects
