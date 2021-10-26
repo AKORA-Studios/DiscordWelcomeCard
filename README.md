@@ -16,7 +16,7 @@ Simple easy-to-use Goodbye and welcome cards for your discord Bot. The version c
 * 💿 rounded edges / border
 * ⭕ avatar outline
 
-(Note that all example codes below are for discord.js Version 13. Example usage code in Version 12, is provided in [another file](Usage.md))
+(Note that all example codes below are for discord.js Version 12. Example usage code in Version 13, is provided in [another file](Usage.md))
 
 
 ## Card Options
