@@ -42,7 +42,12 @@ Simple easy-to-use Goodbye and welcome cards for your discord Bot. The version c
 
 <details> 
     <summary> Full example </summary>
-(If you want to use Gradients, you maybe need to import Gradient like this: ```const { drawCard, Gradient } = require('discord-welcome-card')```)
+(If you want to use Gradients, you maybe need to import Gradient like this: 
+    
+    
+    ```javascript 
+    const { drawCard, Gradient } = require('discord-welcome-card') ```
+    
 ```typescript
     theme: 'circuit',
     text: {
