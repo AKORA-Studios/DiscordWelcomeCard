@@ -33,7 +33,7 @@
         "url": "git://github.com/AKORA-Studios/DiscordWelcomeCard.git"
     },
     "devDependencies": {
-        "@types/node": "^16.7.6",
+        "@types/node": "^17.0.5",
         "discord.js": "^13.1.0",
         "nodemon": "^2.0.12",
         "shx": "^0.3.3",
