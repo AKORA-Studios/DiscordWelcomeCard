@@ -6,7 +6,7 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "build": "npx tsc --build --force",
-    "prepack": "npm run build && npm test",
+    "prepack": "npm run build",
     "test": "jest",
     "test:generate": "node ./test/generate"
   },
