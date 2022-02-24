@@ -1,7 +1,16 @@
-import { loadImage, Canvas, Image } from 'canvas';
+import { loadImage, Canvas, Image, registerFont } from 'canvas';
 import { join } from 'path';
 import { writeFileSync } from 'fs';
 import { ImageResolvable } from './types';
+
+//Path to the root directory of this package
+export const rootDir = join(__dirname, '..');
+function path(...paths: string[]) {
+  return join(rootDir, ...paths);
+}
+
+//Load font
+registerFont(path('fonts/segoeui.ttf'), { family: 'segoe-ui-emoji' });
 
 // Snapshot system
 const production = true;
@@ -11,7 +20,6 @@ export function snap(c: Canvas) {
   if (!production) writeFileSync(`./testing/snapshots/${count}.png`, c.toBuffer('image/png'));
   count++;
 }
-//registerFont(require('@canvas-fonts/arial-bold'), { family: 'Arial Bold' });
 
 export function getFontSize(str: string) {
   if (str.length < 18) return 30;
@@ -28,13 +36,11 @@ export async function toImage(image: ImageResolvable, name?: string) {
   else throw new Error('Invalid Image Format for: ' + name ?? 'Image');
 }
 
-export const root = join(__dirname, '..', 'images');
 export var themes = {
-  dark: { color: '#ffffff', image: join(root, 'dark.png') },
-  circuit: { color: '#ffffff', image: join(root, 'circuit.png') },
+  dark: { color: '#ffffff', image: path('images/dark.png') },
+  circuit: { color: '#ffffff', image: path('images/circuit.png') },
   code: {
     color: '#ffffff',
-    image: join(root, 'code.png'),
-    font: 'Source Sans Pro',
+    image: path('images/code.png'),
   },
 };

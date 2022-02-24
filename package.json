@@ -24,7 +24,8 @@
   "author": "AKORA Studios",
   "license": "MIT",
   "dependencies": {
-    "@discord-card/core": "^1.1.5"
+    "@discord-card/core": "^1.1.5",
+    "canvas": "^2.9.0"
   },
   "repository": {
     "type": "git",
