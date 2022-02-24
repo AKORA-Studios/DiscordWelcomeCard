@@ -19,4 +19,11 @@ function hash(data) {
   return createHash('sha256').update(data).digest('base64');
 }
 
-module.exports = { images, hash };
+function size(buff) {
+  return Buffer.byteLength(buff);
+}
+
+/** Maximum diffrence between buffers in bytes */
+const MAX_DIFF = 300;
+
+module.exports = { images, hash, size, MAX_DIFF };

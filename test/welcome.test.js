@@ -1,11 +1,19 @@
 const { welcomeImage } = require('../lib');
-const { images, hash } = require('./util');
+const { images, MAX_DIFF, size } = require('./util');
 const { member, opts } = require('./mock');
 
 test('Welcome Card - Default', async () => {
-  expect(hash(await welcomeImage(member))).toBe(hash(images.welcome.default));
+  const gen = await welcomeImage(member),
+    comp = images.welcome.default,
+    sizeDiff = Math.abs(size(gen) - size(comp));
+
+  expect(sizeDiff).toBeLessThanOrEqual(MAX_DIFF);
 });
 
 test('Welcome Card - Full', async () => {
-  expect(hash(await welcomeImage(member, opts))).toBe(hash(images.welcome.full));
+  const gen = await welcomeImage(member, opts),
+    comp = images.welcome.default,
+    sizeDiff = Math.abs(size(gen) - size(comp));
+
+  expect(sizeDiff).toBeLessThanOrEqual(MAX_DIFF);
 });
