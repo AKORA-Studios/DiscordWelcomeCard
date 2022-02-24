@@ -30,5 +30,7 @@ jobs:
         if: ${{ matrix.node-version <= 14 }}
       - name: Install Packages
         run: npm ci
+      - name: Build Package
+        run: npm run build
       - name: Run Tests
         run: npm run test
