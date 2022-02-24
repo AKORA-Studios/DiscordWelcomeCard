@@ -11,6 +11,7 @@ function path(...paths: string[]) {
 
 //Load font
 registerFont(path('fonts/segoeui.ttf'), { family: 'SegoeUI' });
+registerFont(path('fonts/seguiemj.ttf'), { family: 'SegoeUIEmoji' });
 
 // Snapshot system
 const production = true;
