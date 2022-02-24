@@ -1,8 +1,7 @@
 const { join } = require('path');
 const { writeFileSync: write, readFileSync } = require('fs');
 const { welcomeImage, goodbyeImage } = require('../lib');
-const { member, opts } = require('./mock');
-
+const { member, opts, avatarOpts } = require('./mock');
 const path = (s) => join(__dirname, s);
 
 async function run() {

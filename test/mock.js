@@ -1,10 +1,14 @@
 const { Gradient } = require('@discord-card/core');
+const { join } = require('path');
+const path = (s) => join(__dirname, s);
+
+const avatar = path('images/avatar.png');
 
 /** @type {import('../lib').GuildMemberLike} */
 const member = {
   user: {
     tag: 'ΛΚΘRΛ#7997',
-    displayAvatarURL: ({ format }) => 'https://cdn.discordapp.com/avatars/387655649934311427/01f64003a9ea0a1494a4d07aa23ae64e.' + format,
+    displayAvatarURL: ({ format }) => avatar,
   },
   guild: {
     memberCount: 420,
@@ -29,4 +33,8 @@ const opts = {
   },
 };
 
-module.exports = { member, opts };
+module.exports = {
+  member,
+  opts,
+  avatar,
+};
