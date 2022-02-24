@@ -1,14 +1,15 @@
 # Only important for git repo
 examples
-CHANGELOG.md
 USAGE.md
 
 #Developement
-node_modules
-testing
-.vscode
-*.map
+node_modules/
+testing/
+.vscode/
+src/**/*.ts
 *.tgz
+*.map
+tsconfig.tsbuildinfo
 
 package-lock.json
 tsconfig.json

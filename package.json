@@ -1,42 +1,38 @@
 {
-    "name": "discord-welcome-card",
-    "version": "4.0.3",
-    "description": "Discord Welcome/Goodbye Cards",
-    "main": "src/index.js",
-    "types": "src/index.d.ts",
-    "scripts": {
-        "build": "tsc",
-        "build:clean": "shx rm -rf ./src/**/*.js* ./src/**/*d.ts*",
-        "build:watch": "npm run build -- -w",
-        "prepack": "npm run build:clean && tsc",
-        "link": "npm link && cd ./testing && npm link discord-welcome-card",
-        "test": "node ./testing/",
-        "test:watch": "nodemon -w .\\ .\\testing\\index.js"
-    },
-    "keywords": [
-        "discord",
-        "discord.js",
-        "canvas",
-        "node-canvas",
-        "welcome",
-        "welcomecard",
-        "goodbye",
-        "greeting"
-    ],
-    "author": "AKORA Studios",
-    "license": "MIT",
-    "dependencies": {
-        "@discord-card/core": "^1.1.5"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git://github.com/AKORA-Studios/DiscordWelcomeCard.git"
-    },
-    "devDependencies": {
-        "@types/node": "^17.0.5",
-        "discord.js": "^13.1.0",
-        "nodemon": "^2.0.12",
-        "shx": "^0.3.3",
-        "typescript": "^4.4.2"
-    }
+  "name": "discord-welcome-card",
+  "version": "4.0.3",
+  "description": "Discord Welcome/Goodbye Cards",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "build": "npx tsc --build --force",
+    "prepack": "npm run build",
+    "link": "npm link && cd ./testing && npm link discord-welcome-card",
+    "test": "node ./testing/",
+    "test:watch": "npx nodemon -w .\\ .\\testing\\index.js"
+  },
+  "keywords": [
+    "discord",
+    "discord.js",
+    "canvas",
+    "node-canvas",
+    "welcome",
+    "welcomecard",
+    "goodbye",
+    "greeting"
+  ],
+  "author": "AKORA Studios",
+  "license": "MIT",
+  "dependencies": {
+    "@discord-card/core": "^1.1.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/AKORA-Studios/DiscordWelcomeCard.git"
+  },
+  "devDependencies": {
+    "@types/node": "^16.11.26",
+    "discord.js": "^13.6.0",
+    "typescript": "^4.5.5"
+  }
 }

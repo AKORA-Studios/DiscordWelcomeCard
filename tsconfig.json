@@ -1,17 +1,29 @@
 {
+    "buildOptions": {
+        "incremental": true
+    },
     "compilerOptions": {
+        "rootDir": "src",
+        "outDir": "lib",
         "target": "ES6",
         "lib": [
             "esnext",
             "DOM"
         ],
+        // Optimizations
+        "incremental": true,
         "skipLibCheck": true,
-        "allowSyntheticDefaultImports": true,
-        "sourceMap": true,
-        "declarationMap": true,
+        // Resolution
         "module": "CommonJS",
         "moduleResolution": "node",
         "resolveJsonModule": true,
-        "declaration": true
+        "allowSyntheticDefaultImports": true,
+        // Declarations
+        "declarationDir": "lib",
+        "declaration": true,
+        "declarationMap": true,
+        // Source Maps
+        "mapRoot": "lib",
+        "sourceMap": true,
     }
 }

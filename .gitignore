@@ -1,10 +1,10 @@
+#Folder
 /node_modules
-/package-lock.json
-/testing
 /.vscode
+/testing
 
 # Compiled
-*.js
-*.d.ts
-*.map
+/typings
+/lib
 *.tgz
+*.tsbuildinfo
