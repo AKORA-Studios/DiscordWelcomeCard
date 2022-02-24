@@ -1,7 +1,8 @@
 import { createCanvas, loadImage, CanvasRenderingContext2D as ctx2D, Canvas, Image } from 'canvas';
-import { Theme, themes } from '@discord-card/core';
-import { toImage, getFontSize, snap } from './lib';
+import { Theme } from '@discord-card/core';
+import { toImage, getFontSize, snap, themes } from './lib';
 import { CardOptions, GuildMemberLike } from './types';
+import '@discord-card/core'; //To polyfill canvas class
 
 export async function drawCard(options: CardOptions): Promise<Buffer> {
   const w = 700,

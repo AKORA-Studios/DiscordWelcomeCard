@@ -8,7 +8,7 @@
     "build": "npx tsc --build --force",
     "prepack": "npm run build",
     "link": "npm link && cd ./testing && npm link discord-welcome-card",
-    "test": "node ./testing/",
+    "test": "jest",
     "test:watch": "npx nodemon -w .\\ .\\testing\\index.js"
   },
   "keywords": [
@@ -34,6 +34,7 @@
   "devDependencies": {
     "@types/node": "^16.11.26",
     "discord.js": "^13.6.0",
+    "jest": "^27.5.1",
     "typescript": "^4.5.5"
   }
 }
