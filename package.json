@@ -6,10 +6,9 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "build": "npx tsc --build --force",
-    "prepack": "npm run build",
-    "link": "npm link && cd ./testing && npm link discord-welcome-card",
+    "prepack": "npm run build && npm test",
     "test": "jest",
-    "test:watch": "npx nodemon -w .\\ .\\testing\\index.js"
+    "test:generate": "node ./test/generate"
   },
   "keywords": [
     "discord",
