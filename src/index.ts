@@ -1,81 +1,7 @@
-import { GuildMember } from 'discord.js';
 import { createCanvas, loadImage, CanvasRenderingContext2D as ctx2D, Canvas, Image } from 'canvas';
-import { writeFileSync } from 'fs';
-import { join } from 'path';
-import { Gradient, Theme } from '@discord-card/core';
-
-const production = true;
-
-function getFontSize(str: string) {
-  if (str.length < 18) return 30;
-  return (600 * Math.pow(str.length, -1.05)).toFixed(0);
-}
-
-async function toImage(image: ImageResolvable, name?: string) {
-  if (image instanceof Canvas) {
-    let img = new Image();
-    img.src = (image as Canvas).toDataURL();
-    return img;
-  } else if (image instanceof Image) return image;
-  else if (typeof image === 'string' || image instanceof Buffer) return await loadImage(image);
-  else throw new Error('Invalid Image Format for: ' + name ?? 'Image');
-}
-
-const root = join(__dirname, '..', 'images');
-export var themes = {
-  dark: { color: '#ffffff', image: join(root, 'dark.png') },
-  circuit: { color: '#ffffff', image: join(root, 'circuit.png') },
-  code: {
-    color: '#ffffff',
-    image: join(root, 'code.png'),
-    font: 'Source Sans Pro',
-  },
-};
-
-type Color = `#${string}` | Gradient;
-type ImageResolvable = Canvas | Image | Buffer | string;
-
-export type CardOptions = {
-  /** Select a theme with some default options */
-  theme?: keyof typeof themes;
-  /** Options for the text on the card */
-  text?: {
-    /** Text in the Top */
-    title?: string;
-    /**Text in the middle(big) */
-    text?: string;
-    /** Text on the bottom */
-    subtitle?: string;
-    /** Font Color */
-    color?: Color;
-    /** Custom Font */
-    font?: string;
-  };
-  /** Options for the avatar */
-  avatar?: {
-    /** The Avatar Image, can be a URL/Canvas/Image or Buffer */
-    image?: ImageResolvable;
-    /** Width of the outline around the avatar */
-    outlineWidth?: number;
-    /** Color of the outline */
-    outlineColor?: Color;
-  };
-  /** Override the Background, can be a URL/Canvas/Image or Buffer  */
-  background?: ImageResolvable;
-  /** If the background should be blurred (true -> 3) */
-  blur?: boolean | number;
-  /** When enabled a blurred border is drawn, enabled by default */
-  border?: boolean;
-  /** If enabled the edges will be rounded, enabled by default */
-  rounded?: boolean;
-  //custom?: ModuleFunction;
-};
-
-var count = 0;
-function snap(c: Canvas) {
-  if (!production) writeFileSync(`./testing/snapshots/${count}.png`, c.toBuffer('image/png'));
-  count++;
-}
+import { Theme, themes } from '@discord-card/core';
+import { toImage, getFontSize, snap } from './lib';
+import { CardOptions, GuildMemberLike } from './types';
 
 export async function drawCard(options: CardOptions): Promise<Buffer> {
   const w = 700,
@@ -206,7 +132,7 @@ export async function drawCard(options: CardOptions): Promise<Buffer> {
   return canvas.toBuffer('image/png');
 }
 
-export async function welcomeImage(member: GuildMember, options: CardOptions = {}): Promise<Buffer> {
+export async function welcomeImage(member: GuildMemberLike, options: CardOptions = {}): Promise<Buffer> {
   const opts = { ...options };
   opts.text ??= {};
   opts.avatar ??= {};
@@ -219,7 +145,7 @@ export async function welcomeImage(member: GuildMember, options: CardOptions = {
   return await drawCard(opts);
 }
 
-export async function goodbyeImage(member: GuildMember, options: CardOptions = {}): Promise<Buffer> {
+export async function goodbyeImage(member: GuildMemberLike, options: CardOptions = {}): Promise<Buffer> {
   const opts = { ...options };
   opts.text ??= {};
   opts.avatar ??= {};
