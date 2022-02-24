@@ -14,15 +14,15 @@ const member = {
 /** @type {import('../lib').CardOptions} */
 const opts = {
   avatar: {
-    outlineWidth: 0.3,
-    outlineColor: new Gradient('linear', { offset: 0, color: '#fff' }, { offset: 1, color: '#aff' }),
+    outlineWidth: 10,
+    outlineColor: new Gradient('linear', { offset: 0, color: '#2d1dba' }, { offset: 1, color: '#2d1dba' }),
   },
   blur: 2,
   border: false,
   rounded: false,
   theme: 'circuit',
   text: {
-    color: '#123456',
+    color: '#1add89',
     subtitle: 'YourFancy Subtitle without Emojis',
     text: 'Some EMojis☑️❌🇮🇶',
     title: 'Your huge title',
