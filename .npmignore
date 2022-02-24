@@ -9,6 +9,7 @@ test/
 src/**/*.ts
 *.tgz
 *.map
+.prettierrc
 tsconfig.tsbuildinfo
 
 package-lock.json
