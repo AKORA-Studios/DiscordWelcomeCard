@@ -10,7 +10,7 @@ function path(...paths: string[]) {
 }
 
 //Load font
-registerFont(path('fonts/segoeui.ttf'), { family: 'segoe-ui-emoji' });
+registerFont(path('fonts/segoeui.ttf'), { family: 'SegoeUI' });
 
 // Snapshot system
 const production = true;
