@@ -2,7 +2,7 @@ import { createCanvas, loadImage, CanvasRenderingContext2D as ctx2D, Canvas, Ima
 import { Theme } from '@discord-card/core';
 import { toImage, getFontSize, snap, themes } from './lib';
 import { CardOptions, GuildMemberLike } from './types';
-import '@discord-card/core'; //To polyfill canvas class
+import '@discord-card/core'; //To polyfill canvas class and load font
 
 export async function drawCard(options: CardOptions): Promise<Buffer> {
   const w = 700,
