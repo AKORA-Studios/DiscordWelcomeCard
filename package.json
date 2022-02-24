@@ -8,7 +8,8 @@
     "build": "npx tsc --build --force",
     "prepack": "npm run build",
     "test": "jest",
-    "test:generate": "node ./test/generate"
+    "test:generate": "node ./test/generate",
+    "dev-release": "npm version prerelease --preid=dev"
   },
   "keywords": [
     "discord",
