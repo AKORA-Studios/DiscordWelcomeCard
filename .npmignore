@@ -4,11 +4,12 @@ USAGE.md
 
 #Developement
 node_modules/
-testing/
+test/
 .vscode/
 src/**/*.ts
 *.tgz
 *.map
+.prettierrc
 tsconfig.tsbuildinfo
 
 package-lock.json

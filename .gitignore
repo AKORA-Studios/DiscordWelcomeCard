@@ -1,7 +1,9 @@
 #Folder
-/node_modules
-/.vscode
-/testing
+**/node_modules/
+.vscode/
+
+# Dev
+/test/snapshots/
 
 # Compiled
 /typings

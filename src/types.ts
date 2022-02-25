@@ -1,5 +1,6 @@
-import { Gradient, themes } from '@discord-card/core';
+import { Gradient } from '@discord-card/core';
 import { Canvas, Image } from 'canvas';
+import { themes } from './lib';
 
 export interface GuildMemberLike {
   user: {

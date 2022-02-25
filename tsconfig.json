@@ -19,11 +19,9 @@
         "resolveJsonModule": true,
         "allowSyntheticDefaultImports": true,
         // Declarations
-        "declarationDir": "lib",
         "declaration": true,
         "declarationMap": true,
         // Source Maps
-        "mapRoot": "lib",
         "sourceMap": true,
     }
 }

@@ -9,9 +9,6 @@ function path(...paths: string[]) {
   return join(rootDir, ...paths);
 }
 
-//Load font
-registerFont(path('fonts/segoeui.ttf'), { family: 'segoe-ui-emoji' });
-
 // Snapshot system
 const production = true;
 

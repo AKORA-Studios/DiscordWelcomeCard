@@ -1,7 +1,8 @@
 import { createCanvas, loadImage, CanvasRenderingContext2D as ctx2D, Canvas, Image } from 'canvas';
-import { Theme, themes } from '@discord-card/core';
-import { toImage, getFontSize, snap } from './lib';
+import { Theme } from '@discord-card/core';
+import { toImage, getFontSize, snap, themes } from './lib';
 import { CardOptions, GuildMemberLike } from './types';
+import '@discord-card/core'; //To polyfill canvas class and load font
 
 export async function drawCard(options: CardOptions): Promise<Buffer> {
   const w = 700,
@@ -81,7 +82,7 @@ export async function drawCard(options: CardOptions): Promise<Buffer> {
   //Setting Styles
   ctx.fillStyle = (options.text?.color ?? theme.color).toString(ctx);
   //ctx.strokeStyle = theme.color.toString(ctx);
-  ctx.font = '30px ' + (options.text?.font ?? theme.font ?? 'sans-serif', 'segoe-ui-emoji');
+  ctx.font = '30px ' + (options.text?.font ?? theme.font ?? 'SegoeUI') + ', SegoeUI, SegoeUIEmoji';
 
   //Drawing
   //Title
