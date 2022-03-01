@@ -16,6 +16,11 @@ export type Color = `#${string}` | Gradient;
 export type ImageResolvable = Canvas | Image | Buffer | string;
 
 export type Style = string | CanvasGradient | CanvasPattern;
+export interface MultilineOptions {
+  width: number;
+  height: number;
+  lineHeight: number;
+}
 
 export type CardOptions = {
   /** Select a theme with some default options */

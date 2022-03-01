@@ -1,7 +1,8 @@
 import { loadImage, Canvas, Image, CanvasRenderingContext2D } from 'canvas';
 import { join } from 'path';
 import { writeFileSync } from 'fs';
-import { ImageResolvable, Style } from './types';
+import * as drawMultilineText from 'canvas-multiline-text';
+import { ImageResolvable, MultilineOptions, Style } from './types';
 
 //Path to the root directory of this package
 export const rootDir = join(__dirname, '..');
@@ -47,15 +48,17 @@ export class Text {
   public y: number;
   public text: string;
   public textAlign?: CanvasTextAlign;
-  public strokeStyle?: Style;
-  public fillStyle?: Style;
+  public style?: Style;
+  public strokeOn: boolean;
   public font?: string;
   public fontSize?: string;
+  public multilineOpts?: MultilineOptions;
 
   constructor(text: string, posX: number, posY: number) {
     this.text = text;
     this.x = posX;
     this.y = posY;
+    this.strokeOn = false;
   }
 
   setFont(font: string) {
@@ -63,16 +66,21 @@ export class Text {
     return this;
   }
   setFontSize(size: string) {
-    this.fontSize = this.fontSize;
+    this.fontSize = size;
     return this;
   }
-  setFillStyle(style: Style) {
-    this.fillStyle = style;
+  setStyle(style: Style) {
+    this.style = style;
     return this;
   }
 
-  setStrokeStyle(style: Style) {
-    this.strokeStyle = style;
+  multiline(opts: MultilineOptions) {
+    this.multilineOpts = opts;
+  }
+
+  stroke(): this;
+  stroke(enabled?: boolean) {
+    this.strokeOn = enabled ?? true;
     return this;
   }
 
@@ -86,16 +94,38 @@ export class Text {
       })
     );
 
+    if (this.x < 1 && this.y < 1) {
+      this.x *= ctx.canvas.width;
+      this.y *= ctx.canvas.height;
+    }
+
     if (this.textAlign) ctx.textAlign = this.textAlign;
-    if (this.fillStyle) ctx.fillStyle = this.fillStyle;
-    if (this.strokeStyle) ctx.strokeStyle = this.strokeStyle;
-    if (this.font) ctx = ctx.changeFont(this.font);
-    if (this.fontSize) ctx = ctx.changeFontSize(this.fontSize);
+    if (this.style) {
+      ctx.fillStyle = this.style;
+      ctx.strokeStyle = this.style;
+    }
+    if (this.font) ctx.changeFont(this.font);
+    if (this.fontSize) ctx.changeFontSize(this.fontSize);
 
-    if (this.strokeStyle) {
-      ctx.strokeText(this.text, this.x, this.y, maxWidth);
-    } else ctx.fillText(this.text, this.x, this.y, maxWidth);
+    let maxW: number = maxWidth ?? ctx.w - this.x;
 
+    if (this.multilineOpts) {
+      drawMultilineText(ctx, this.text, {
+        rect: {
+          x: this.x,
+          y: this.y,
+          width: this.multilineOpts.width,
+          height: this.multilineOpts.height,
+        },
+        lineHeight: this.multilineOpts.lineHeight,
+        minFontSize: this.fontSize,
+        maxFontSize: this.fontSize,
+      });
+    } else {
+      if (this.strokeOn) {
+        ctx.strokeText(this.text, this.x, this.y, maxW);
+      } else ctx.fillText(this.text, this.x, this.y, maxW);
+    }
     Object.assign(ctx, before);
   }
 }
