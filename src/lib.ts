@@ -51,7 +51,8 @@ export class Text {
   public style?: Style;
   public strokeOn: boolean;
   public font?: string;
-  public fontSize?: string;
+  /** Font size in px */
+  public fontSize?: number;
   public multilineOpts?: MultilineOptions;
 
   constructor(text: string, posX: number, posY: number) {
@@ -65,7 +66,7 @@ export class Text {
     this.font = font;
     return this;
   }
-  setFontSize(size: string) {
+  setFontSize(size: number) {
     this.fontSize = size;
     return this;
   }
@@ -75,7 +76,8 @@ export class Text {
   }
 
   multiline(opts: MultilineOptions) {
-    this.multilineOpts = opts;
+    this.multilineOpts = opts ?? {};
+    return this;
   }
 
   stroke(): this;
@@ -105,21 +107,21 @@ export class Text {
       ctx.strokeStyle = this.style;
     }
     if (this.font) ctx.changeFont(this.font);
-    if (this.fontSize) ctx.changeFontSize(this.fontSize);
+    if (this.fontSize) ctx.changeFontSize(this.fontSize + 'px');
 
     let maxW: number = maxWidth ?? ctx.w - this.x;
 
-    if (this.multilineOpts) {
+    if (!!this.multilineOpts) {
       drawMultilineText(ctx, this.text, {
         rect: {
           x: this.x,
           y: this.y,
-          width: this.multilineOpts.width,
-          height: this.multilineOpts.height,
+          width: this.multilineOpts.width ?? ctx.canvas.width - this.x,
+          height: this.multilineOpts.height ?? ctx.canvas.height - this.y,
         },
         lineHeight: this.multilineOpts.lineHeight,
-        minFontSize: this.fontSize,
-        maxFontSize: this.fontSize,
+        minFontSize: this.fontSize / 2 || undefined,
+        maxFontSize: this.fontSize || undefined,
       });
     } else {
       if (this.strokeOn) {
