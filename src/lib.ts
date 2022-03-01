@@ -1,4 +1,4 @@
-import { loadImage, Canvas, Image, registerFont } from 'canvas';
+import { loadImage, Canvas, Image, CanvasRenderingContext2D, CanvasGradient, CanvasPattern } from 'canvas';
 import { join } from 'path';
 import { writeFileSync } from 'fs';
 import { ImageResolvable } from './types';
@@ -41,3 +41,43 @@ export var themes = {
     image: path('images/code.png'),
   },
 };
+
+export class Text {
+  public x: number;
+  public y: number;
+  public text: string;
+  public textAlign?: CanvasTextAlign;
+  public strokeStyle?: string | CanvasGradient | CanvasPattern;
+  public fillStyle?: string | CanvasGradient | CanvasPattern;
+  public font?: string;
+  public fontSize?: string;
+
+  constructor(text: string, posX: number, posY: number) {
+    this.text = text;
+    this.x = posX;
+    this.y = posY;
+  }
+
+  public draw(ctx: CanvasRenderingContext2D, maxWidth?: number) {
+    const before = JSON.parse(
+      JSON.stringify({
+        font: ctx.font,
+        textAlign: ctx.textAlign,
+        fillStyle: ctx.fillStyle,
+        strokeStyle: ctx.strokeStyle,
+      })
+    );
+
+    if (this.textAlign) ctx.textAlign = this.textAlign;
+    if (this.fillStyle) ctx.fillStyle = this.fillStyle;
+    if (this.strokeStyle) ctx.strokeStyle = this.strokeStyle;
+    if (this.font) ctx.changeFont(this.font);
+    if (this.fontSize) ctx.changeFontSize(this.fontSize);
+
+    if (this.strokeStyle) {
+      ctx.strokeText(this.text, this.x, this.y, maxWidth);
+    } else ctx.fillText(this.text, this.x, this.y, maxWidth);
+
+    Object.assign(ctx, before);
+  }
+}

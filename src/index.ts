@@ -158,5 +158,5 @@ export async function goodbyeImage(member: GuildMemberLike, options: CardOptions
   return await drawCard(opts);
 }
 
-export { themes } from './lib';
+export { themes, Text } from './lib';
 export { CardOptions, Color, GuildMemberLike, ImageResolvable } from './types';
