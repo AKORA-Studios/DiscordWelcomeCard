@@ -3,6 +3,7 @@ import { join } from 'path';
 import { writeFileSync } from 'fs';
 import * as drawMultilineText from 'canvas-multiline-text';
 import { ImageResolvable, MultilineOptions, Style } from './types';
+import { Gradient } from '@discord-card/core';
 
 //Path to the root directory of this package
 export const rootDir = join(__dirname, '..');
@@ -49,6 +50,7 @@ export class Text {
   public text: string;
   public textAlign?: CanvasTextAlign;
   public style?: Style;
+  public gradient?: Gradient;
   public strokeOn: boolean;
   public font?: string;
   /** Font size in px */
@@ -72,6 +74,10 @@ export class Text {
   }
   setStyle(style: Style) {
     this.style = style;
+    return this;
+  }
+  setGradient(gradient: Gradient) {
+    this.gradient = gradient;
     return this;
   }
 
@@ -106,6 +112,13 @@ export class Text {
       ctx.fillStyle = this.style;
       ctx.strokeStyle = this.style;
     }
+
+    if (this.gradient) {
+      const grad = this.gradient.toString(ctx);
+      ctx.fillStyle = grad;
+      ctx.strokeStyle = grad;
+    }
+
     if (this.font) ctx.changeFont(this.font);
     if (this.fontSize) ctx.changeFontSize(this.fontSize + 'px');
 
@@ -119,8 +132,9 @@ export class Text {
           width: this.multilineOpts.width ?? ctx.canvas.width - this.x,
           height: this.multilineOpts.height ?? ctx.canvas.height - this.y,
         },
+        stroke: this.strokeOn,
         lineHeight: this.multilineOpts.lineHeight,
-        minFontSize: this.fontSize / 2 || undefined,
+        minFontSize: this.fontSize / 1.5 || undefined,
         maxFontSize: this.fontSize || undefined,
       });
     } else {
