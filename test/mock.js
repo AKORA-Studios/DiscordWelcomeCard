@@ -37,7 +37,7 @@ const opts = {
   theme: 'circuit',
   text: {
     color: '#1add89',
-    title: new Text('humongus title', 240, 70).setFontSize('55px').setStyle('#fff').stroke(),
+    title: new Text('humongus title', 240, 70).setFontSize(55).setStyle('#fff').stroke(),
     text: 'Some EMojis☑️❌🇮🇶',
     subtitle: new Text('YourFancy long humongus giant horse text is is´nsalnel long', 240, 180)
       .stroke(false)
