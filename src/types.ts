@@ -1,6 +1,6 @@
 import { Gradient } from '@discord-card/core';
 import { Canvas, Image } from 'canvas';
-import { themes } from './lib';
+import { Text, themes } from './lib';
 
 export interface GuildMemberLike {
   user: {
@@ -21,11 +21,11 @@ export type CardOptions = {
   /** Options for the text on the card */
   text?: {
     /** Text in the Top */
-    title?: string;
+    title?: string | Text;
     /**Text in the middle(big) */
-    text?: string;
+    text?: string | Text;
     /** Text on the bottom */
-    subtitle?: string;
+    subtitle?: string | Text;
     /** Font Color */
     color?: Color;
     /** Custom Font */

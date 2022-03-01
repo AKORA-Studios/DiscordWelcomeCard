@@ -86,13 +86,28 @@ export async function drawCard(options: CardOptions): Promise<Buffer> {
 
   //Drawing
   //Title
-  ctx.changeFontSize('30px').fillText(options.text?.title ?? '', ctx.width / 2.7, ctx.height / 3.5);
+  if (options.text?.title) {
+    const txt = options.text!.title;
+    if (typeof txt === 'string') {
+      ctx.changeFontSize('30px').fillText(txt, ctx.width / 2.7, ctx.height / 3.5);
+    } else txt.draw(ctx); //instanceof Text
+  }
 
   //Text
-  ctx.changeFontSize(getFontSize(options.text?.text ?? '') + 'px').fillText(options.text?.text ?? '', ctx.width / 2.7, ctx.height / 1.8);
+  if (options.text?.text) {
+    const txt = options.text!.text;
+    if (typeof txt === 'string') {
+      ctx.changeFontSize(getFontSize(txt) + 'px').fillText(txt, ctx.width / 2.7, ctx.height / 1.8);
+    } else txt.draw(ctx); //instanceof Text
+  }
 
   //Subtitle
-  ctx.changeFontSize('25px').fillText(options.text?.subtitle ?? '', ctx.width / 2.7, ctx.height / 1.3);
+  if (options.text?.subtitle) {
+    const txt = options.text!.subtitle;
+    if (typeof txt === 'string') {
+      ctx.changeFontSize('25px').fillText(txt, ctx.width / 2.7, ctx.height / 1.3);
+    } else txt.draw(ctx); //instanceof Text
+  }
 
   //Avatar Image
   const radius = h / 2.5;
