@@ -1,5 +1,6 @@
 const { Gradient } = require('@discord-card/core');
 const { join } = require('path');
+const { Text } = require('../lib');
 const path = (s) => join(__dirname, s);
 
 const avatar = path('images/avatar.png');
@@ -15,11 +16,20 @@ const member = {
   },
 };
 
+const grad = new Gradient(
+  'linear',
+  {
+    color: '#f00',
+    offset: 0,
+  },
+  { color: '#00f', offset: 1 }
+);
+
 /** @type {import('../lib').CardOptions} */
 const opts = {
   avatar: {
     outlineWidth: 10,
-    outlineColor: new Gradient('linear', { offset: 0, color: '#2d1dba' }, { offset: 1, color: '#2d1dba' }),
+    outlineColor: grad,
   },
   blur: 2,
   border: false,
@@ -27,9 +37,13 @@ const opts = {
   theme: 'circuit',
   text: {
     color: '#1add89',
-    subtitle: 'YourFancy Subtitle without Emojis',
+    title: new Text('humongus title', 240, 70).setFontSize('55px').setStyle('#fff').stroke(),
     text: 'Some EMojis☑️❌🇮🇶',
-    title: 'Your huge title',
+    subtitle: new Text('YourFancy long humongus giant horse text is is´nsalnel long', 240, 180)
+      .stroke(false)
+      .setFontSize(30)
+      .setGradient(grad)
+      .multiline(),
   },
 };
 
