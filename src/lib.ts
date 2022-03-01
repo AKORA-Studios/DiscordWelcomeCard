@@ -1,7 +1,7 @@
-import { loadImage, Canvas, Image, CanvasRenderingContext2D, CanvasGradient, CanvasPattern } from 'canvas';
+import { loadImage, Canvas, Image, CanvasRenderingContext2D } from 'canvas';
 import { join } from 'path';
 import { writeFileSync } from 'fs';
-import { ImageResolvable } from './types';
+import { ImageResolvable, Style } from './types';
 
 //Path to the root directory of this package
 export const rootDir = join(__dirname, '..');
@@ -47,8 +47,8 @@ export class Text {
   public y: number;
   public text: string;
   public textAlign?: CanvasTextAlign;
-  public strokeStyle?: string | CanvasGradient | CanvasPattern;
-  public fillStyle?: string | CanvasGradient | CanvasPattern;
+  public strokeStyle?: Style;
+  public fillStyle?: Style;
   public font?: string;
   public fontSize?: string;
 
@@ -56,6 +56,24 @@ export class Text {
     this.text = text;
     this.x = posX;
     this.y = posY;
+  }
+
+  setFont(font: string) {
+    this.font = font;
+    return this;
+  }
+  setFontSize(size: string) {
+    this.fontSize = this.fontSize;
+    return this;
+  }
+  setFillStyle(style: Style) {
+    this.fillStyle = style;
+    return this;
+  }
+
+  setStrokeStyle(style: Style) {
+    this.strokeStyle = style;
+    return this;
   }
 
   public draw(ctx: CanvasRenderingContext2D, maxWidth?: number) {
@@ -71,8 +89,8 @@ export class Text {
     if (this.textAlign) ctx.textAlign = this.textAlign;
     if (this.fillStyle) ctx.fillStyle = this.fillStyle;
     if (this.strokeStyle) ctx.strokeStyle = this.strokeStyle;
-    if (this.font) ctx.changeFont(this.font);
-    if (this.fontSize) ctx.changeFontSize(this.fontSize);
+    if (this.font) ctx = ctx.changeFont(this.font);
+    if (this.fontSize) ctx = ctx.changeFontSize(this.fontSize);
 
     if (this.strokeStyle) {
       ctx.strokeText(this.text, this.x, this.y, maxWidth);

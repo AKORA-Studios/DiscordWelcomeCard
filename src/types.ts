@@ -1,5 +1,5 @@
 import { Gradient } from '@discord-card/core';
-import { Canvas, Image } from 'canvas';
+import { Canvas, CanvasGradient, CanvasPattern, Image } from 'canvas';
 import { Text, themes } from './lib';
 
 export interface GuildMemberLike {
@@ -14,6 +14,8 @@ export interface GuildMemberLike {
 
 export type Color = `#${string}` | Gradient;
 export type ImageResolvable = Canvas | Image | Buffer | string;
+
+export type Style = string | CanvasGradient | CanvasPattern;
 
 export type CardOptions = {
   /** Select a theme with some default options */
