@@ -132,12 +132,13 @@ export async function drawCard(options: CardOptions): Promise<Buffer> {
     }
 
     if (outlineWidth) {
+      let r = radius - outlineWidth / 2;
       ctx.beginPath();
       ctx.arc(h / 2, h / 2, radius - outlineWidth / 2, 0, Math.PI * 2, true);
       ctx.closePath();
 
       ctx.lineWidth = outlineWidth;
-      ctx.strokeStyle = (outlineColor ?? theme.color ?? '#fff').toString(ctx);
+      ctx.strokeStyle = (outlineColor ?? theme.color ?? '#fff').toString(ctx, ctx.h / 2 - r, h / 2 - r, h / 2 + r, h / 2 + r);
 
       ctx.stroke();
     }

@@ -114,7 +114,7 @@ export class Text {
     }
 
     if (this.gradient) {
-      const grad = this.gradient.toString(ctx);
+      const grad = this.gradient.toString(ctx, this.x, this.y, maxWidth ?? ctx.w - this.x, ctx.h - this.y);
       ctx.fillStyle = grad;
       ctx.strokeStyle = grad;
     }
@@ -125,12 +125,19 @@ export class Text {
     let maxW: number = maxWidth ?? ctx.w - this.x;
 
     if (!!this.multilineOpts) {
+      let w = this.multilineOpts.width ?? ctx.canvas.width - this.x,
+        h = this.multilineOpts.height ?? ctx.canvas.height - this.y;
+
+      const grad = this.gradient.toString(ctx, this.x, this.y, w, h);
+      ctx.fillStyle = grad;
+      ctx.strokeStyle = grad;
+
       drawMultilineText(ctx, this.text, {
         rect: {
           x: this.x,
           y: this.y,
-          width: this.multilineOpts.width ?? ctx.canvas.width - this.x,
-          height: this.multilineOpts.height ?? ctx.canvas.height - this.y,
+          width: w,
+          height: h,
         },
         stroke: this.strokeOn,
         lineHeight: this.multilineOpts.lineHeight,

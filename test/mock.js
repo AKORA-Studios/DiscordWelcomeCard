@@ -17,7 +17,6 @@ const member = {
 };
 
 const grad = new LinearGradient(
-  'linear',
   {
     color: '#f00',
     offset: 0,
