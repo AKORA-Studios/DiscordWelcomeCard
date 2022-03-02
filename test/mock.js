@@ -1,4 +1,4 @@
-const { Gradient } = require('@discord-card/core');
+const { LinearGradient } = require('@discord-card/core');
 const { join } = require('path');
 const { Text } = require('../lib');
 const path = (s) => join(__dirname, s);
@@ -16,7 +16,7 @@ const member = {
   },
 };
 
-const grad = new Gradient(
+const grad = new LinearGradient(
   'linear',
   {
     color: '#f00',
