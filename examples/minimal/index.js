@@ -1,3 +1,6 @@
+/**
+ * This card was designed and developed by @AmitKumarHQ
+ */
 const { drawCard, Text } = require('discord-welcome-card');
 const { writeFile } = require('fs/promises');
 const { join } = require('path');

@@ -1,4 +1,5 @@
-#  Discord Welcome Card
+# Discord Welcome Card
+
 [![NPM Version](https://img.shields.io/npm/v/discord-welcome-card?color=00DEC8&style=for-the-badge)](https://www.npmjs.com/package/discord-welcome-card)
 [![NPM Downloads](https://img.shields.io/npm/dt/discord-welcome-card?color=00DEC8&style=for-the-badge)](https://www.npmjs.com/package/discord-welcome-card)
 [![NPM License](https://img.shields.io/npm/l/discord-welcome-card?color=00DEC8&style=for-the-badge)](https://www.npmjs.com/package/discord-welcome-card)
@@ -6,26 +7,26 @@
 
 Simple easy-to-use Goodbye and welcome cards for your discord Bot. The version changelog could be found at [changelog.md](CHANGELOG.md). If you have any problems or questiosn considering this package, feel free to open a issue or join our [discord server](https://discord.gg/Emk2udJ).
 
-
 ## Features
-* ⛩️ 3 default themes (circuit, code, dark)
-* 🍭 gradient color support
-* 🖼️ custom background support
-*  📎 customizable cards (blur, rounded edges)
-* 🗛 multiple font support
-* 💿 rounded edges / border
-* ⭕ avatar outline
+
+- ⛩️ 3 default themes (circuit, code, dark)
+- 🍭 gradient color support
+- 🖼️ custom background support
+- 📎 customizable cards (blur, rounded edges)
+- 🗛 multiple font support
+- 💿 rounded edges / border
+- ⭕ avatar outline
 
 (Note that all example codes below are for discord.js Version 13. Example usage code in Version 12, is provided in [another file](Usage.md))
 
-
 ## Card Options
+
 ```typescript
     theme?: "dark" | "circuit" | "code";    /** Select a theme with some default options */
     text?: {   /** Options for the text on the card */
-        title?: string;      /** Text in the Top */
-        text?: string; /**Text in the middle(big) */
-        subtitle?: string; /** Text on the bottom */
+        title?: string | Text;      /** Text in the Top */
+        text?: string | Text; /**Text in the middle(big) */
+        subtitle?: string | Text; /** Text on the bottom */
         color?: `#${string}` | Gradient;      /** Font Color / Gradient */
         font?: string;  /** Custom Font */
     },
@@ -45,10 +46,10 @@ Simple easy-to-use Goodbye and welcome cards for your discord Bot. The version c
 <b>If you want to use Gradients, you maybe need to import Gradient like this:</b>
 <br /><br />
 
-```javascript 
-const { drawCard, Gradient } = require('discord-welcome-card')
+```javascript
+const { drawCard, LinearGradient } = require('discord-welcome-card');
 ```
-    
+
 ```typescript
     theme: 'circuit',
     text: {
@@ -60,7 +61,7 @@ const { drawCard, Gradient } = require('discord-welcome-card')
     avatar: {
         image: user.displayAvatarURL({ format: 'png' }),
         outlineWidth: 5,
-        outlineColor: new Gradient('linear',
+        outlineColor: new LinearGradient(
             [0, '#33f'],
             [1, '#f33']
         )
@@ -72,56 +73,57 @@ const { drawCard, Gradient } = require('discord-welcome-card')
 ```
 
 ![Custom Card](examples/fullCustom.png)
+
 </details>
 
 <br/><br/><br/>
 
-
 ## Default themes & font colors
 
-
 ### Dark
+
 ![Dark Theme](examples/dark_welcome.png)
 
 ### Circuit
+
 ![Circuit Theme](examples/circuit_welcome.png)
 
 ### Code
+
 ![Code Theme](examples/code_goodbye.png)
 
 <br/><br/><br/>
 
-
 ## Examples
-(If you want to use Gradients, you maybe need to import Gradient like this: ```const { drawCard, Gradient } = require('discord-welcome-card')```)
+
+(If you want to use Gradients, you maybe need to import Gradient like this: `const { drawCard, Gradient } = require('discord-welcome-card')`)
+
 <details open> 
     <summary>  Welcome Card (circuit) </summary>
 
 ```javascript
-const { Client, Intents } = require("discord.js");
+const { Client, Intents } = require('discord.js');
 const { welcomeImage } = require('discord-welcome-card');
 const client = new Client({
-    intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES]
+  intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
 });
 
-client.on("messageCreate", async message => {
-    if(message.author.bot) return
-    //Generating the actual welcome Card
-    const image = await welcomeImage(message.member, { theme: 'circuit' });
+client.on('messageCreate', async (message) => {
+  if (message.author.bot) return;
+  //Generating the actual welcome Card
+  const image = await welcomeImage(message.member, { theme: 'circuit' });
 
-    message.channel.send({ files: [ image ] })
+  message.channel.send({ files: [image] });
 });
 
 client.login('Your-Bot-Token');
 ```
-    
-![Image](examples/circuit_welcome.png)
 
+![Image](examples/circuit_welcome.png)
 
 </details>
 
 <br />
-
 
 <details open> <summary> Goodbye Card </summary>
 
@@ -141,60 +143,61 @@ client.on("messageCreate", async message => {
 
 client.login('Your-Bot-Token');
 ```
-    
+
 ![Image](examples/code_goodbye.png)
-    
+
 </details>
 <br />
 
 <details open><summary> Custom Card </summary>
 
 ```javascript
-const { Client, Intents } = require("discord.js");
+const { Client, Intents } = require('discord.js');
 const { drawCard } = require('discord-welcome-card');
 const client = new Client({
-    intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES]
+  intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
 });
 
-client.on("messageCreate", async message => {
-    if(message.author.bot) return
-    //Generating the actual custom Card
-    const image = await drawCard({
-        theme: "circuit",
-        text: {
-            title: 'Hellloo',
-            text: message.author.tag,
-            subtitle: 'please read the Rules',
-            color: `#88f`
-        },
-        avatar: {
-            image: message.author.displayAvatarURL({ format: 'png' }),
-            outlineWidth: 5,
-            outlineColor: new Gradient('linear',
-                [0, '#33f'],
-                [1, '#f33']
-            ),
-        },
-        background: 'https://i.imgur.com/ea9PB3H.png',
-        blur: 1,
-        border: true,
-        rounded: true
-    });
+client.on('messageCreate', async (message) => {
+  if (message.author.bot) return;
+  //Generating the actual custom Card
+  const image = await drawCard({
+    theme: 'circuit',
+    text: {
+      title: 'Hellloo',
+      text: message.author.tag,
+      subtitle: 'please read the Rules',
+      color: `#88f`,
+    },
+    avatar: {
+      image: message.author.displayAvatarURL({ format: 'png' }),
+      outlineWidth: 5,
+      outlineColor: new Gradient('linear', [0, '#33f'], [1, '#f33']),
+    },
+    background: 'https://i.imgur.com/ea9PB3H.png',
+    blur: 1,
+    border: true,
+    rounded: true,
+  });
 
-    message.channel.send({ files: [ image ] })
+  message.channel.send({ files: [image] });
 });
 
 client.login('Your-Bot-Token');
 ```
-    
+
 ![Image](examples/fullCustom.png)
 
-</details>  
+</details>
 
+## Examples
 
-## Example projects
+There are some examples of cards/themes in the `examples` folder, these are mostly provided by the community and showcase the possibilities of this package. If you think your card looks awesome and unique and would be a great addition to our examples, then we'll happily look at your card, and maybe include it.
+
 Some projects written with this package
-* [Miyuki](https://github.com/discord-card/Miyuki) (discord.js V13)
+
+- [Miyuki](https://github.com/discord-card/Miyuki) (discord.js V13)
 
 ## Support Server
+
 **[![widget](https://discord.com/api/guilds/553942677117337600/widget.png?style=banner2)](https://discord.gg/EUbKBTwSmP)**
