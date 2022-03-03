@@ -1,0 +1,12 @@
+{
+  "name": "examples",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "discord-welcome-card": "^4.5.0"
+  }
+}
