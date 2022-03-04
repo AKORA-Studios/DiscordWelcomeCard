@@ -33,6 +33,7 @@
     "url": "git://github.com/AKORA-Studios/DiscordWelcomeCard.git"
   },
   "devDependencies": {
+    "@types/canvas-multiline-text": "^1.0.0",
     "@types/jest": "^27.4.1",
     "@types/node": "^16.11.26",
     "jest": "^27.5.1",

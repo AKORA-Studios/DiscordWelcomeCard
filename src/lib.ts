@@ -1,7 +1,7 @@
 import { loadImage, Canvas, Image, CanvasRenderingContext2D } from 'canvas';
 import { join } from 'path';
 import { writeFileSync } from 'fs';
-import * as drawMultilineText from 'canvas-multiline-text';
+import drawMultilineText = require('canvas-multiline-text');
 import { ImageResolvable, MultilineOptions, Style } from './types';
 import { Gradient } from '@discord-card/core';
 
@@ -132,13 +132,14 @@ export class Text {
       ctx.fillStyle = grad;
       ctx.strokeStyle = grad;
 
-      drawMultilineText(ctx, this.text, {
+      drawMultilineText(ctx as any, this.text, {
         rect: {
           x: this.x,
           y: this.y,
           width: w,
           height: h,
         },
+        //@ts-ignore
         stroke: this.strokeOn,
         lineHeight: this.multilineOpts.lineHeight,
         minFontSize: this.fontSize / 1.5 || undefined,
