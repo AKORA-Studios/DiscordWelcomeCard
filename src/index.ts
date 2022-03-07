@@ -176,3 +176,4 @@ export async function goodbyeImage(member: GuildMemberLike, options: CardOptions
 
 export { themes, Text } from './lib';
 export { CardOptions, Color, GuildMemberLike, ImageResolvable } from './types';
+export * from '@discord-card/core';

@@ -96,7 +96,7 @@ const { drawCard, LinearGradient } = require('discord-welcome-card');
 
 ## Examples
 
-(If you want to use Gradients, you maybe need to import Gradient like this: `const { drawCard, Gradient } = require('discord-welcome-card')`)
+(If you want to use Gradients, you maybe need to import Gradient like this: `const { drawCard, LinearGradient } = require('discord-welcome-card')`)
 
 <details open> 
     <summary>  Welcome Card (circuit) </summary>
@@ -172,7 +172,7 @@ client.on('messageCreate', async (message) => {
     avatar: {
       image: message.author.displayAvatarURL({ format: 'png' }),
       outlineWidth: 5,
-      outlineColor: new Gradient('linear', [0, '#33f'], [1, '#f33']),
+      outlineColor: new LinearGradient('linear', [0, '#33f'], [1, '#f33']),
     },
     background: 'https://i.imgur.com/ea9PB3H.png',
     blur: 1,
