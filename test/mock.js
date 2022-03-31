@@ -29,6 +29,8 @@ const opts = {
   avatar: {
     outlineWidth: 10,
     outlineColor: grad,
+    imageRadius: 0.8,
+    borderRadius: 0.75,
   },
   blur: 2,
   border: false,

@@ -110,18 +110,30 @@ export async function drawCard(options: CardOptions): Promise<Buffer> {
   }
 
   //Avatar Image
-  const radius = h / 2.5;
+  const radius = (h / 2) * (options.avatar?.imageRadius ?? 0.8);
 
-  ctx.lineWidth = 6;
-  ctx.beginPath();
-  ctx.arc(h / 2, h / 2, radius, 0, Math.PI * 2, true);
-  ctx.closePath();
-  ctx.clip();
+  function applyShape(offset = 0) {
+    if (options.avatar?.borderRadius) {
+      ctx.roundRect(
+        h / 2 - radius - offset,
+        h / 2 - radius - offset,
+        radius * 2 + 2 * offset,
+        radius * 2 + 2 * offset,
+        options.avatar.borderRadius * radius
+      );
+    } else {
+      ctx.beginPath();
+      ctx.arc(h / 2, h / 2, radius + offset, 0, Math.PI * 2, true);
+      ctx.closePath();
+    }
+    return ctx;
+  }
 
   const { avatar } = options;
   if (avatar) {
     const { image: avatarImage, outlineWidth, outlineColor } = avatar;
     if (avatarImage) {
+      applyShape(-5).clip();
       ctx.drawImage(
         await toImage(avatarImage),
         h / 2 - radius + (avatar.outlineWidth ?? 0), //x
@@ -132,10 +144,8 @@ export async function drawCard(options: CardOptions): Promise<Buffer> {
     }
 
     if (outlineWidth) {
-      let r = radius - outlineWidth / 2;
-      ctx.beginPath();
-      ctx.arc(h / 2, h / 2, radius - outlineWidth / 2, 0, Math.PI * 2, true);
-      ctx.closePath();
+      applyShape(-outlineWidth / 2);
+      let r = radius;
 
       ctx.lineWidth = outlineWidth;
       ctx.strokeStyle = (outlineColor ?? theme.color ?? '#fff').toString(ctx, ctx.h / 2 - r, h / 2 - r, h / 2 + r, h / 2 + r);

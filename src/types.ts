@@ -46,6 +46,15 @@ export type CardOptions = {
     outlineWidth?: number;
     /** Color of the outline */
     outlineColor?: Color;
+    /** Border radius of the avatar between 0.0 and 1.0
+     *  (0 = rect. 1 = circle)
+     * @default 1.0 */
+    borderRadius?: number;
+    /** Radius to control the size of the avatar
+     *  the value is multiplied with the height/2
+     *  of the canvas, so 1.0 fills the entire height
+     *  @default 0.8 */
+    imageRadius?: number;
   };
   /** Override the Background, can be a URL/Canvas/Image or Buffer  */
   background?: ImageResolvable;
