@@ -22,26 +22,51 @@ Simple easy-to-use Goodbye and welcome cards for your discord Bot. The version c
 ## Card Options
 
 ```typescript
-    theme?: "dark" | "circuit" | "code";    /** Select a theme with some default options */
-    text?: {   /** Options for the text on the card */
-        title?: string | Text;      /** Text in the Top */
-        text?: string | Text; /**Text in the middle(big) */
-        subtitle?: string | Text; /** Text on the bottom */
-        color?: `#${string}` | Gradient;      /** Font Color / Gradient */
-        font?: string;  /** Custom Font */
-    },
-    avatar?: { /** Options for the avatar */
-        image?: Canvas | Image | Buffer | string;   /** The Avatar Image, can be a URL/Canvas/Image or Buffer */
-        outlineWidth?: number;  /** Width of the outline around the avatar in px */
-        outlineColor?: `#${string}` | Gradient;   /** Color of the outline / Gradient */
-    },
-    background?: Canvas | Image | Buffer | string;  /** Override the Background, can be a URL/Canvas/Image or Buffer  */
-    blur?: boolean | number;  /** If the background should be blurred (true -> 3) */
-    border?: boolean;    /** When enabled a blurred border is drawn, enabled by default */
-    rounded?: boolean; /** If enabled the edges will be rounded, enabled by default */
+  /** Select a theme with some default options */
+  theme?: "dark" | "circuit" | "code";
+  /** Options for the text on the card */
+  text?: {
+    /** Text in the Top */
+    title?: string | Text;
+    /**Text in the middle(big) */
+    text?: string | Text;
+    /** Text on the bottom */
+    subtitle?: string | Text;
+    /** Font Color */
+    color?: Color;
+    /** Custom Font */
+    font?: string;
+  };
+  /** Options for the avatar */
+  avatar?: {
+    /** The Avatar Image, can be a URL/Canvas/Image or Buffer */
+    image?: ImageResolvable;
+    /** Width of the outline around the avatar */
+    outlineWidth?: number;
+    /** Color of the outline */
+    outlineColor?: Color;
+    /** Border radius of the avatar between 0.0 and 1.0
+     *  (0 = rect. 1 = circle)
+     * @default 1.0 */
+    borderRadius?: number;
+    /** Radius to control the size of the avatar
+     *  the value is multiplied with the height/2
+     *  of the canvas, so 1.0 fills the entire height
+     *  @default 0.8 */
+    imageRadius?: number;
+  };
+  /** Override the Background, can be a URL/Canvas/Image or Buffer  */
+  background?: ImageResolvable;
+  /** If the background should be blurred (true -> 3) */
+  blur?: boolean | number;
+  /** When enabled a blurred border is drawn, enabled by default */
+  border?: boolean;
+  /** If enabled the edges will be rounded, enabled by default */
+  rounded?: boolean;
+  //custom?: ModuleFunction;
 ```
 
-<details> 
+<details>
     <summary> Full example </summary>
 <b>If you want to use Gradients, you maybe need to import Gradient like this:</b>
 <br /><br />
