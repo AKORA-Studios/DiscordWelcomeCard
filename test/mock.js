@@ -44,7 +44,10 @@ const opts = {
       .stroke(false)
       .setFontSize(30)
       .setGradient(grad)
-      .multiline(),
+      .multiline({
+        width: 400,
+        height: 100,
+      }),
   },
 };
 
