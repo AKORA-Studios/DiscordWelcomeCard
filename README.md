@@ -178,7 +178,7 @@ client.login('Your-Bot-Token');
 
 ```javascript
 const { Client, Intents } = require('discord.js');
-const { drawCard } = require('discord-welcome-card');
+const { drawCard, LinearGradient } = require('discord-welcome-card');
 const client = new Client({
   intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
 });
@@ -197,7 +197,7 @@ client.on('messageCreate', async (message) => {
     avatar: {
       image: message.author.displayAvatarURL({ format: 'png' }),
       outlineWidth: 5,
-      outlineColor: new LinearGradient('linear', [0, '#33f'], [1, '#f33']),
+      outlineColor: new LinearGradient([0, '#33f'], [1, '#f33']),
     },
     background: 'https://i.imgur.com/ea9PB3H.png',
     blur: 1,
