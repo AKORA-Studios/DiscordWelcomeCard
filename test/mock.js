@@ -1,4 +1,5 @@
 const { LinearGradient } = require('@discord-card/skia-core');
+const { readFileSync } = require('fs');
 const { join } = require('path');
 const { Text } = require('../lib');
 const path = (s) => join(__dirname, s);
@@ -29,6 +30,7 @@ const opts = {
   avatar: {
     outlineWidth: 10,
     outlineColor: grad,
+    image: readFileSync(avatar),
     imageRadius: 0.8,
     borderRadius: 0.75,
   },

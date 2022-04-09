@@ -62,7 +62,9 @@ const drawingCards = () =>
   suite(
     'Drawing Cards',
     add('Default welcome', async () => {
-      await welcomeImage(mock.member);
+      await welcomeImage(mock.member, {
+        avatar: { image: avatarBuffer },
+      });
     }),
     add('Empty', async () => {
       await drawCard({});
@@ -101,7 +103,7 @@ const blurring = () =>
 
 const main = async () => {
   //await readingImages();
-  //await drawingCards();
+  await drawingCards();
   await blurring();
 };
 
