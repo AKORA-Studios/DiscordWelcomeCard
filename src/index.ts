@@ -1,7 +1,7 @@
 import { createCanvas, loadImage, CanvasRenderingContext2D as ctx2D, Canvas, Image } from 'canvas';
-import { Theme } from '@discord-card/core';
-import { toImage, getFontSize, snap, themes } from './lib';
-import { CardOptions, GuildMemberLike } from './types';
+import { getFontSize, GuildMemberLike, Theme, toImage } from '@discord-card/core';
+import { snap, themes } from './lib';
+import { CardOptions } from './types';
 import '@discord-card/core'; //To polyfill canvas class and load font
 
 export async function drawCard(options: CardOptions): Promise<Buffer> {
@@ -24,7 +24,7 @@ export async function drawCard(options: CardOptions): Promise<Buffer> {
     theme = themes[options.theme ?? 'code'];
     if (!theme) throw new Error('Invalid theme, use: ' + Object.keys(themes).join(' | '));
 
-    background = await loadImage(theme.image);
+    background = await toImage(theme.image);
   } else throw new Error('Invalid theme, use: ' + Object.keys(themes).join(' | '));
 
   if (options.background) background = await toImage(options.background, 'Background');
@@ -184,6 +184,6 @@ export async function goodbyeImage(member: GuildMemberLike, options: CardOptions
   return await drawCard(opts);
 }
 
-export { themes, Text } from './lib';
-export { CardOptions, Color, GuildMemberLike, ImageResolvable } from './types';
+export { themes } from './lib';
+export { CardOptions } from './types';
 export * from '@discord-card/core';

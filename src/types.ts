@@ -1,26 +1,5 @@
-import { Gradient } from '@discord-card/core';
-import { Canvas, CanvasGradient, CanvasPattern, Image } from 'canvas';
-import { Text, themes } from './lib';
-
-export interface GuildMemberLike {
-  user: {
-    tag: string;
-    displayAvatarURL(options?: { dynamic?: boolean; format?: 'gif' | 'webp' | 'png' | 'jpg' | 'jpeg' }): string;
-  };
-  guild: {
-    memberCount: number;
-  };
-}
-
-export type Color = `#${string}` | Gradient;
-export type ImageResolvable = Canvas | Image | Buffer | string;
-
-export type Style = string | CanvasGradient | CanvasPattern;
-export interface MultilineOptions {
-  width?: number;
-  height?: number;
-  lineHeight?: number;
-}
+import { Text, ImageResolvable, ColorResolvable } from '@discord-card/core';
+import { themes } from './lib';
 
 export type CardOptions = {
   /** Select a theme with some default options */
@@ -34,7 +13,7 @@ export type CardOptions = {
     /** Text on the bottom */
     subtitle?: string | Text;
     /** Font Color */
-    color?: Color;
+    color?: ColorResolvable;
     /** Custom Font */
     font?: string;
   };
@@ -45,7 +24,7 @@ export type CardOptions = {
     /** Width of the outline around the avatar */
     outlineWidth?: number;
     /** Color of the outline */
-    outlineColor?: Color;
+    outlineColor?: ColorResolvable;
     /** Border radius of the avatar between 0.0 and 1.0
      *  (0 = rect. 1 = circle)
      * @default 1.0 */
