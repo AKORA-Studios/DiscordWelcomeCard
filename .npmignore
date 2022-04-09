@@ -4,6 +4,7 @@ USAGE.md
 
 #Developement
 node_modules/
+benchmark/
 test/
 .vscode/
 src/**/*.ts
