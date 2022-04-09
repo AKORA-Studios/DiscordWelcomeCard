@@ -15,11 +15,11 @@
       font: 'Panton Black Caps',
     },
     avatar: {
-      image: avatar,
+      image: await readFile(avatar),
       outlineWidth: 5,
       outlineColor: `#DDDDDD`,
     },
-    background: join(__dirname, './background.png'),
+    background: await readFile(join(__dirname, './background.png')),
   });
   ```
   

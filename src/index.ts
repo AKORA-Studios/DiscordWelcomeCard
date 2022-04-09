@@ -2,6 +2,7 @@ import { createCanvas, SKRSContext2D as ctx2D, Canvas, Image } from '@napi-rs/ca
 import { getFontSize, GuildMemberLike, Theme, toImage, roundRect, changeFontSize, blur, loadImage } from '@discord-card/skia-core';
 import { snap, themes } from './lib';
 import { CardOptions } from './types';
+import { readFile } from 'fs/promises';
 
 export async function drawCard(options: CardOptions): Promise<Buffer> {
   const w = 700,
@@ -21,7 +22,7 @@ export async function drawCard(options: CardOptions): Promise<Buffer> {
     theme = themes[options.theme ?? 'code'];
     if (!theme) throw new Error('Invalid theme, use: ' + Object.keys(themes).join(' | '));
 
-    background = await toImage(theme.image);
+    background = await toImage(await readFile(theme.image as string));
   } else throw new Error('Invalid theme, use: ' + Object.keys(themes).join(' | '));
 
   if (options.background) background = await toImage(options.background, 'Background');

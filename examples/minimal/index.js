@@ -1,8 +1,8 @@
 /**
  * This card was designed and developed by @AmitKumarHQ
  */
-const { drawCard, Text } = require('discord-welcome-card');
-const { writeFile } = require('fs/promises');
+const { drawCard, Text } = require('../../');
+const { writeFile, readFile } = require('fs/promises');
 const { join } = require('path');
 const { member, avatar } = require('../mock');
 
@@ -18,13 +18,13 @@ async function run() {
       font: 'Panton Black Caps',
     },
     avatar: {
-      image: avatar,
+      image: await readFile(avatar),
       outlineWidth: 5,
       outlineColor: `#DDDDDD`,
     },
-    background: join(__dirname, './background.png'),
+    background: await readFile(join(__dirname, './background.png')),
   });
 
-  writeFile(join(__dirname, './card.png'), image);
+  await writeFile(join(__dirname, './card.png'), image);
 }
 run();
