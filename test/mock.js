@@ -1,4 +1,4 @@
-const { LinearGradient } = require('@discord-card/core');
+const { LinearGradient } = require('@discord-card/skia-core');
 const { join } = require('path');
 const { Text } = require('../lib');
 const path = (s) => join(__dirname, s);

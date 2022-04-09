@@ -1,16 +1,13 @@
-import { createCanvas, loadImage, CanvasRenderingContext2D as ctx2D, Canvas, Image } from 'canvas';
-import { getFontSize, GuildMemberLike, Theme, toImage } from '@discord-card/core';
+import { createCanvas, SKRSContext2D as ctx2D, Canvas, Image } from '@napi-rs/canvas';
+import { getFontSize, GuildMemberLike, Theme, toImage, roundRect, changeFontSize, blur, loadImage } from '@discord-card/skia-core';
 import { snap, themes } from './lib';
 import { CardOptions } from './types';
-import '@discord-card/core'; //To polyfill canvas class and load font
 
 export async function drawCard(options: CardOptions): Promise<Buffer> {
   const w = 700,
     h = 250;
   const canvas = createCanvas(w, h);
   const ctx = canvas.getContext('2d');
-  ctx.w = ctx.width = w;
-  ctx.h = ctx.height = h;
 
   //@ts-ignore
   let theme: Theme;
@@ -29,13 +26,12 @@ export async function drawCard(options: CardOptions): Promise<Buffer> {
 
   if (options.background) background = await toImage(options.background, 'Background');
 
-  ctx.theme = theme;
   /** Border width */
   const b = 10; //Border
 
   //Background
   snap(canvas);
-  if (options.rounded) ctx.roundRect(0, 0, w, h, h / 15);
+  if (options.rounded) roundRect(ctx, 0, 0, w, h, h / 15);
   else ctx.rect(0, 0, w, h);
   ctx.clip();
 
@@ -46,33 +42,33 @@ export async function drawCard(options: CardOptions): Promise<Buffer> {
     ctx.fillRect(0, 0, w, h);
     ctx.globalAlpha = 1;
 
-    ctx.blur(3);
+    blur(ctx, 3);
   }
 
   snap(canvas);
   //Rounded Edges
   if (options.border) {
     if (options.rounded) {
-      ctx.roundRect(b, b, w - 2 * b, h - 2 * b, h / 20);
+      roundRect(ctx, b, b, w - 2 * b, h - 2 * b, h / 20);
     } else {
       ctx.rect(b, b, w - 2 * b, h - 2 * b);
     }
     ctx.clip();
   } else {
-    if (options.rounded) ctx.roundRect(0, 0, w, h, h / 15).clip();
+    if (options.rounded) roundRect(ctx, 0, 0, w, h, h / 15).clip();
     else ctx.rect(0, 0, w, h);
   }
 
   var temp: Canvas | Image = background;
   if (options.blur) {
-    var blur = createCanvas(w, h),
-      blur_ctx = blur.getContext('2d') as ctx2D;
+    var blurred = createCanvas(w, h),
+      blur_ctx = blurred.getContext('2d') as ctx2D;
     blur_ctx.drawImage(background, 0, 0, w, h);
 
-    if (typeof options.blur === 'boolean') blur_ctx.blur(3);
-    else blur_ctx.blur(options.blur);
+    if (typeof options.blur === 'boolean') blur(blur_ctx, 3);
+    else blur(blur_ctx, options.blur);
 
-    temp = blur;
+    temp = blurred;
   }
   if (options.border) ctx.drawImage(temp, b, b, w - b * 2, h - b * 2);
   else ctx.drawImage(temp, 0, 0, w, h);
@@ -89,7 +85,7 @@ export async function drawCard(options: CardOptions): Promise<Buffer> {
   if (options.text?.title) {
     const txt = options.text!.title;
     if (typeof txt === 'string') {
-      ctx.changeFontSize('30px').fillText(txt, ctx.width / 2.7, ctx.height / 3.5);
+      changeFontSize(ctx, '30px').fillText(txt, w / 2.7, h / 3.5);
     } else txt.draw(ctx); //instanceof Text
   }
 
@@ -97,7 +93,7 @@ export async function drawCard(options: CardOptions): Promise<Buffer> {
   if (options.text?.text) {
     const txt = options.text!.text;
     if (typeof txt === 'string') {
-      ctx.changeFontSize(getFontSize(txt) + 'px').fillText(txt, ctx.width / 2.7, ctx.height / 1.8);
+      changeFontSize(ctx, getFontSize(txt) + 'px').fillText(txt, w / 2.7, h / 1.8);
     } else txt.draw(ctx); //instanceof Text
   }
 
@@ -105,7 +101,7 @@ export async function drawCard(options: CardOptions): Promise<Buffer> {
   if (options.text?.subtitle) {
     const txt = options.text!.subtitle;
     if (typeof txt === 'string') {
-      ctx.changeFontSize('25px').fillText(txt, ctx.width / 2.7, ctx.height / 1.3);
+      changeFontSize(ctx, '25px').fillText(txt, w / 2.7, h / 1.3);
     } else txt.draw(ctx); //instanceof Text
   }
 
@@ -114,7 +110,8 @@ export async function drawCard(options: CardOptions): Promise<Buffer> {
 
   function applyShape(offset = 0) {
     if (options.avatar?.borderRadius) {
-      ctx.roundRect(
+      roundRect(
+        ctx,
         h / 2 - radius - offset,
         h / 2 - radius - offset,
         radius * 2 + 2 * offset,
@@ -148,7 +145,7 @@ export async function drawCard(options: CardOptions): Promise<Buffer> {
       let r = radius;
 
       ctx.lineWidth = outlineWidth;
-      ctx.strokeStyle = (outlineColor ?? theme.color ?? '#fff').toString(ctx, ctx.h / 2 - r, h / 2 - r, h / 2 + r, h / 2 + r);
+      ctx.strokeStyle = (outlineColor ?? theme.color ?? '#fff').toString(ctx, h / 2 - r, h / 2 - r, h / 2 + r, h / 2 + r);
 
       ctx.stroke();
     }
@@ -186,4 +183,4 @@ export async function goodbyeImage(member: GuildMemberLike, options: CardOptions
 
 export { themes } from './lib';
 export { CardOptions } from './types';
-export * from '@discord-card/core';
+export * from '@discord-card/skia-core';
