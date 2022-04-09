@@ -226,3 +226,9 @@ Some projects written with this package
 ## Support Server
 
 **[![widget](https://discord.com/api/guilds/553942677117337600/widget.png?style=banner2)](https://discord.gg/EUbKBTwSmP)**
+
+| name               | children   | size   |
+| ------------------ | ---------- | ------ |
+| canvas             | 0          | 57.02M |
+| @discord-card/core | 0          | 2.93M  |
+| 2 modules          | 0 children | 59.95M |
