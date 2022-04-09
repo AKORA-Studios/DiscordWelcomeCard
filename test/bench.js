@@ -96,8 +96,7 @@ const blurring = () =>
       });
     }),
 
-    cycle(),
-    complete()
+    cycle()
   );
 
 const main = async () => {
