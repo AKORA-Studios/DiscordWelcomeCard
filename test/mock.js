@@ -1,4 +1,5 @@
 const { LinearGradient } = require('@discord-card/core');
+const { readFileSync } = require('fs');
 const { join } = require('path');
 const { Text } = require('../lib');
 const path = (s) => join(__dirname, s);
@@ -29,6 +30,7 @@ const opts = {
   avatar: {
     outlineWidth: 10,
     outlineColor: grad,
+    image: readFileSync(avatar),
     imageRadius: 0.8,
     borderRadius: 0.75,
   },
@@ -41,13 +43,10 @@ const opts = {
     title: new Text('humongus title', 240, 70).setFontSize(55).setStyle('#fff').stroke(),
     text: 'Some EMojis☑️❌🇮🇶',
     subtitle: new Text('YourFancy long humongus giant horse text is is´nsalnel long', 240, 180)
-      .stroke(false)
       .setFontSize(30)
       .setGradient(grad)
-      .multiline({
-        width: 400,
-        height: 100,
-      }),
+      .multiline()
+      .setRect(400, 100),
   },
 };
 
