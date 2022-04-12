@@ -43,13 +43,10 @@ const opts = {
     title: new Text('humongus title', 240, 70).setFontSize(55).setStyle('#fff').stroke(),
     text: 'Some EMojis☑️❌🇮🇶',
     subtitle: new Text('YourFancy long humongus giant horse text is is´nsalnel long', 240, 180)
-      .stroke(false)
       .setFontSize(30)
       .setGradient(grad)
-      .multiline({
-        width: 400,
-        height: 100,
-      }),
+      .multiline()
+      .setRect(400, 100),
   },
 };
 
