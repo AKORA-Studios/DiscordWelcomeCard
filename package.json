@@ -35,7 +35,7 @@
     "typescript": "^4.5.5"
   },
   "dependencies": {
-    "@discord-card/skia-core": "^0.1.0",
+    "@discord-card/skia-core": "^0.1.4",
     "@napi-rs/canvas": "^0.1.21"
   }
 }

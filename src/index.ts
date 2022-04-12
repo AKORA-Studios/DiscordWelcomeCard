@@ -1,14 +1,18 @@
 import { createCanvas, SKRSContext2D as ctx2D, Canvas, Image } from '@napi-rs/canvas';
-import { getFontSize, GuildMemberLike, Theme, toImage, roundRect, changeFontSize, blur, loadImage } from '@discord-card/skia-core';
+import { getFontSize, GuildMemberLike, Theme, toImage, roundRect, changeFontSize, blur, loadImage, Timer } from '@discord-card/skia-core';
 import { snap, themes } from './lib';
 import { CardOptions } from './types';
 import { readFile } from 'fs/promises';
 
 export async function drawCard(options: CardOptions): Promise<Buffer> {
+  const timer = new Timer('Drawcard').start();
+
   const w = 700,
     h = 250;
   const canvas = createCanvas(w, h);
   const ctx = canvas.getContext('2d');
+
+  timer.step('created Canvas');
 
   //@ts-ignore
   let theme: Theme;
@@ -26,6 +30,8 @@ export async function drawCard(options: CardOptions): Promise<Buffer> {
   } else throw new Error('Invalid theme, use: ' + Object.keys(themes).join(' | '));
 
   if (options.background) background = await toImage(options.background, 'Background');
+
+  timer.step('loaded Background');
 
   /** Border width */
   const b = 10; //Border
@@ -60,6 +66,8 @@ export async function drawCard(options: CardOptions): Promise<Buffer> {
     else ctx.rect(0, 0, w, h);
   }
 
+  timer.step('border');
+
   var temp: Canvas | Image = background;
   if (options.blur) {
     var blurred = createCanvas(w, h),
@@ -73,6 +81,8 @@ export async function drawCard(options: CardOptions): Promise<Buffer> {
   }
   if (options.border) ctx.drawImage(temp, b, b, w - b * 2, h - b * 2);
   else ctx.drawImage(temp, 0, 0, w, h);
+
+  timer.step('blur');
 
   snap(canvas);
 
@@ -105,6 +115,8 @@ export async function drawCard(options: CardOptions): Promise<Buffer> {
       changeFontSize(ctx, '25px').fillText(txt, w / 2.7, h / 1.3);
     } else txt.draw(ctx); //instanceof Text
   }
+
+  timer.step('text');
 
   //Avatar Image
   const radius = (h / 2) * (options.avatar?.imageRadius ?? 0.8);
@@ -152,9 +164,16 @@ export async function drawCard(options: CardOptions): Promise<Buffer> {
     }
   }
 
+  timer.step('avatar');
+
   snap(canvas);
 
-  return canvas.toBuffer('image/png');
+  const buff = canvas.toBuffer('image/png');
+
+  timer.step('buffer');
+  timer.stop();
+
+  return buff;
 }
 
 export async function welcomeImage(member: GuildMemberLike, options: CardOptions = {}): Promise<Buffer> {
