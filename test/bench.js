@@ -101,7 +101,7 @@ const blurring = () =>
 
 const main = async () => {
   //await readingImages();
-  //await drawingCards();
+  await drawingCards();
   await blurring();
 };
 

@@ -1,7 +1,7 @@
 import { GuildMemberLike } from '@discord-card/core';
 import { loadImage } from 'canvas';
 import { CardOptions } from '../types';
-import { drawCard } from './draw';
+import { drawCard } from './hydrate';
 
 export async function welcomeImage(member: GuildMemberLike, options: CardOptions = {}): Promise<Buffer> {
   const opts = { ...options };

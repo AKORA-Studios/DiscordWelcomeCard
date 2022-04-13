@@ -34,7 +34,8 @@ const opts = {
     imageRadius: 0.8,
     borderRadius: 0.75,
   },
-  blur: 2,
+  //background: readFileSync(path('images/background.png')),
+  blur: 2.5,
   border: false,
   rounded: false,
   theme: 'circuit',
@@ -46,7 +47,7 @@ const opts = {
       .setFontSize(30)
       .setGradient(grad)
       .multiline()
-      .setRect(400, 100),
+      .setRect(400, 50),
   },
 };
 

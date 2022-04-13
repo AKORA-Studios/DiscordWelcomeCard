@@ -3,8 +3,9 @@ import { createCanvas, Image, Canvas } from 'canvas';
 import { readFile } from 'fs/promises';
 import { themes, snap } from '../lib';
 import { CardOptions } from '../types';
+import { DryOptions, staticCard } from './dry';
 
-export async function drawCard(options: CardOptions): Promise<Buffer> {
+export async function drawCard(options: CardOptions & DryOptions): Promise<Buffer> {
   const timer = new Timer('Drawcard').start();
   /*
     const timer = {
@@ -22,7 +23,6 @@ export async function drawCard(options: CardOptions): Promise<Buffer> {
 
   //@ts-ignore
   let theme: Theme;
-  let background: Image;
 
   options.border ??= true;
   options.rounded ??= true;
@@ -31,65 +31,11 @@ export async function drawCard(options: CardOptions): Promise<Buffer> {
   if (typeof (options.theme ?? 'code') === 'string') {
     theme = themes[options.theme ?? 'code'];
     if (!theme) throw new Error('Invalid theme, use: ' + Object.keys(themes).join(' | '));
-
-    background = await toImage(await readFile(theme.image as string));
   } else throw new Error('Invalid theme, use: ' + Object.keys(themes).join(' | '));
 
-  if (options.background) background = await toImage(options.background, 'Background');
+  ctx.drawImage(await staticCard(options), 0, 0, w, h);
 
-  timer.step('loaded Background');
-
-  /** Border width */
-  const b = 10; //Border
-
-  //Background
-  snap(canvas);
-  if (options.rounded) {
-    roundRect(ctx, 0, 0, w, h, h / 15);
-    ctx.clip();
-  }
-
-  if (options.border) {
-    ctx.drawImage(background, 0, 0, w, h);
-
-    //darken the borders
-    ctx.globalAlpha = 0.3;
-    ctx.fillStyle = '#000';
-    ctx.fillRect(0, 0, w, h);
-    ctx.globalAlpha = 1;
-
-    //StackBlur.canvasRGBA(ctx.canvas as any, 0, 0, w, h, 9);
-    blur(ctx, 3);
-
-    if (options.rounded) {
-      roundRect(ctx, b, b, w - 2 * b, h - 2 * b, h / 20);
-    } else {
-      ctx.rect(b, b, w - 2 * b, h - 2 * b);
-    }
-    ctx.clip();
-  }
-
-  timer.step('border');
-
-  var temp: Canvas | Image = background;
-  if (options.blur) {
-    var blurred = createCanvas(w, h),
-      blur_ctx = blurred.getContext('2d') as ctx2D;
-    blur_ctx.drawImage(background, 0, 0, w, h);
-
-    if (typeof options.blur === 'boolean') options.blur = 3;
-
-    blur(blur_ctx, options.blur);
-    //StackBlur.canvasRGBA(blurred as any, 0, 0, blurred.width, blurred.height, options.blur * 3);
-
-    temp = blurred;
-  }
-  if (options.border) ctx.drawImage(temp, b, b, w - b * 2, h - b * 2);
-  else ctx.drawImage(temp, 0, 0, w, h);
-
-  timer.step('blur');
-
-  snap(canvas);
+  timer.step('add static');
 
   //Setting Styles
   ctx.fillStyle = (options.text?.color ?? theme.color).toString(ctx);
@@ -156,16 +102,6 @@ export async function drawCard(options: CardOptions): Promise<Buffer> {
         radius * 2 - (avatar.outlineWidth ?? 0) * 2, //width
         radius * 2 - (avatar.outlineWidth ?? 0) * 2 //height
       );
-    }
-
-    if (outlineWidth) {
-      applyShape(-outlineWidth / 2);
-      let r = radius;
-
-      ctx.lineWidth = outlineWidth;
-      ctx.strokeStyle = (outlineColor ?? theme.color ?? '#fff').toString(ctx, h / 2 - r, h / 2 - r, h / 2 + r, h / 2 + r);
-
-      ctx.stroke();
     }
   }
 
