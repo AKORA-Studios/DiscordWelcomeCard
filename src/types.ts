@@ -1,5 +1,6 @@
 import { Text, ImageResolvable, ColorResolvable } from '@discord-card/core';
 import { themes } from './lib';
+type mimeType = 'image/png' | 'image/jpeg' | 'application/pdf' | 'raw';
 
 export type CardOptions = {
   /** Select a theme with some default options */
@@ -35,13 +36,22 @@ export type CardOptions = {
      *  @default 0.8 */
     imageRadius?: number;
   };
-  /** Override the Background, can be a URL/Canvas/Image or Buffer  */
-  background?: ImageResolvable;
-  /** If the background should be blurred (true -> 3) */
-  blur?: boolean | number;
-  /** When enabled a blurred border is drawn, enabled by default */
-  border?: boolean;
-  /** If enabled the edges will be rounded, enabled by default */
-  rounded?: boolean;
-  //custom?: ModuleFunction;
+  card?: {
+    /** Override the Background, can be a URL/Canvas/Image or Buffer  */ background?: ImageResolvable;
+    /** If the background should be blurred (true -> 3) */
+    blur?: boolean | number;
+    /** When enabled a blurred border is drawn, enabled by default */
+    border?: boolean | number;
+    /** If enabled the edges will be rounded, enabled by default */
+    rounded?: boolean | number;
+    //custom?: ModuleFunction;
+  };
+  generation?: {
+    /** Add name to this card, this will save the card
+     * renderd without text and image, to speed up the generation
+     * by only updating dynamic content */
+    static?: string;
+    /** Image Format, by default it's PNG */
+    format?: mimeType;
+  };
 };

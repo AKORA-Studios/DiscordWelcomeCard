@@ -32,6 +32,7 @@ const grad = new LinearGradient(
   },
   { color: '#00f', offset: 1 }
 );
+/** @type {import('../').CardOptions} */
 const opts = {
   avatar: {
     outlineWidth: 10,
@@ -39,16 +40,16 @@ const opts = {
     imageRadius: 0.8,
     borderRadius: 0.75,
   },
-  blur: 2,
-  border: false,
-  rounded: false,
+  card: { blur: 2, border: false, rounded: false },
+  generation: {
+    static: 'Bench',
+  },
   theme: 'circuit',
   text: {
     color: '#1add89',
     title: new Text('humongus title', 240, 70).setFontSize(55).setStyle('#fff').stroke(),
     text: 'Some EMojis☑️❌🇮🇶',
-    subtitle: new Text('YourFancy long humongus giant horse text is is´nsalnel long', 240, 180).setFontSize(30),
-    //.setGradient(grad),
+    subtitle: new Text('YourFancy long humongus giant horse text is is´nsalnel long', 240, 180).setFontSize(30).setGradient(grad),
     /*
       .multiline({
         width: 400,
@@ -67,6 +68,9 @@ const drawingCards = () =>
     add('Empty', async () => {
       await drawCard({});
     }),
+    add('Custom', async () => {
+      await drawCard(opts);
+    }),
     add('Blur', async () => {
       await drawCard({
         blur: 1,
@@ -83,16 +87,19 @@ const blurring = () =>
     add('Blur 1', async () => {
       await drawCard({
         blur: 1,
+        generation: { static: 'Blur1' },
       });
     }),
-    add('Blur Default', async () => {
+    add('Blur Default + JPEG', async () => {
       await drawCard({
         blur: true,
+        generation: { static: 'BlurDef', format: 'image/jpeg' },
       });
     }),
     add('Blur 5', async () => {
       await drawCard({
         blur: 5,
+        generation: { static: 'Blur5' },
       });
     }),
 

@@ -4,25 +4,20 @@ import { readFile } from 'fs/promises';
 import { themes, snap } from '../lib';
 import { CardOptions } from '../types';
 
-export type DryOptions = {
-  static?: string;
-};
-
 const dryMap: { [name: string]: Canvas } = {};
 
-export async function staticCard(options: CardOptions & DryOptions): Promise<Canvas> {
+export async function staticCard(options: CardOptions): Promise<Canvas> {
   //check for existing
-  if (options.static && dryMap[options.static]) {
-    return dryMap[options.static];
+  if (options.generation?.static && dryMap[options.generation?.static]) {
+    return dryMap[options.generation.static];
   }
 
-  const timer = new Timer('Prepare').start();
-  /*
-    const timer = {
-       step: (...args: any[]) => {},
-      stop: (...args: any[]) => {},
-    };
-    */
+  //const timer = new Timer('Prepare').start();
+
+  const timer = {
+    step: (...args: any[]) => {},
+    stop: (...args: any[]) => {},
+  };
 
   const w = 700,
     h = 250;
@@ -35,8 +30,9 @@ export async function staticCard(options: CardOptions & DryOptions): Promise<Can
   let theme: Theme;
   let background: Image;
 
-  options.border ??= true;
-  options.rounded ??= true;
+  options.card ??= {};
+  options.card.border ??= true;
+  options.card.rounded ??= true;
 
   //Parsing the Theme
   if (typeof (options.theme ?? 'code') === 'string') {
@@ -46,7 +42,7 @@ export async function staticCard(options: CardOptions & DryOptions): Promise<Can
     background = await toImage(await readFile(theme.image as string));
   } else throw new Error('Invalid theme, use: ' + Object.keys(themes).join(' | '));
 
-  if (options.background) background = await toImage(options.background, 'Background');
+  if (options.card.background) background = await toImage(options.card.background, 'Background');
 
   timer.step('loaded Background');
 
@@ -55,12 +51,12 @@ export async function staticCard(options: CardOptions & DryOptions): Promise<Can
 
   //Background
   snap(canvas);
-  if (options.rounded) {
+  if (options.card?.rounded) {
     roundRect(ctx, 0, 0, w, h, h / 15);
     ctx.clip();
   }
 
-  if (options.border) {
+  if (options.card?.border) {
     ctx.drawImage(background, 0, 0, w, h);
 
     //darken the borders
@@ -72,7 +68,7 @@ export async function staticCard(options: CardOptions & DryOptions): Promise<Can
     //StackBlur.canvasRGBA(ctx.canvas as any, 0, 0, w, h, 9);
     blur(ctx, 3);
 
-    if (options.rounded) {
+    if (options.card?.rounded) {
       roundRect(ctx, b, b, w - 2 * b, h - 2 * b, h / 20);
     } else {
       ctx.rect(b, b, w - 2 * b, h - 2 * b);
@@ -82,19 +78,19 @@ export async function staticCard(options: CardOptions & DryOptions): Promise<Can
 
   timer.step('border');
   var temp: Canvas | Image = background;
-  if (options.blur) {
+  if (options.card?.blur) {
     var blurred = createCanvas(w, h),
       blur_ctx = blurred.getContext('2d') as ctx2D;
     blur_ctx.drawImage(background as any, 0, 0, w, h);
 
-    if (typeof options.blur === 'boolean') options.blur = 3;
+    if (typeof options.card?.blur === 'boolean') options.card.blur = 3;
 
-    blur(blur_ctx, options.blur);
+    blur(blur_ctx, options.card?.blur);
     //StackBlur.canvasRGBA(blurred as any, 0, 0, blurred.width, blurred.height, options.blur * 3);
 
     temp = blurred;
   }
-  if (options.border) ctx.drawImage(temp, b, b, w - b * 2, h - b * 2);
+  if (options.card?.border) ctx.drawImage(temp, b, b, w - b * 2, h - b * 2);
   else ctx.drawImage(temp, 0, 0, w, h);
 
   timer.step('blur');
@@ -148,8 +144,8 @@ export async function staticCard(options: CardOptions & DryOptions): Promise<Can
 
   timer.stop();
 
-  if (options.static) {
-    dryMap[options.static] = canvas;
+  if (options.generation?.static) {
+    dryMap[options.generation.static] = canvas;
   }
 
   return canvas;

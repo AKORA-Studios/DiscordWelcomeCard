@@ -1,21 +1,20 @@
-import { Timer, toImage, roundRect, ctx2D, changeFontSize, getFontSize, blur } from '@discord-card/core';
-import { createCanvas, Image, Canvas } from 'canvas';
-import { readFile } from 'fs/promises';
+import { Timer, toImage, roundRect, changeFontSize, getFontSize } from '@discord-card/core';
+import { createCanvas } from 'canvas';
 import { themes, snap } from '../lib';
 import { CardOptions } from '../types';
-import { DryOptions, staticCard } from './dry';
+import { staticCard } from './dry';
 
-export async function drawCard(options: CardOptions & DryOptions): Promise<Buffer> {
-  const timer = new Timer('Drawcard').start();
-  /*
-    const timer = {
-       step: (...args: any[]) => {},
-      stop: (...args: any[]) => {},
-    };
-    */
+const w = 700,
+  h = 250;
 
-  const w = 700,
-    h = 250;
+export async function drawCard(options: CardOptions): Promise<Buffer> {
+  //const timer = new Timer('Drawcard').start();
+
+  const timer = {
+    step: (...args: any[]) => {},
+    stop: (...args: any[]) => {},
+  };
+
   const canvas = createCanvas(w, h);
   const ctx = canvas.getContext('2d');
 
@@ -24,8 +23,13 @@ export async function drawCard(options: CardOptions & DryOptions): Promise<Buffe
   //@ts-ignore
   let theme: Theme;
 
-  options.border ??= true;
-  options.rounded ??= true;
+  options.card ??= {};
+  options.card.border ??= true;
+  options.card.rounded ??= true;
+  options.card.blur ??= true;
+
+  options.avatar ??= {};
+  options.avatar.imageRadius ??= 0.8;
 
   //Parsing the Theme
   if (typeof (options.theme ?? 'code') === 'string') {
@@ -92,7 +96,7 @@ export async function drawCard(options: CardOptions & DryOptions): Promise<Buffe
 
   const { avatar } = options;
   if (avatar) {
-    const { image: avatarImage, outlineWidth, outlineColor } = avatar;
+    const { image: avatarImage, outlineWidth } = avatar;
     if (avatarImage) {
       applyShape(-outlineWidth).clip();
       ctx.drawImage(
@@ -109,7 +113,7 @@ export async function drawCard(options: CardOptions & DryOptions): Promise<Buffe
 
   snap(canvas);
 
-  const buff = canvas.toBuffer('image/png');
+  const buff = canvas.toBuffer(options.generation?.format ?? ('image/png' as any));
 
   timer.step('buffer');
   timer.stop();

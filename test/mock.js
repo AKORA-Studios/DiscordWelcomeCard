@@ -35,9 +35,12 @@ const opts = {
     borderRadius: 0.5,
   },
   //background: readFileSync(path('images/background.png')),
-  blur: 2.5,
-  border: false,
-  rounded: false,
+  card: {
+    blur: 2.5,
+    border: false,
+    rounded: false,
+  },
+  generation: { static: 'Card1', format: 'image/jpeg' },
   theme: 'circuit',
   text: {
     color: '#1add89',

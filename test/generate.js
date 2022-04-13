@@ -4,7 +4,8 @@ const { welcomeImage, goodbyeImage, drawCard, staticCard } = require('../');
 const { member, opts, avatarOpts } = require('./mock');
 const path = (s) => join(__dirname, s);
 
-const op = { ...opts, static: 'Q' };
+/** @type {import('../').CardOptions} */
+const op = { ...opts};
 async function run() {
   try {
     let buff = (await staticCard(op)).toBuffer('image/png');

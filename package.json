@@ -24,7 +24,7 @@
   "author": "AKORA Studios",
   "license": "MIT",
   "dependencies": {
-    "@discord-card/core": "^3.0.0",
+    "@discord-card/core": "^3.0.1",
     "canvas": "^2.9.0",
     "stackblur-canvas": "^2.5.0"
   },
