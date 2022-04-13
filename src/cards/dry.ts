@@ -8,9 +8,9 @@ export type DryOptions = {
   static?: string;
 };
 
-const dryMap: { [name: string]: Image } = {};
+const dryMap: { [name: string]: Canvas } = {};
 
-export async function staticCard(options: CardOptions & DryOptions): Promise<Image> {
+export async function staticCard(options: CardOptions & DryOptions): Promise<Canvas> {
   //check for existing
   if (options.static && dryMap[options.static]) {
     return dryMap[options.static];
@@ -107,33 +107,6 @@ export async function staticCard(options: CardOptions & DryOptions): Promise<Ima
   //ctx.strokeStyle = theme.color.toString(ctx);
   ctx.font = '30px ' + (options.text?.font ?? theme.font ?? 'SegoeUI') + ', SegoeUI, SegoeUIEmoji';
 
-  //Drawing
-  //Title
-  /*
-  if (options.text?.title) {
-    const txt = options.text!.title;
-    if (typeof txt === 'string') {
-      changeFontSize(ctx, '30px').fillText(txt, w / 2.7, h / 3.5);
-    } else txt.draw(ctx); //instanceof Text
-  }
-
-  //Text
-  if (options.text?.text) {
-    const txt = options.text!.text;
-    if (typeof txt === 'string') {
-      changeFontSize(ctx, getFontSize(txt) + 'px').fillText(txt, w / 2.7, h / 1.8);
-    } else txt.draw(ctx); //instanceof Text
-  }
-
-  //Subtitle
-  if (options.text?.subtitle) {
-    const txt = options.text!.subtitle;
-    if (typeof txt === 'string') {
-      changeFontSize(ctx, '25px').fillText(txt, w / 2.7, h / 1.3);
-    } else txt.draw(ctx); //instanceof Text
-  }
-  */
-
   timer.step('text');
 
   //Avatar Image
@@ -159,19 +132,7 @@ export async function staticCard(options: CardOptions & DryOptions): Promise<Ima
 
   const { avatar } = options;
   if (avatar) {
-    const { image: avatarImage, outlineWidth, outlineColor } = avatar;
-    /*
-    if (avatarImage) {
-      applyShape(-5).clip();
-      ctx.drawImage(
-        await toImage(avatarImage),
-        h / 2 - radius + (avatar.outlineWidth ?? 0), //x
-        h / 2 - radius + (avatar.outlineWidth ?? 0), //y
-        radius * 2 - (avatar.outlineWidth ?? 0) * 2, //width
-        radius * 2 - (avatar.outlineWidth ?? 0) * 2 //height
-      );
-    }
-    */
+    const { outlineWidth, outlineColor } = avatar;
 
     if (outlineWidth) {
       applyShape(-outlineWidth);
@@ -186,16 +147,11 @@ export async function staticCard(options: CardOptions & DryOptions): Promise<Ima
 
   timer.step('avatar');
 
-  snap(canvas);
-
-  const image = await toImage(canvas);
-
-  timer.step('buffer');
   timer.stop();
 
   if (options.static) {
-    dryMap[options.static] = image;
+    dryMap[options.static] = canvas;
   }
 
-  return image;
+  return canvas;
 }

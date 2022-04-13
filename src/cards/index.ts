@@ -29,3 +29,4 @@ export async function goodbyeImage(member: GuildMemberLike, options: CardOptions
 }
 
 export { drawCard };
+export { staticCard } from './dry';
