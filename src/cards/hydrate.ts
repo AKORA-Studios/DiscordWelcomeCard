@@ -94,7 +94,7 @@ export async function drawCard(options: CardOptions & DryOptions): Promise<Buffe
   if (avatar) {
     const { image: avatarImage, outlineWidth, outlineColor } = avatar;
     if (avatarImage) {
-      applyShape(-5).clip();
+      applyShape(-outlineWidth).clip();
       ctx.drawImage(
         await toImage(avatarImage),
         h / 2 - radius + (avatar.outlineWidth ?? 0), //x

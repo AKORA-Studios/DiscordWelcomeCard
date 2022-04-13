@@ -32,7 +32,7 @@ const opts = {
     outlineColor: grad,
     image: readFileSync(avatar),
     imageRadius: 0.8,
-    borderRadius: 0.75,
+    borderRadius: 0.5,
   },
   //background: readFileSync(path('images/background.png')),
   blur: 2.5,

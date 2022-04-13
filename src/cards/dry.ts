@@ -174,10 +174,10 @@ export async function staticCard(options: CardOptions & DryOptions): Promise<Ima
     */
 
     if (outlineWidth) {
-      applyShape(-outlineWidth / 2);
+      applyShape(-outlineWidth);
       let r = radius;
 
-      ctx.lineWidth = outlineWidth;
+      ctx.lineWidth = outlineWidth * 1.5;
       ctx.strokeStyle = (outlineColor ?? theme.color ?? '#fff').toString(ctx, h / 2 - r, h / 2 - r, h / 2 + r, h / 2 + r);
 
       ctx.stroke();
