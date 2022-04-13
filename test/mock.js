@@ -46,8 +46,8 @@ const opts = {
     subtitle: new Text('YourFancy long humongus giant horse text is is´nsalnel long', 240, 180)
       .setFontSize(30)
       .setGradient(grad)
-      .multiline()
-      .setRect(400, 50),
+      .multiline(),
+    //.setRect(400, 50),
   },
 };
 

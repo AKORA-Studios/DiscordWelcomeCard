@@ -7,10 +7,11 @@ const path = (s) => join(__dirname, s);
 const op = { ...opts, static: 'Q' };
 async function run() {
   try {
-    write(path('images/custom_full.png'), await (await staticCard(op)).toBuffer('image/png'));
+    let buff = (await staticCard(op)).toBuffer('image/png');
     await drawCard(op);
     await drawCard(op);
-    await drawCard(op);
+    buff = await drawCard(op);
+    write(path('images/custom_full.png'), buff);
     //write(path('images/welcome_default.png'), await welcomeImage(member));
     //write(path('images/welcome_full.png'), await welcomeImage(member, opts));
     //write(path('images/goodbye_default.png'), await goodbyeImage(member));

@@ -1,4 +1,4 @@
-import { Timer, toImage, roundRect, ctx2D, changeFontSize, getFontSize, blur } from '@discord-card/core';
+import { Timer, toImage, roundRect, ctx2D, blur } from '@discord-card/core';
 import { createCanvas, Image, Canvas } from 'canvas';
 import { readFile } from 'fs/promises';
 import { themes, snap } from '../lib';
@@ -81,12 +81,11 @@ export async function staticCard(options: CardOptions & DryOptions): Promise<Can
   }
 
   timer.step('border');
-
   var temp: Canvas | Image = background;
   if (options.blur) {
     var blurred = createCanvas(w, h),
       blur_ctx = blurred.getContext('2d') as ctx2D;
-    blur_ctx.drawImage(background, 0, 0, w, h);
+    blur_ctx.drawImage(background as any, 0, 0, w, h);
 
     if (typeof options.blur === 'boolean') options.blur = 3;
 
