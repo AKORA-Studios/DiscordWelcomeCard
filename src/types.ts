@@ -1,4 +1,4 @@
-import { Text, ImageResolvable, ColorResolvable } from '@discord-card/core';
+import { Text, ImageResolvable, ColorResolvable } from '@discord-card/skia-core';
 import { themes } from './lib';
 type mimeType = 'image/png' | 'image/jpeg' | 'application/pdf' | 'raw';
 

@@ -1,5 +1,5 @@
 const { suite, add, cycle, complete } = require('benny');
-const { loadImage } = require('canvas');
+const { loadImage } = require('@napi-rs/canvas');
 const { readFileSync } = require('fs');
 const { readFile } = require('fs/promises');
 const { join } = require('path');
@@ -62,9 +62,11 @@ const opts = {
 const drawingCards = () =>
   suite(
     'Drawing Cards',
+    /*
     add('Default welcome', async () => {
       await welcomeImage(mock.member);
     }),
+    */
     add('Empty', async () => {
       await drawCard({});
     }),

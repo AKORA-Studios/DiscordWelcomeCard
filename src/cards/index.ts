@@ -1,5 +1,4 @@
-import { GuildMemberLike } from '@discord-card/core';
-import { loadImage } from 'canvas';
+import { GuildMemberLike, loadImage } from '@discord-card/skia-core';
 import { CardOptions } from '../types';
 import { drawCard } from './hydrate';
 

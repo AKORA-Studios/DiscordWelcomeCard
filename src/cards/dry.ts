@@ -1,5 +1,5 @@
-import { Timer, toImage, roundRect, ctx2D, blur } from '@discord-card/core';
-import { createCanvas, Image, Canvas } from 'canvas';
+import { toImage, roundRect, ctx2D, blur } from '@discord-card/skia-core';
+import { createCanvas, Image, Canvas } from '@napi-rs/canvas';
 import { readFile } from 'fs/promises';
 import { themes, snap } from '../lib';
 import { CardOptions } from '../types';

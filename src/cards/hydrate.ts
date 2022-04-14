@@ -1,5 +1,5 @@
-import { Timer, toImage, roundRect, changeFontSize, getFontSize } from '@discord-card/core';
-import { createCanvas } from 'canvas';
+import { toImage, roundRect, changeFontSize, getFontSize, Benchmarking } from '@discord-card/skia-core';
+import { createCanvas } from '@napi-rs/canvas';
 import { themes, snap } from '../lib';
 import { CardOptions } from '../types';
 import { staticCard } from './dry';
@@ -8,12 +8,14 @@ const w = 700,
   h = 250;
 
 export async function drawCard(options: CardOptions): Promise<Buffer> {
-  //const timer = new Timer('Drawcard').start();
+  const timer = new Benchmarking.Timer('Drawcard').start();
 
+  /*
   const timer = {
     step: (...args: any[]) => {},
     stop: (...args: any[]) => {},
   };
+  */
 
   const canvas = createCanvas(w, h);
   const ctx = canvas.getContext('2d');
