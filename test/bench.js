@@ -68,15 +68,33 @@ const drawingCards = () =>
     }),
     */
     add('Empty', async () => {
-      await drawCard({});
+      await drawCard({
+        generation: {
+          static: 'Empty',
+        },
+      });
+
+      return () =>
+        drawCard({
+          generation: {
+            static: 'Empty',
+          },
+        });
     }),
     add('Custom', async () => {
       await drawCard(opts);
+
+      return () => drawCard(opts);
     }),
     add('Blur', async () => {
       await drawCard({
         blur: 1,
       });
+
+      return () =>
+        drawCard({
+          blur: 1,
+        });
     }),
 
     cycle(),
@@ -111,7 +129,7 @@ const blurring = () =>
 const main = async () => {
   //await readingImages();
   await drawingCards();
-  await blurring();
+  //await blurring();
 };
 
 main();
