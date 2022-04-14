@@ -8,14 +8,12 @@ const w = 700,
   h = 250;
 
 export async function drawCard(options: CardOptions): Promise<Buffer> {
-  const timer = new Benchmarking.Timer('Drawcard').start();
+  //const timer = new Benchmarking.Timer('Drawcard').start();
 
-  /*
   const timer = {
     step: (...args: any[]) => {},
     stop: (...args: any[]) => {},
   };
-  */
 
   const canvas = createCanvas(w, h);
   const ctx = canvas.getContext('2d');

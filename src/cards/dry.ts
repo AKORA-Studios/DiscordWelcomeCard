@@ -1,4 +1,4 @@
-import { toImage, roundRect, ctx2D, blur } from '@discord-card/skia-core';
+import { toImage, roundRect, ctx2D, blur, Benchmarking } from '@discord-card/skia-core';
 import { createCanvas, Image, Canvas } from '@napi-rs/canvas';
 import { readFile } from 'fs/promises';
 import { themes, snap } from '../lib';
@@ -12,12 +12,14 @@ export async function staticCard(options: CardOptions): Promise<Canvas> {
     return dryMap[options.generation.static];
   }
 
-  //const timer = new Timer('Prepare').start();
+  //const timer = new Benchmarking.Timer('Prepare').start();
 
+  
   const timer = {
     step: (...args: any[]) => {},
     stop: (...args: any[]) => {},
   };
+  
 
   const w = 700,
     h = 250;
