@@ -37,7 +37,8 @@ export type CardOptions = {
     imageRadius?: number;
   };
   card?: {
-    /** Override the Background, can be a URL/Canvas/Image or Buffer  */ background?: ImageResolvable;
+    /** Override the Background, can be a URL/Canvas/Image or Buffer  */
+    background?: ImageResolvable;
     /** If the background should be blurred (true -> 3) */
     blur?: boolean | number;
     /** When enabled a blurred border is drawn, enabled by default */
