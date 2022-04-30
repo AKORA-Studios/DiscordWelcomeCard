@@ -44,6 +44,18 @@ export async function staticCard(options: CardOptions): Promise<Canvas> {
 
   if (options.card.background) background = await toImage(options.card.background, 'Background');
 
+  // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/drawImage
+  let backgroundScale = h / background.height;
+  if (w / background.width > backgroundScale) {
+    backgroundScale = w / background.width;
+  }
+  console.log(backgroundScale);
+
+  let backXOff = (background.width - backgroundScale * background.width) / 2,
+    backYOff = (background.height - backgroundScale * background.height) / 2;
+
+  console.log(backXOff, backYOff);
+
   timer.step('loaded Background');
 
   /** Border width */
@@ -57,7 +69,8 @@ export async function staticCard(options: CardOptions): Promise<Canvas> {
   }
 
   if (options.card?.border) {
-    ctx.drawImage(background, 0, 0, w, h);
+    ctx.drawImage(background, backXOff, backYOff, w, h, 0, 0, w, h);
+    //ctx.drawImage(background, 0, 0, w, h);
 
     //darken the borders
     ctx.globalAlpha = 0.3;
@@ -81,7 +94,8 @@ export async function staticCard(options: CardOptions): Promise<Canvas> {
   if (options.card?.blur) {
     var blurred = createCanvas(w, h),
       blur_ctx = blurred.getContext('2d') as ctx2D;
-    blur_ctx.drawImage(background as any, 0, 0, w, h);
+    blur_ctx.drawImage(background, backXOff, backYOff, w, h, 0, 0, w, h);
+    //blur_ctx.drawImage(background, 0, 0, w, h);
 
     if (typeof options.card?.blur === 'boolean') options.card.blur = 3;
 
@@ -91,7 +105,7 @@ export async function staticCard(options: CardOptions): Promise<Canvas> {
     temp = blurred;
   }
   if (options.card?.border) ctx.drawImage(temp, b, b, w - b * 2, h - b * 2);
-  else ctx.drawImage(temp, 0, 0, w, h);
+  else ctx.drawImage(background, backXOff, backYOff, w, h, 0, 0, w, h);
 
   timer.step('blur');
 

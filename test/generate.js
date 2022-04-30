@@ -5,7 +5,7 @@ const { member, opts, avatarOpts } = require('./mock');
 const path = (s) => join(__dirname, s);
 
 /** @type {import('../').CardOptions} */
-const op = { ...opts};
+const op = { ...opts };
 async function run() {
   try {
     let buff = (await staticCard(op)).toBuffer('image/png');
