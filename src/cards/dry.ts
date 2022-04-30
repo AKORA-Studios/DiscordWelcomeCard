@@ -49,12 +49,12 @@ export async function staticCard(options: CardOptions): Promise<Canvas> {
   if (w / background.width > backgroundScale) {
     backgroundScale = w / background.width;
   }
-  console.log(backgroundScale);
+  //console.log(backgroundScale);
 
   let backXOff = (background.width - backgroundScale * background.width) / 2,
     backYOff = (background.height - backgroundScale * background.height) / 2;
 
-  console.log(backXOff, backYOff);
+  //console.log(backXOff, backYOff);
 
   timer.step('loaded Background');
 
