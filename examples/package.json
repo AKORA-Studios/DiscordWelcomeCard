@@ -7,6 +7,6 @@
   },
   "license": "ISC",
   "dependencies": {
-    "discord-welcome-card": "^4.6.0"
+    "discord-welcome-card": "^4.7.0"
   }
 }
