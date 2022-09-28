@@ -25,7 +25,7 @@
   "license": "MIT",
   "dependencies": {
     "@discord-card/core": "^3.0.1",
-    "canvas": "^2.9.0"
+    "canvas": "^2.10.1"
   },
   "repository": {
     "type": "git",
