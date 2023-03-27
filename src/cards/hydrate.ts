@@ -52,7 +52,7 @@ export async function drawCard(options: CardOptions): Promise<Buffer> {
     const txt = options.text!.title;
     if (typeof txt === 'string') {
       changeFontSize(ctx, '30px').fillText(txt, w / 2.7, h / 3.5);
-    } else txt.draw(ctx); //instanceof Text
+    } else txt.draw(canvas); //instanceof Text
   }
 
   //Text
@@ -60,7 +60,7 @@ export async function drawCard(options: CardOptions): Promise<Buffer> {
     const txt = options.text!.text;
     if (typeof txt === 'string') {
       changeFontSize(ctx, getFontSize(txt) + 'px').fillText(txt, w / 2.7, h / 1.8);
-    } else txt.draw(ctx); //instanceof Text
+    } else txt.draw(canvas); //instanceof Text
   }
 
   //Subtitle
@@ -68,7 +68,7 @@ export async function drawCard(options: CardOptions): Promise<Buffer> {
     const txt = options.text!.subtitle;
     if (typeof txt === 'string') {
       changeFontSize(ctx, '25px').fillText(txt, w / 2.7, h / 1.3);
-    } else txt.draw(ctx); //instanceof Text
+    } else txt.draw(canvas); //instanceof Text
   }
 
   timer.step('text');

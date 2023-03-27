@@ -94,7 +94,7 @@ const { drawCard, LinearGradient } = require('discord-welcome-card');
         color: `#88f`
     },
     avatar: {
-        image: user.displayAvatarURL({ format: 'png' }),
+        image: user.displayAvatarURL({ extension: 'png' }),
         outlineWidth: 5,
         outlineColor: new LinearGradient(
             [0, '#33f'],
@@ -205,7 +205,7 @@ client.on('messageCreate', async (message) => {
       color: `#88f`,
     },
     avatar: {
-      image: message.author.displayAvatarURL({ format: 'png' }),
+      image: message.author.displayAvatarURL({ extension: 'png' }),
       outlineWidth: 5,
       outlineColor: new LinearGradient([0, '#33f'], [1, '#f33']),
     },

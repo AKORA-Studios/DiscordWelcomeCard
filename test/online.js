@@ -1,7 +1,7 @@
 const { Client, GatewayIntentBits } = require('discord.js');
 const { join } = require('path');
 const { writeFileSync: write, readFileSync, writeFileSync } = require('fs');
-const { Text, drawCard, LinearGradient } = require('../');
+const { Text, drawCard, LinearGradient, welcomeImage } = require('../');
 const path = (s) => join(__dirname, s);
 
 const token = readFileSync(path('../.env')).toString();
@@ -21,7 +21,7 @@ const op = (url) => ({
   avatar: {
     outlineWidth: 10,
     outlineColor: grad,
-    image: url,
+    //image: url,
     imageRadius: 0.8,
     borderRadius: 0.5,
   },
@@ -55,8 +55,10 @@ client.on('ready', async () => {
 
   console.log(url);
 
-  let buff = await drawCard(op(url));
+  let buff = await welcomeImage({ user }, op(undefined));
+  //let buff = await drawCard(op(url));
   writeFileSync(path('images/custom_full.png'), buff);
+  process.exit();
 });
 
 client.login(token);

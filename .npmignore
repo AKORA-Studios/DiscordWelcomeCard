@@ -12,6 +12,8 @@ src/**/*.ts
 *.map
 .prettierrc
 tsconfig.tsbuildinfo
+.env
+
 
 package-lock.json
 tsconfig.json

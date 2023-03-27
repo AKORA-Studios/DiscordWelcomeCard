@@ -21,7 +21,7 @@ export async function staticCard(options: CardOptions): Promise<Canvas> {
 
   const w = 700,
     h = 250;
-  const canvas = createCanvas(w, h);
+  let canvas = createCanvas(w, h);
   const ctx = canvas.getContext('2d');
 
   timer.step('created Canvas');
@@ -79,7 +79,7 @@ export async function staticCard(options: CardOptions): Promise<Canvas> {
     ctx.globalAlpha = 1;
 
     //StackBlur.canvasRGBA(ctx.canvas as any, 0, 0, w, h, 9);
-    blur(ctx, 3);
+    canvas = blur(canvas, 3);
 
     if (options.card?.rounded) {
       roundRect(ctx, b, b, w - 2 * b, h - 2 * b, h / 20);
@@ -99,7 +99,7 @@ export async function staticCard(options: CardOptions): Promise<Canvas> {
 
     if (typeof options.card?.blur === 'boolean') options.card.blur = 3;
 
-    blur(blur_ctx, options.card?.blur);
+    blurred = blur(blurred, options.card?.blur);
     //StackBlur.canvasRGBA(blurred as any, 0, 0, blurred.width, blurred.height, options.blur * 3);
 
     temp = blurred;

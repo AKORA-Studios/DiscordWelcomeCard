@@ -1,6 +1,6 @@
 {
   "name": "discord-welcome-card",
-  "version": "4.8.1",
+  "version": "4.9.0",
   "description": "Discord Welcome/Goodbye Cards",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -24,8 +24,11 @@
   "author": "AKORA Studios",
   "license": "MIT",
   "dependencies": {
-    "@discord-card/core": "^3.0.1",
+    "@discord-card/core": "^3.2.0",
     "canvas": "^2.11.0"
+  },
+  "peerDependencies": {
+    "discord.js": "^14.x"
   },
   "repository": {
     "type": "git",
