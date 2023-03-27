@@ -4,9 +4,11 @@
 
 # Dev
 /test/snapshots/
+.env
 
 # Compiled
 /typings
 /lib
 *.tgz
 *.tsbuildinfo
+pnpm-lock.yaml
