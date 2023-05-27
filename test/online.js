@@ -55,7 +55,27 @@ client.on('ready', async () => {
 
   console.log(url);
 
-  let buff = await welcomeImage({ user }, op(undefined));
+  // let buff = await welcomeImage({ user }, op(undefined));
+
+  let buff = await drawCard({
+    theme: 'circuit',
+    text: {
+      title: `Welcome To ()`,
+      text: user.username,
+      subtitle: `< By LingSystem >`,
+      color: `#88f`,
+    },
+    avatar: {
+      image: user.displayAvatarURL({ forceStatic: true, size: 1024, extension: 'png' }),
+    },
+    card: {
+      background: readFileSync(path('images/wallpaper.png')),
+      blur: 1,
+      border: true,
+      rounded: true,
+    },
+  });
+
   //let buff = await drawCard(op(url));
   writeFileSync(path('images/custom_full.png'), buff);
   process.exit();

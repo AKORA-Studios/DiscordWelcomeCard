@@ -96,7 +96,8 @@ export async function drawCard(options: CardOptions): Promise<Buffer> {
 
   const { avatar } = options;
   if (avatar) {
-    const { image: avatarImage, outlineWidth } = avatar;
+    const avatarImage = avatar.image;
+    const outlineWidth = avatar.outlineWidth ?? 0;
     if (avatarImage) {
       applyShape(-outlineWidth).clip();
       ctx.drawImage(
