@@ -142,10 +142,15 @@ client.login('Your-Bot-Token');
 <details open> <summary> Goodbye Card </summary>
 
 ```javascript
-const { Client, Intents } = require('discord.js');
+const { Client, GatewayIntentBits  } = require('discord.js');
 const { drawCard, LinearGradient } = require('discord-welcome-card');
 const client = new Client({
-  intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
+	intents: [
+		GatewayIntentBits.Guilds,
+		GatewayIntentBits.GuildMessages,
+		GatewayIntentBits.MessageContent,
+		GatewayIntentBits.GuildMembers,
+	],
 });
 
 client.on('messageCreate', async (message) => {
@@ -167,10 +172,15 @@ client.login('Your-Bot-Token');
 <details open><summary> Custom Card </summary>
 
 ```javascript
-const { Client, Intents } = require('discord.js');
+const { Client, GatewayIntentBits  } = require('discord.js');
 const { drawCard, LinearGradient } = require('discord-welcome-card');
 const client = new Client({
-  intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
+	intents: [
+		GatewayIntentBits.Guilds,
+		GatewayIntentBits.GuildMessages,
+		GatewayIntentBits.MessageContent,
+		GatewayIntentBits.GuildMembers,
+	],
 });
 
 client.on('messageCreate', async (message) => {
