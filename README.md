@@ -101,10 +101,12 @@ const { drawCard, LinearGradient } = require('discord-welcome-card');
             [1, '#f33']
         )
     },
-    background: 'https://i.imgur.com/ea9PB3H.png',
-    blur: 1,
-    border: true,
-    rounded: true
+      card: {
+        background: "https://i.imgur.com/ea9PB3H.png",
+        blur: 1,
+        border: true,
+        rounded: true,
+    }
 ```
 
 ![Custom Card](examples/fullCustom.png)
@@ -131,25 +133,37 @@ const { drawCard, LinearGradient } = require('discord-welcome-card');
 
 ## Examples
 
-(If you want to use Gradients, you maybe need to import Gradient like this: `const { drawCard, LinearGradient } = require('discord-welcome-card')`)
+| Package | Version |
+| --- | --- |
+| discord.js | 14.13.0 |
+| discord-welcome-card | 4.9.1 |
+
+
+Note: (If you want to use Gradients, you maybe need to import Gradient like this: `const { drawCard, LinearGradient } = require('discord-welcome-card')`)
+
 
 <details open> 
-    <summary>  Welcome Card (circuit) </summary>
+    <summary>  Welcome Card  </summary>
 
 ```javascript
-const { Client, Intents } = require('discord.js');
-const { welcomeImage } = require('discord-welcome-card');
+
 const client = new Client({
-  intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
+	intents: [
+		GatewayIntentBits.Guilds,
+		GatewayIntentBits.GuildMessages,
+		GatewayIntentBits.MessageContent,
+		GatewayIntentBits.GuildMembers,
+	],
 });
 
 client.on('messageCreate', async (message) => {
   if (message.author.bot) return;
-  //Generating the actual welcome Card
+ 
   const image = await welcomeImage(message.member, { theme: 'circuit' });
 
   message.channel.send({ files: [image] });
 });
+
 
 client.login('Your-Bot-Token');
 ```
@@ -163,18 +177,19 @@ client.login('Your-Bot-Token');
 <details open> <summary> Goodbye Card </summary>
 
 ```javascript
-const { Client, Intents } = require("discord.js");
-const { goodbyeImage } = require('discord-welcome-card');
+const { Client, Intents } = require('discord.js');
+const { drawCard, LinearGradient } = require('discord-welcome-card');
 const client = new Client({
-    intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES]
+  intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
 });
 
-client.on("messageCreate", async message => {
-    if(message.author.bot) return
-    //Generating the actual goodbye Card
-    const image = await goodbyeImage(message.member, { theme: 'code' });
+client.on('messageCreate', async (message) => {
+  if (message.author.bot) return;
+ 
+  const image = await welcomeImage(message.member, { theme: 'code' });
 
-    message.channel.send({ files: [ image ] });
+  message.channel.send({ files: [image] });
+});
 
 client.login('Your-Bot-Token');
 ```
@@ -229,9 +244,6 @@ client.login('Your-Bot-Token');
 
 There are some examples of cards/themes in the `examples` folder, these are mostly provided by the community and showcase the possibilities of this package. If you think your card looks awesome and unique and would be a great addition to our examples, then we'll happily look at your card, and maybe include it.
 
-Some projects written with this package
-
-- [Miyuki](https://github.com/discord-card/Miyuki) (discord.js V13)
 
 ## Support Server
 
