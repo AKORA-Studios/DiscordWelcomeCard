@@ -76,41 +76,6 @@ Simple easy-to-use Goodbye and welcome cards for your discord Bot. The version c
   };
 ```
 
-<details>
-    <summary> Full example </summary>
-<b>If you want to use Gradients, you maybe need to import Gradient like this:</b>
-<br /><br />
-
-```javascript
-const { drawCard, LinearGradient } = require('discord-welcome-card');
-```
-
-```typescript
-    theme: 'circuit',
-    text: {
-        title: 'Hellloo',
-        text: user.tag,
-        subtitle: 'please read the Rules',
-        color: `#88f`
-    },
-    avatar: {
-        image: user.displayAvatarURL({ extension: 'png' }),
-        outlineWidth: 5,
-        outlineColor: new LinearGradient(
-            [0, '#33f'],
-            [1, '#f33']
-        )
-    },
-      card: {
-        background: "https://i.imgur.com/ea9PB3H.png",
-        blur: 1,
-        border: true,
-        rounded: true,
-    }
-```
-
-![Custom Card](examples/fullCustom.png)
-
 </details>
 
 <br/><br/><br/>
@@ -224,10 +189,12 @@ client.on('messageCreate', async (message) => {
       outlineWidth: 5,
       outlineColor: new LinearGradient([0, '#33f'], [1, '#f33']),
     },
-    background: 'https://i.imgur.com/ea9PB3H.png',
-    blur: 1,
-    border: true,
-    rounded: true,
+    card: {
+      background: 'https://i.imgur.com/ea9PB3H.png',
+      blur: 1,
+      border: true,
+      rounded: true,
+    }
   });
 
   message.channel.send({ files: [image] });
