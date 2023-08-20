@@ -80,22 +80,6 @@ Simple easy-to-use Goodbye and welcome cards for your discord Bot. The version c
 
 <br/><br/><br/>
 
-## Default themes & font colors
-
-### Dark
-
-![Dark Theme](examples/dark_welcome.png)
-
-### Circuit
-
-![Circuit Theme](examples/circuit_welcome.png)
-
-### Code
-
-![Code Theme](examples/code_goodbye.png)
-
-<br/><br/><br/>
-
 ## Examples
 
 | Package | Version |
@@ -216,6 +200,24 @@ client.login('Your-Bot-Token');
 ![Image](examples/fullCustom.png)
 
 </details>
+
+<br/><br/><br/>
+
+## Default themes & font colors
+
+### Dark
+
+![Dark Theme](examples/dark_welcome.png)
+
+### Circuit
+
+![Circuit Theme](examples/circuit_welcome.png)
+
+### Code
+
+![Code Theme](examples/code_goodbye.png)
+
+
 
 ## Examples
 
