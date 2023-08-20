@@ -19,7 +19,9 @@
       outlineWidth: 5,
       outlineColor: `#DDDDDD`,
     },
-    background: join(__dirname, './background.png'),
+    card: {
+      background: join(__dirname, './background.png'),
+    }
   });
   ```
   
