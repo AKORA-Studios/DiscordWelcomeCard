@@ -224,7 +224,6 @@ client.login('Your-Bot-Token');
 There are some examples of cards/themes in the `examples` folder, these are mostly provided by the community and showcase the possibilities of this package. If you think your card looks awesome and unique and would be a great addition to our examples, then we'll happily look at your card, and maybe include it.
 
 ## FAQ
-https://discord.js.org/docs/packages/rest/2.1.0/ImageURLOptions:Interface
 Image Options may be different depending on the discord.js Version your using.
 ```image: message.author.displayAvatarURL({ format: 'png' }),```
 needs to be 
