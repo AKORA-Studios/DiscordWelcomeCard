@@ -1,6 +1,6 @@
 {
     "name": "discord-welcome-card",
-    "version": "4.9.1",
+    "version": "4.9.2",
     "description": "Discord Welcome/Goodbye Cards",
     "main": "lib/index.js",
     "types": "lib/index.d.ts",
