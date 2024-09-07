@@ -25,7 +25,7 @@
     "license": "MIT",
     "dependencies": {
         "@discord-card/core": "^3.2.0",
-        "canvas": "^2.11.0"
+        "canvas": "^2.11.2"
     },
     "peerDependencies": {
         "discord.js": "^14.x"
