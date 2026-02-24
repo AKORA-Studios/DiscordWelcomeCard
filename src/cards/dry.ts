@@ -1,5 +1,5 @@
 import { Timer, toImage, roundRect, ctx2D, blur } from '@discord-card/core';
-import { createCanvas, Image, Canvas } from 'canvas';
+import { createCanvas, Image, Canvas, loadImage } from 'canvas';
 import { readFile } from 'fs/promises';
 import { themes, snap } from '../lib';
 import { CardOptions } from '../types';
@@ -15,8 +15,8 @@ export async function staticCard(options: CardOptions): Promise<Canvas> {
   //const timer = new Timer('Prepare').start();
 
   const timer = {
-    step: (...args: any[]) => {},
-    stop: (...args: any[]) => {},
+    step: (...args: any[]) => { },
+    stop: (...args: any[]) => { },
   };
 
   const w = 700,
@@ -39,7 +39,9 @@ export async function staticCard(options: CardOptions): Promise<Canvas> {
     theme = themes[options.theme ?? 'code'];
     if (!theme) throw new Error('Invalid theme, use: ' + Object.keys(themes).join(' | '));
 
-    background = await toImage(await readFile(theme.image as string));
+    //background = await toImage(await readFile(theme.image as string));
+    background = await loadImage(theme.image as string);
+
   } else throw new Error('Invalid theme, use: ' + Object.keys(themes).join(' | '));
 
   if (options.card.background) background = await toImage(options.card.background, 'Background');
@@ -94,7 +96,12 @@ export async function staticCard(options: CardOptions): Promise<Canvas> {
   if (options.card?.blur) {
     var blurred = createCanvas(w, h),
       blur_ctx = blurred.getContext('2d') as ctx2D;
-    blur_ctx.drawImage(background, backXOff, backYOff, w, h, 0, 0, w, h);
+
+    if (!(background instanceof Image)) {
+      throw new Error('Canvas or Image expected (Invalid instance)');
+    }
+
+    blur_ctx.drawImage(background as Image, backXOff, backYOff, w, h, 0, 0, w, h);
     //blur_ctx.drawImage(background, 0, 0, w, h);
 
     if (typeof options.card?.blur === 'boolean') options.card.blur = 3;
@@ -105,7 +112,7 @@ export async function staticCard(options: CardOptions): Promise<Canvas> {
     temp = blurred;
   }
   if (options.card?.border) ctx.drawImage(temp, b, b, w - b * 2, h - b * 2);
-  else ctx.drawImage(background, backXOff, backYOff, w, h, 0, 0, w, h);
+  else ctx.drawImage(background as Image, backXOff, backYOff, w, h, 0, 0, w, h);
 
   timer.step('blur');
 
