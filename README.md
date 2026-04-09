@@ -91,7 +91,7 @@ Simple easy-to-use Goodbye and welcome cards for your discord Bot. The version c
 Note: (If you want to use Gradients, you maybe need to import Gradient like this: `const { drawCard, LinearGradient } = require('discord-welcome-card')`)
 
 
-<details open> 
+<details> 
     <summary>  Welcome Card  </summary>
 
 ```javascript
@@ -123,7 +123,7 @@ client.login('Your-Bot-Token');
 
 <br />
 
-<details open> <summary> Goodbye Card </summary>
+<details> <summary> Goodbye Card </summary>
 
 ```javascript
 const { Client, GatewayIntentBits  } = require('discord.js');
@@ -153,7 +153,7 @@ client.login('Your-Bot-Token');
 </details>
 <br />
 
-<details open><summary> Custom Card </summary>
+<details><summary> Custom Card </summary>
 
 ```javascript
 const { Client, GatewayIntentBits  } = require('discord.js');
@@ -231,11 +231,4 @@ needs to be
 [See here](https://discord.js.org/docs/packages/rest/2.1.0/ImageURLOptions:Interface)
 
 ## Support Server
-
-**[![widget](https://discord.com/api/guilds/553942677117337600/widget.png?style=banner2)](https://discord.gg/EUbKBTwSmP)**
-
-| name               | children   | size   |
-| ------------------ | ---------- | ------ |
-| canvas             | 0          | 57.02M |
-| @discord-card/core | 0          | 2.93M  |
-| 2 modules          | 0 children | 59.95M |
+[![widget](https://discord.com/api/guilds/553942677117337600/widget.png?style=banner2)](https://discord.gg/EUbKBTwSmP)
